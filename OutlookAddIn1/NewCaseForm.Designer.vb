@@ -88,6 +88,7 @@ Partial Class NewCaseForm
         '
         'RequestorBox
         '
+        Me.RequestorBox.AllowDrop = True
         Me.RequestorBox.Font = New System.Drawing.Font("Segoe UI", 10.0!)
         Me.RequestorBox.Location = New System.Drawing.Point(117, 181)
         Me.RequestorBox.Name = "RequestorBox"
@@ -118,6 +119,7 @@ Partial Class NewCaseForm
         '
         'TicketNumberBox
         '
+        Me.TicketNumberBox.AllowDrop = True
         Me.TicketNumberBox.Font = New System.Drawing.Font("Segoe UI", 10.0!)
         Me.TicketNumberBox.Location = New System.Drawing.Point(117, 153)
         Me.TicketNumberBox.Name = "TicketNumberBox"
@@ -137,6 +139,7 @@ Partial Class NewCaseForm
         '
         'ResponsibleBox
         '
+        Me.ResponsibleBox.AllowDrop = True
         Me.ResponsibleBox.Font = New System.Drawing.Font("Segoe UI", 10.0!)
         Me.ResponsibleBox.FormattingEnabled = True
         Me.ResponsibleBox.Location = New System.Drawing.Point(117, 209)
@@ -154,6 +157,7 @@ Partial Class NewCaseForm
         '
         'DateBox
         '
+        Me.DateBox.AllowDrop = True
         Me.DateBox.Font = New System.Drawing.Font("Segoe UI", 10.0!)
         Me.DateBox.Location = New System.Drawing.Point(117, 125)
         Me.DateBox.Name = "DateBox"
@@ -173,6 +177,7 @@ Partial Class NewCaseForm
         '
         'RegionBox
         '
+        Me.RegionBox.AllowDrop = True
         Me.RegionBox.Font = New System.Drawing.Font("Segoe UI", 10.0!)
         Me.RegionBox.Location = New System.Drawing.Point(117, 237)
         Me.RegionBox.Name = "RegionBox"
@@ -192,6 +197,7 @@ Partial Class NewCaseForm
         '
         'PendingSrcBox
         '
+        Me.PendingSrcBox.AllowDrop = True
         Me.PendingSrcBox.Font = New System.Drawing.Font("Segoe UI", 10.0!)
         Me.PendingSrcBox.Location = New System.Drawing.Point(117, 265)
         Me.PendingSrcBox.Name = "PendingSrcBox"
@@ -222,6 +228,7 @@ Partial Class NewCaseForm
         '
         'ConectionBox
         '
+        Me.ConectionBox.AllowDrop = True
         Me.ConectionBox.Font = New System.Drawing.Font("Segoe UI", 10.0!)
         Me.ConectionBox.FormattingEnabled = True
         Me.ConectionBox.Location = New System.Drawing.Point(117, 97)
@@ -242,6 +249,7 @@ Partial Class NewCaseForm
         '
         'StatusBox
         '
+        Me.StatusBox.AllowDrop = True
         Me.StatusBox.Font = New System.Drawing.Font("Segoe UI", 10.0!)
         Me.StatusBox.FormattingEnabled = True
         Me.StatusBox.Location = New System.Drawing.Point(117, 293)
@@ -251,6 +259,7 @@ Partial Class NewCaseForm
         '
         'ActCategoryBox
         '
+        Me.ActCategoryBox.AllowDrop = True
         Me.ActCategoryBox.Font = New System.Drawing.Font("Segoe UI", 10.0!)
         Me.ActCategoryBox.FormattingEnabled = True
         Me.ActCategoryBox.Location = New System.Drawing.Point(117, 69)
@@ -280,8 +289,10 @@ Partial Class NewCaseForm
         '
         'TeamBox
         '
+        Me.TeamBox.AllowDrop = True
         Me.TeamBox.Font = New System.Drawing.Font("Segoe UI", 10.0!)
         Me.TeamBox.FormattingEnabled = True
+        Me.TeamBox.ImeMode = System.Windows.Forms.ImeMode.Off
         Me.TeamBox.Location = New System.Drawing.Point(117, 41)
         Me.TeamBox.Name = "TeamBox"
         Me.TeamBox.Size = New System.Drawing.Size(126, 25)
@@ -311,6 +322,7 @@ Partial Class NewCaseForm
         '
         'CommentsBox
         '
+        Me.CommentsBox.AllowDrop = True
         Me.CommentsBox.Font = New System.Drawing.Font("Segoe UI", 10.0!)
         Me.CommentsBox.Location = New System.Drawing.Point(117, 321)
         Me.CommentsBox.Name = "CommentsBox"
@@ -319,9 +331,12 @@ Partial Class NewCaseForm
         '
         'NewCaseForm
         '
+        Me.AcceptButton = Me.CreateCaseButton
+        Me.AllowDrop = True
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.InactiveCaptionText
+        Me.CausesValidation = False
         Me.ClientSize = New System.Drawing.Size(248, 408)
         Me.Controls.Add(Me.CommentsBox)
         Me.Controls.Add(Me.Label14)
@@ -350,11 +365,13 @@ Partial Class NewCaseForm
         Me.Controls.Add(Me.TrakingID)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.CreateCaseButton)
+        Me.ImeMode = System.Windows.Forms.ImeMode.Close
+        Me.KeyPreview = True
         Me.MaximumSize = New System.Drawing.Size(264, 447)
         Me.MinimumSize = New System.Drawing.Size(264, 447)
         Me.Name = "NewCaseForm"
         Me.ShowIcon = False
-        Me.Text = "Perf. Tracking Tool"
+        Me.Text = "New Case"
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()

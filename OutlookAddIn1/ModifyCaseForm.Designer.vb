@@ -70,6 +70,7 @@ Partial Class ModifyCaseForm
         '
         'CloseButton
         '
+        Me.CloseButton.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.CloseButton.Font = New System.Drawing.Font("Segoe UI", 8.0!)
         Me.CloseButton.Location = New System.Drawing.Point(130, 72)
         Me.CloseButton.Name = "CloseButton"
@@ -128,6 +129,7 @@ Partial Class ModifyCaseForm
         '
         'Label6
         '
+        Me.Label6.AllowDrop = True
         Me.Label6.AutoSize = True
         Me.Label6.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.Label6.Font = New System.Drawing.Font("Segoe UI", 10.0!)
@@ -179,7 +181,7 @@ Partial Class ModifyCaseForm
         Me.Label4.AutoSize = True
         Me.Label4.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.Label4.Font = New System.Drawing.Font("Segoe UI", 10.0!)
-        Me.Label4.ForeColor = System.Drawing.Color.DarkRed
+        Me.Label4.ForeColor = System.Drawing.Color.DodgerBlue
         Me.Label4.Location = New System.Drawing.Point(9, 143)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(47, 19)
@@ -212,7 +214,7 @@ Partial Class ModifyCaseForm
         Me.StatusBox.BackColor = System.Drawing.Color.LightGray
         Me.StatusBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.StatusBox.Font = New System.Drawing.Font("Segoe UI", 10.0!)
-        Me.StatusBox.ForeColor = System.Drawing.Color.DarkRed
+        Me.StatusBox.ForeColor = System.Drawing.Color.DodgerBlue
         Me.StatusBox.Location = New System.Drawing.Point(114, 143)
         Me.StatusBox.Name = "StatusBox"
         Me.StatusBox.Size = New System.Drawing.Size(126, 25)
@@ -295,6 +297,7 @@ Partial Class ModifyCaseForm
         '
         'ModifyCaseForm
         '
+        Me.AllowDrop = True
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.ActiveCaptionText
@@ -324,11 +327,12 @@ Partial Class ModifyCaseForm
         Me.Controls.Add(Me.TicketNumberBox)
         Me.Controls.Add(Me.Label1)
         Me.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
+        Me.KeyPreview = True
         Me.MaximumSize = New System.Drawing.Size(264, 447)
         Me.Name = "ModifyCaseForm"
         Me.ShowIcon = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.WindowsDefaultBounds
-        Me.Text = "Performance Tracking Tool"
+        Me.Text = "Modify Case"
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()

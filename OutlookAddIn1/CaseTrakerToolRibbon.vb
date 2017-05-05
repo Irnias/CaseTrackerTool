@@ -8,7 +8,6 @@ Public Class CaseTrackerTool
     End Sub
 
     Private Sub AddCaseButton_Click(sender As Object, e As RibbonControlEventArgs) Handles AddCaseButton.Click
-
         'My.Computer.FileSystem.ReadAllText("C:\Users\" & Environment.UserName & "\Resource Planning Tool.txt", System.Text.Encoding.UTF32)
         If Not My.Computer.FileSystem.FileExists("C:\Users\" & Environment.UserName & "\Resource Planning Tool.txt") Then
             MsgBox("It seems that you didn't enter your Team's activities. Please go to Settings and add them")
@@ -20,7 +19,6 @@ Public Class CaseTrackerTool
             Dim NewCaseForm As New NewCaseForm
             NewCaseForm.Show()
         End If
-
     End Sub
 
     Private Sub ModifyCaseButton_Click(sender As Object, e As RibbonControlEventArgs) Handles ModifyCaseButton.Click
@@ -31,12 +29,10 @@ Public Class CaseTrackerTool
     Private Sub NotifyIssueButton_Click(sender As Object, e As RibbonControlEventArgs) Handles NotifyIssueButton.Click
         Dim NewMessage As Outlook.MailItem
         Dim OutlookAppli As Outlook.Application
-
         OutlookAppli = CreateObject("Outlook.Application")
         NewMessage = OutlookAppli.CreateItem(OlItemType.olMailItem)
         NewMessage.To = "CaseTrackingToolSupport@accenture.com"
         NewMessage.Subject = "Case Tracker Tool | Issue Notification"
         NewMessage.Display()
     End Sub
-
 End Class

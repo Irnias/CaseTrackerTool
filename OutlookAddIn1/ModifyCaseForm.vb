@@ -11,7 +11,7 @@ Public Class ModifyCaseForm
     Dim Subject As String
     Dim Outlookitem As Outlook.MailItem
 
-    Private Sub Form2_Load_1(sender As Object, e As EventArgs) Handles MyBase.Load
+    Private Sub ModifyCaseForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         ResponsibleBox.Enabled = False
         RegionBox.Enabled = False
         OpenedDateBox.Enabled = False
@@ -23,8 +23,22 @@ Public Class ModifyCaseForm
         ConectionBox.Items.Add("Home")
 
     End Sub
+    Private Sub ModifyCaseForm_Closed(sender As Object, e As EventArgs) Handles Me.Closed
+        conexion.Close()
+        Me.Close()
+    End Sub
 
-    Private Sub Button1_Click_1(sender As Object, e As EventArgs) Handles SearchButton.Click
+    Private Sub ModifyCaseForm_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
+        conexion.Close()
+    End Sub
+
+    Public Sub ModifyCaseForm_KeyDown(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles MyBase.KeyDown
+        If (e.KeyCode = Keys.Escape) Then
+            Me.Close()
+        End If
+    End Sub
+
+    Private Sub SearchButton_Click(sender As Object, e As EventArgs) Handles SearchButton.Click
 
         If TicketNumberBox.Text = "MaxForm" Then
 
@@ -71,11 +85,6 @@ Public Class ModifyCaseForm
 
     End Sub
 
-    Private Sub Form2_Closed(sender As Object, e As EventArgs) Handles Me.Closed
-        conexion.Close()
-        Me.Close()
-    End Sub
-
     Private Sub CheckBox1_CheckedChanged(sender As Object, e As EventArgs)
         ResponsibleBox.Enabled = True
         RegionBox.Enabled = True
@@ -105,15 +114,7 @@ Public Class ModifyCaseForm
 
     End Sub
 
-    Private Sub Form2_KeyPress(sender As Object, e As KeyPressEventArgs) Handles Me.KeyPress
-
-    End Sub
-
-    Private Sub TextBox3_TextChanged(sender As Object, e As EventArgs)
-
-    End Sub
-
-    Private Sub Button2_Click(sender As Object, e As EventArgs) Handles CloseButton.Click
+    Private Sub CloseButton_Click(sender As Object, e As EventArgs) Handles CloseButton.Click
 
 
         If StatusBox.Text <> "Closed" Or PendingSourceBox.Text <> "" Then
@@ -142,17 +143,10 @@ Public Class ModifyCaseForm
             Outlookitem.Save()
         Else
             MsgBox("Make sure the ticket is not already closed and the pending source field is blank", vbInformation, "Ticket already closed")
-
         End If
-
-
     End Sub
 
-    Private Sub TextBox2_TextChanged(sender As Object, e As EventArgs)
-
-    End Sub
-
-    Private Sub Button4_Click(sender As Object, e As EventArgs) Handles OpenButton.Click
+    Private Sub OpenButton_Click(sender As Object, e As EventArgs) Handles OpenButton.Click
 
         If StatusBox.Text <> "Opened" Then
 
@@ -185,10 +179,6 @@ Public Class ModifyCaseForm
 
     End Sub
 
-    Private Sub Panel1_Paint(sender As Object, e As PaintEventArgs)
-
-    End Sub
-
     Private Sub ComboBox2_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ConectionBox.SelectedIndexChanged
         If ConectionBox.Text = "Office" Then
             conexion.ConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source = \\10.21.144.6\GBS Accenture Data\RTR\GA\MIS\Test1.accdb"
@@ -208,11 +198,4 @@ Public Class ModifyCaseForm
         TicketNumberBox.Focus()
     End Sub
 
-    Private Sub TextBox1_TextChanged(sender As Object, e As EventArgs) Handles TicketNumberBox.TextChanged
-
-    End Sub
-
-    Private Sub Form2_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
-        conexion.Close()
-    End Sub
 End Class

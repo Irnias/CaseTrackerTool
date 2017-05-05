@@ -25,7 +25,8 @@ Public Class NewCaseForm
     'si usas un "entero corto", son aprox. 65mil
     'un "entero largo" o un autonumerico te permiten guardar aprox. 2 mil millones de registros
 
-    Public Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
+    Public Sub NewCaseForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         TeamBox.Items.Add("BSI")
         TeamBox.Items.Add("MAP")
         TeamBox.Items.Add("BPC")
@@ -41,8 +42,20 @@ Public Class NewCaseForm
         ActCategoryBox.Items.AddRange(File.ReadAllLines(filePath))
     End Sub
 
-    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles CreateCaseButton.Click
+    Private Sub NewCaseForm_Closed(sender As Object, e As EventArgs) Handles Me.Closed
+        conection.Close()
+        Me.Close()
+    End Sub
 
+    Public Sub NewCaseForm_KeyDown(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles MyBase.KeyDown
+        If (e.KeyCode = Keys.Escape) Then
+            Me.Close()
+        End If
+    End Sub
+
+    Private Sub CreateCaseButton_Click(sender As Object, e As EventArgs) Handles CreateCaseButton.Click
+
+        'Validate required fields
         If (((ActCategoryBox.Text = "") Or (TicketNumberBox.Text = "")) Or ((StatusBox.Text = "Open") And (PendingSrcBox.Text = ""))) Then
             MsgBox("The ticket number field and Activity Category cannot be empty! If the ticket is open there must be a pending source.")
 
@@ -110,13 +123,7 @@ Public Class NewCaseForm
 
     End Sub
 
-    Private Sub Form1_Closed(sender As Object, e As EventArgs) Handles Me.Closed
-        conection.Close()
-        Me.Close()
-    End Sub
-
     Public Sub ComboBox2_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ConectionBox.SelectedIndexChanged
-
 
         Try
             If ConectionBox.Text = "Office" Then
@@ -174,25 +181,10 @@ Public Class NewCaseForm
 
     End Sub
 
-    Private Sub ComboBox2_MouseClick(sender As Object, e As MouseEventArgs) Handles ConectionBox.MouseClick
-
-    End Sub
-
-    Private Sub Form1_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
+    Private Sub NewCaseConection_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
         conection.Close()
     End Sub
 
-    Private Sub CheckBox1_CheckedChanged(sender As Object, e As EventArgs)
-
-    End Sub
-
-    Private Sub TextBox2_TextChanged(sender As Object, e As EventArgs) Handles RegionBox.TextChanged
-
-    End Sub
-
-    Private Sub Label8_Click(sender As Object, e As EventArgs) Handles Label8.Click
-
-    End Sub
 End Class
 
 
