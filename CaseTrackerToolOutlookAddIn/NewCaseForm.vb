@@ -8,6 +8,7 @@ Public Class NewCaseForm
     Dim OutApp As Outlook.Application
     Dim EmailSender As String
     Dim Subject As String
+    Dim OriginalEmailTime As String
     Dim OutItem As Outlook.MailItem
     Dim OutReplyItem As Outlook.MailItem
     Dim conection As New OleDbConnection
@@ -77,8 +78,8 @@ Public Class NewCaseForm
                     TicketNumberBox.Text = TeamBox.Text & TrakingID.Text
                 End If
 
-                comands = New OleDbCommand("INSERT INTO TestTable(MyITCase, Opened, Requestor, Analyst, BU, Description, PendingSource, Closed, ActivityCategory, Comments)" & Chr(13) &
-                                           "VALUES(Textbox3, Textbox5, Textbox1, Combobox1, Textbox2, Subject, Textbox4, TextBox6, ComboBox4, TextBox7)", conection)
+                comands = New OleDbCommand("INSERT INTO TestTable(MyITCase, Opened, Requestor, Analyst, BU, Description, PendingSource, Closed, ActivityCategory, Comments, OriginalEmailTime )" & Chr(13) &
+                                           "VALUES(Textbox3, Textbox5, Textbox1, Combobox1, Textbox2, Subject, Textbox4, TextBox6, ComboBox4, TextBox7, OriginalEmailTime)", conection)
 
                 comands.Parameters.AddWithValue("@MyITCase", TicketNumberBox.Text)
                 comands.Parameters.AddWithValue("@Opened", DateBox.Text)
@@ -87,6 +88,7 @@ Public Class NewCaseForm
                 comands.Parameters.AddWithValue("@BU", RegionBox.Text)
                 comands.Parameters.AddWithValue("@Description", Subject)
                 comands.Parameters.AddWithValue("@PendingSource", PendingSrcBox.Text)
+                comands.Parameters.AddWithValue("@OriginalEmailTime", OriginalEmailTime)
 
                 If StatusBox.Text = "Closed" Then
                     comands.Parameters.AddWithValue("@Closed", TextBox6.Text)
@@ -175,6 +177,8 @@ Public Class NewCaseForm
             EmailSender = OutItem.SenderName
             RequestorBox.Text = EmailSender
             Subject = OutItem.Subject
+            OriginalEmailTime = OutItem.ReceivedTime
+
             ' TextBox6.Text = "Closed"
 
         Catch ex As Exception
@@ -189,6 +193,9 @@ Salir:
         conection.Close()
     End Sub
 
+    Private Sub ActCategoryBox_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ActCategoryBox.SelectedIndexChanged
+
+    End Sub
 End Class
 
 
