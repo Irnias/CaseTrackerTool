@@ -4,7 +4,7 @@ Imports System.Windows.Forms
 Imports System.IO
 Imports System.ComponentModel
 
-Public Class Form1
+Public Class NewCaseForm
     Dim OutApp As Outlook.Application
     Dim EmailSender As String
     Dim Subject As String
@@ -26,24 +26,24 @@ Public Class Form1
     'un "entero largo" o un autonumerico te permiten guardar aprox. 2 mil millones de registros
 
     Public Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        ComboBox5.Items.Add("BSI")
-        ComboBox5.Items.Add("MAP")
-        ComboBox5.Items.Add("BPC")
-        ComboBox5.Items.Add("GT1")
-        ComboBox5.Items.Add("MIS")
-        ComboBox5.Items.Add("GFT")
-        ComboBox2.Items.Add("Office")
-        ComboBox2.Items.Add("Home")
-        ComboBox3.Items.Add("Closed")
-        ComboBox3.Items.Add("Open")
+        TeamBox.Items.Add("BSI")
+        TeamBox.Items.Add("MAP")
+        TeamBox.Items.Add("BPC")
+        TeamBox.Items.Add("GT1")
+        TeamBox.Items.Add("MIS")
+        TeamBox.Items.Add("GFT")
+        ConectionBox.Items.Add("Office")
+        ConectionBox.Items.Add("Home")
+        StatusBox.Items.Add("Closed")
+        StatusBox.Items.Add("Open")
         TextBox6.Text = (DateTime.Now.ToString("MM/dd/yyyy"))
         filePath = "C:\Users\" & Environment.UserName & "\Resource Planning Tool.txt"
-        ComboBox4.Items.AddRange(File.ReadAllLines(filePath))
+        ActCategoryBox.Items.AddRange(File.ReadAllLines(filePath))
     End Sub
 
-    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles CreateCaseButton.Click
 
-        If (((ComboBox4.Text = "") Or (TextBox3.Text = "")) Or ((ComboBox3.Text = "Open") And (TextBox4.Text = ""))) Then
+        If (((ActCategoryBox.Text = "") Or (TicketNumberBox.Text = "")) Or ((StatusBox.Text = "Open") And (PendingSrcBox.Text = ""))) Then
             MsgBox("The ticket number field and Activity Category cannot be empty! If the ticket is open there must be a pending source.")
 
         Else
@@ -56,41 +56,41 @@ Public Class Form1
                 If lista <> 0 Then
                     DataGridView1.DataSource = registros
                     DataGridView1.DataMember = "TestTable"
-                    TextBox3.Text = ComboBox5.Text & Label2.Text
+                    TicketNumberBox.Text = TeamBox.Text & TrakingID.Text
                 End If
 
-                If Label2.Text = (registros.Tables("TestTable").Rows(0).Item("TicketNumber")) Then
-                    Label2.Text = Label2.Text + 1
-                    TextBox3.Text = ComboBox5.Text & Label2.Text
+                If TrakingID.Text = (registros.Tables("TestTable").Rows(0).Item("TicketNumber")) Then
+                    TrakingID.Text = TrakingID.Text + 1
+                    TicketNumberBox.Text = TeamBox.Text & TrakingID.Text
                 End If
 
                 comands = New OleDbCommand("INSERT INTO TestTable(MyITCase, Opened, Requestor, Analyst, BU, Description, PendingSource, Closed, ActivityCategory, Comments)" & Chr(13) &
                                            "VALUES(Textbox3, Textbox5, Textbox1, Combobox1, Textbox2, Subject, Textbox4, TextBox6, ComboBox4, TextBox7)", conection)
 
-                comands.Parameters.AddWithValue("@MyITCase", TextBox3.Text)
-                comands.Parameters.AddWithValue("@Opened", TextBox5.Text)
-                comands.Parameters.AddWithValue("@Requestor", TextBox1.Text)
-                comands.Parameters.AddWithValue("@Analyst", ComboBox1.Text)
-                comands.Parameters.AddWithValue("@BU", TextBox2.Text)
+                comands.Parameters.AddWithValue("@MyITCase", TicketNumberBox.Text)
+                comands.Parameters.AddWithValue("@Opened", DateBox.Text)
+                comands.Parameters.AddWithValue("@Requestor", RequestorBox.Text)
+                comands.Parameters.AddWithValue("@Analyst", ResponsibleBox.Text)
+                comands.Parameters.AddWithValue("@BU", RegionBox.Text)
                 comands.Parameters.AddWithValue("@Description", Subject)
-                comands.Parameters.AddWithValue("@PendingSource", TextBox4.Text)
+                comands.Parameters.AddWithValue("@PendingSource", PendingSrcBox.Text)
 
-                If ComboBox3.Text = "Closed" Then
+                If StatusBox.Text = "Closed" Then
                     comands.Parameters.AddWithValue("@Closed", TextBox6.Text)
                 Else
                     comands.Parameters.AddWithValue("@Closed", DBNull.Value)
                 End If
 
-                comands.Parameters.AddWithValue("@ActivityCategory", ComboBox4.Text)
-                comands.Parameters.AddWithValue("@Comments", TextBox7.Text)
+                comands.Parameters.AddWithValue("@ActivityCategory", ActCategoryBox.Text)
+                comands.Parameters.AddWithValue("@Comments", CommentsBox.Text)
                 comands.ExecuteNonQuery()
 
                 conection.Close()
 
-                If ComboBox3.Text = "Closed" Then               'si el caso fue cerrado o no
-                    OutItem.Subject = OutItem.Subject & " - " & Label2.Text & " Completed"
+                If StatusBox.Text = "Closed" Then               'si el caso fue cerrado o no
+                    OutItem.Subject = OutItem.Subject & " - " & TrakingID.Text & " Completed"
                 Else
-                    OutItem.Subject = OutItem.Subject & " - " & Label2.Text
+                    OutItem.Subject = OutItem.Subject & " - " & TrakingID.Text
                 End If
 
                 OutItem.Save()
@@ -115,11 +115,11 @@ Public Class Form1
         Me.Close()
     End Sub
 
-    Public Sub ComboBox2_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox2.SelectedIndexChanged
+    Public Sub ComboBox2_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ConectionBox.SelectedIndexChanged
 
 
         Try
-            If ComboBox2.Text = "Office" Then
+            If ConectionBox.Text = "Office" Then
                 conection.ConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source = \\10.21.144.6\GBS Accenture Data\RTR\GA\MIS\Test1.accdb"
                 conection.Open()
             Else
@@ -141,8 +141,8 @@ Public Class Form1
             If lista <> 0 Then
                 DataGridView1.DataSource = registros
                 DataGridView1.DataMember = "TestTable"
-                Label2.Text = (registros.Tables("TestTable").Rows(0).Item("TicketNumber")) + 1
-                TextBox3.Text = ComboBox5.Text & Label2.Text                                     'FUNCIONA PARA BSI
+                TrakingID.Text = (registros.Tables("TestTable").Rows(0).Item("TicketNumber")) + 1
+                TicketNumberBox.Text = TeamBox.Text & TrakingID.Text                                     'FUNCIONA PARA BSI
             End If
         Catch ex As Exception
             MsgBox("Error when trying to get the ticket number. Please contact the administrator", vbCritical)
@@ -151,9 +151,9 @@ Public Class Form1
         filePath = "C:\Users\" & Environment.UserName & "\UserList.txt"
 
         Try
-            TextBox5.Text = (DateTime.Now.ToString("MM/dd/yyyy"))
-            ComboBox1.Items.Clear()
-            ComboBox1.Items.AddRange(File.ReadAllLines(filePath))
+            DateBox.Text = (DateTime.Now.ToString("MM/dd/yyyy"))
+            ResponsibleBox.Items.Clear()
+            ResponsibleBox.Items.AddRange(File.ReadAllLines(filePath))
 
         Catch ex As Exception
             MsgBox("Error when trying yo get the analyst names", vbCritical)
@@ -164,7 +164,7 @@ Public Class Form1
             OutApp = CreateObject("Outlook.Application")
             OutItem = OutApp.ActiveInspector.CurrentItem
             EmailSender = OutItem.SenderName
-            TextBox1.Text = EmailSender
+            RequestorBox.Text = EmailSender
             Subject = OutItem.Subject
             ' TextBox6.Text = "Closed"
 
@@ -174,7 +174,7 @@ Public Class Form1
 
     End Sub
 
-    Private Sub ComboBox2_MouseClick(sender As Object, e As MouseEventArgs) Handles ComboBox2.MouseClick
+    Private Sub ComboBox2_MouseClick(sender As Object, e As MouseEventArgs) Handles ConectionBox.MouseClick
 
     End Sub
 
@@ -183,6 +183,14 @@ Public Class Form1
     End Sub
 
     Private Sub CheckBox1_CheckedChanged(sender As Object, e As EventArgs)
+
+    End Sub
+
+    Private Sub TextBox2_TextChanged(sender As Object, e As EventArgs) Handles RegionBox.TextChanged
+
+    End Sub
+
+    Private Sub Label8_Click(sender As Object, e As EventArgs) Handles Label8.Click
 
     End Sub
 End Class
