@@ -69,7 +69,7 @@ Partial Class NewCaseForm
         Me.Label1.ForeColor = System.Drawing.Color.White
         Me.Label1.Location = New System.Drawing.Point(12, 14)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(80, 19)
+        Me.Label1.Size = New System.Drawing.Size(81, 19)
         Me.Label1.TabIndex = 1
         Me.Label1.Text = "Tracking ID:"
         '
@@ -211,7 +211,7 @@ Partial Class NewCaseForm
         Me.Label6.ForeColor = System.Drawing.Color.White
         Me.Label6.Location = New System.Drawing.Point(11, 265)
         Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(83, 19)
+        Me.Label6.Size = New System.Drawing.Size(84, 19)
         Me.Label6.TabIndex = 24
         Me.Label6.Text = "Pending Src:"
         '
@@ -305,7 +305,7 @@ Partial Class NewCaseForm
         Me.Label13.ForeColor = System.Drawing.Color.White
         Me.Label13.Location = New System.Drawing.Point(11, 41)
         Me.Label13.Name = "Label13"
-        Me.Label13.Size = New System.Drawing.Size(44, 19)
+        Me.Label13.Size = New System.Drawing.Size(45, 19)
         Me.Label13.TabIndex = 35
         Me.Label13.Text = "Team:"
         '
@@ -335,9 +335,9 @@ Partial Class NewCaseForm
         Me.AllowDrop = True
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.BackColor = System.Drawing.SystemColors.InactiveCaptionText
+        Me.BackColor = System.Drawing.SystemColors.ActiveCaptionText
         Me.CausesValidation = False
-        Me.ClientSize = New System.Drawing.Size(248, 408)
+        Me.ClientSize = New System.Drawing.Size(248, 409)
         Me.Controls.Add(Me.CommentsBox)
         Me.Controls.Add(Me.Label14)
         Me.Controls.Add(Me.Label13)
