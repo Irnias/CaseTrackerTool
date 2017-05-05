@@ -76,14 +76,15 @@ Partial Class NewCaseForm
         'TrakingID
         '
         Me.TrakingID.AutoSize = True
+        Me.TrakingID.BackColor = System.Drawing.Color.Black
         Me.TrakingID.Font = New System.Drawing.Font("Segoe UI", 10.0!)
         Me.TrakingID.ForeColor = System.Drawing.Color.White
         Me.TrakingID.Location = New System.Drawing.Point(119, 14)
         Me.TrakingID.Margin = New System.Windows.Forms.Padding(3)
         Me.TrakingID.Name = "TrakingID"
-        Me.TrakingID.Size = New System.Drawing.Size(121, 19)
+        Me.TrakingID.Size = New System.Drawing.Size(13, 19)
         Me.TrakingID.TabIndex = 2
-        Me.TrakingID.Text = "00000000000000"
+        Me.TrakingID.Text = " "
         Me.TrakingID.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'RequestorBox

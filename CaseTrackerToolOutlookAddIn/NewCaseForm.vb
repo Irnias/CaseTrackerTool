@@ -135,7 +135,8 @@ Public Class NewCaseForm
             End If
 
         Catch ex As Exception
-
+            MsgBox("There is an error with the conections. Please report issue using the 'Notify issue' button", vbCritical)
+            GoTo Salir
         End Try
 
 
@@ -153,6 +154,7 @@ Public Class NewCaseForm
             End If
         Catch ex As Exception
             MsgBox("Error when trying to get the ticket number. Please contact the administrator", vbCritical)
+            GoTo Salir
         End Try
 
         filePath = "C:\Users\" & Environment.UserName & "\UserList.txt"
@@ -178,6 +180,8 @@ Public Class NewCaseForm
         Catch ex As Exception
             MsgBox("Error when trying to get data from the current email item", vbCritical)
         End Try
+
+Salir:
 
     End Sub
 

@@ -40,48 +40,39 @@ Public Class ModifyCaseForm
 
     Private Sub SearchButton_Click(sender As Object, e As EventArgs) Handles SearchButton.Click
 
-        If TicketNumberBox.Text = "MaxForm" Then
+        Try
+            Dim consultar As String
+            Dim lista As Byte
+            If TicketNumberBox.Text <> "" Then
+                consultar = "SELECT * FROM TestTable WHERE MyITCase = '" & TicketNumberBox.Text & "'"
+                adaptador = New OleDbDataAdapter(consultar, conexion)
+                registros = New DataSet
+                adaptador.Fill(registros, "TestTable")
+                lista = registros.Tables("TestTable").Rows.Count
+                If lista <> 0 Then
+                    DataGridView1.DataSource = registros
+                    DataGridView1.DataMember = "TestTable"
+                    ResponsibleBox.Text = registros.Tables("TestTable").Rows(0).Item("Analyst")
+                    OpenedDateBox.Text = registros.Tables("TestTable").Rows(0).Item("Opened")
+                    RegionBox.Text = registros.Tables("TestTable").Rows(0).Item("BU")
+                    RequestorBox.Text = registros.Tables("TestTable").Rows(0).Item("Requestor")
+                    PendingSourceBox.Text = registros.Tables("TestTable").Rows(0).Item("PendingSource")
+                    StatusBox.Text = registros.Tables("TestTable").Rows(0).Item("Status")
+                    CommentsBox.Text = registros.Tables("TestTable").Rows(0).Item("Comments")
 
-
-            Me.WindowState = FormWindowState.Maximized
-
-            DataGridView1.Width = 1350
-            DataGridView1.Height = 100
-        Else
-
-            Try
-                Dim consultar As String
-                Dim lista As Byte
-                If TicketNumberBox.Text <> "" Then
-                    consultar = "SELECT * FROM TestTable WHERE MyITCase = '" & TicketNumberBox.Text & "'"
-                    adaptador = New OleDbDataAdapter(consultar, conexion)
-                    registros = New DataSet
-                    adaptador.Fill(registros, "TestTable")
-                    lista = registros.Tables("TestTable").Rows.Count
-                    If lista <> 0 Then
-                        DataGridView1.DataSource = registros
-                        DataGridView1.DataMember = "TestTable"
-                        ResponsibleBox.Text = registros.Tables("TestTable").Rows(0).Item("Analyst")
-                        OpenedDateBox.Text = registros.Tables("TestTable").Rows(0).Item("Opened")
-                        RegionBox.Text = registros.Tables("TestTable").Rows(0).Item("BU")
-                        RequestorBox.Text = registros.Tables("TestTable").Rows(0).Item("Requestor")
-                        PendingSourceBox.Text = registros.Tables("TestTable").Rows(0).Item("PendingSource")
-                        StatusBox.Text = registros.Tables("TestTable").Rows(0).Item("Status")
-                        CommentsBox.Text = registros.Tables("TestTable").Rows(0).Item("Comments")
-
-                    Else
-                        MsgBox("Unable to find case", vbExclamation, "Alert")
-                        TicketNumberBox.Clear()
-                        DataGridView1.Columns.Clear()
-                        TicketNumberBox.Focus()
-                    End If
-
+                Else
+                    MsgBox("Unable to find case", vbExclamation, "Alert")
+                    TicketNumberBox.Clear()
+                    DataGridView1.Columns.Clear()
+                    TicketNumberBox.Focus()
                 End If
 
-            Catch ex As Exception
-                MsgBox("Unable to find case", vbExclamation, "Alert")
+            End If
+
+        Catch ex As Exception
+            MsgBox("Unable to find case", vbExclamation, "Alert")
             End Try
-        End If
+
 
     End Sub
 
@@ -121,14 +112,17 @@ Public Class ModifyCaseForm
 
             Try
                 Dim actualizar As String
-                actualizar = "UPDATE TestTable SET Closed = '" & (DateTime.Now.ToString("MM/dd/yyyy")) & "' WHERE MyITCase = '" & TicketNumberBox.Text & "'"
+                'actualizar = "UPDATE TestTable SET Closed = '" & (DateTime.Now.ToString("MM/dd/yyyy")) & "' WHERE TicketNumber = '" & TicketNumberBox.Text & "'"
+
+                actualizar = "UPDATE Testable SET Closed = '" & (DateTime.Now.ToString("MM/dd/yyyy")) & "' ,PendingSource = '" & DBNull.Value & "' WHERE TicketNumber = '" & TicketNumberBox.Text & "'"
+
                 comandos = New OleDbCommand(actualizar, conexion)
                 comandos.ExecuteNonQuery()
                 ' Outlookitem.Subject = Outlookitem.Subject & " - " & "Ticket closed"
                 MsgBox("Case closed correctly", vbInformation, "Correct")
 
             Catch ex As Exception
-                MsgBox("The case cannot be closed", vbInformation, "Correct")
+                MsgBox("The Case cannot be closed", vbInformation, "Correct")
             End Try
 
             OutlookAppli = CreateObject("Outlook.Application")
@@ -142,7 +136,7 @@ Public Class ModifyCaseForm
             StatusBox.Text = "Closed"
             Outlookitem.Save()
         Else
-            MsgBox("Make sure the ticket is not already closed and the pending source field is blank", vbInformation, "Ticket already closed")
+            MsgBox("Make sure the ticket Is Not already closed And the pending source field Is blank", vbInformation, "Ticket already closed")
         End If
     End Sub
 
@@ -153,7 +147,7 @@ Public Class ModifyCaseForm
             Try
                 Dim actualizar As String
 
-                actualizar = "UPDATE TestTable SET Closed = NULL WHERE MyITCase = '" & TicketNumberBox.Text & "'"
+                actualizar = "UPDATE TestTable Set Closed = NULL WHERE MyITCase = '" & TicketNumberBox.Text & "'"
                 comandos = New OleDbCommand(actualizar, conexion)
                 comandos.ExecuteNonQuery()
                 MsgBox("Case Opened correctly", vbInformation, "Correct")

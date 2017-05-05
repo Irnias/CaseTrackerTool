@@ -148,9 +148,9 @@ Partial Class ModifyCaseForm
         Me.Label7.ForeColor = System.Drawing.Color.White
         Me.Label7.Location = New System.Drawing.Point(9, 294)
         Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(106, 19)
+        Me.Label7.Size = New System.Drawing.Size(84, 19)
         Me.Label7.TabIndex = 60
-        Me.Label7.Text = "Pending Source:"
+        Me.Label7.Text = "Pending Src:"
         '
         'Label3
         '
