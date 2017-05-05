@@ -129,7 +129,7 @@ Public Class ModifyCaseForm
             Outlookitem = OutlookAppli.ActiveInspector.CurrentItem
 
             Try
-                Outlookitem.Subject = Outlookitem.Subject & "Completed"
+                Outlookitem.Subject = Outlookitem.Subject & " Completed"
             Catch ex As Exception
             End Try
 

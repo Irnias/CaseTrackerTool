@@ -90,6 +90,7 @@ Public Class NewCaseForm
                 comands.Parameters.AddWithValue("@PendingSource", PendingSrcBox.Text)
                 comands.Parameters.AddWithValue("@OriginalEmailTime", OriginalEmailTime)
 
+
                 If StatusBox.Text = "Closed" Then
                     comands.Parameters.AddWithValue("@Closed", TextBox6.Text)
                 Else
