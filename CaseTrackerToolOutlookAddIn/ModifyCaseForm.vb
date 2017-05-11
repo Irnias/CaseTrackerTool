@@ -44,7 +44,7 @@ Public Class ModifyCaseForm
             Dim consultar As String
             Dim lista As Byte
             If TicketNumberBox.Text <> "" Then
-                consultar = "SELECT * FROM TestTable WHERE MyITCase = '" & TicketNumberBox.Text & "'"
+                consultar = "SELECT * FROM TestTable WHERE TicketNumber = '" & TicketNumberBox.Text & "'"
                 adaptador = New OleDbDataAdapter(consultar, conexion)
                 registros = New DataSet
                 adaptador.Fill(registros, "TestTable")
@@ -147,7 +147,7 @@ Public Class ModifyCaseForm
             Try
                 Dim actualizar As String
 
-                actualizar = "UPDATE TestTable Set Closed = NULL WHERE MyITCase = '" & TicketNumberBox.Text & "'"
+                actualizar = "UPDATE TestTable Set Closed = NULL WHERE TicketNumber = '" & TicketNumberBox.Text & "'"
                 comandos = New OleDbCommand(actualizar, conexion)
                 comandos.ExecuteNonQuery()
                 MsgBox("Case Opened correctly", vbInformation, "Correct")
@@ -192,4 +192,28 @@ Public Class ModifyCaseForm
         TicketNumberBox.Focus()
     End Sub
 
+    Private Sub ModifyCaseCheckBox_CheckedChanged(sender As Object, e As EventArgs) Handles ModifyCaseCheckBox.CheckedChanged
+        ResponsibleBox.Enabled = True
+        RegionBox.Enabled = True
+        OpenedDateBox.Enabled = True
+        RequestorBox.Enabled = True
+        PendingSourceBox.Enabled = True
+        StatusBox.Enabled = True
+    End Sub
+
+    Private Sub ModifyCaseButton_Click(sender As Object, e As EventArgs) Handles ModifyCaseButton.Click
+        Dim actualizar As String
+        actualizar = "UPDATE TestTable SET Analyst = '" & ResponsibleBox.Text &
+         "', BU = '" & RegionBox.Text &
+         "', Opened = '" & OpenedDateBox.Text &
+         "', Requestor = '" & RequestorBox.Text &
+         "', PendingSource = '" & PendingSourceBox.Text &
+         "', Comments = '" & CommentsBox.Text &
+         "' WHERE TicketNumber = '" & TicketNumberBox.Text & "'"
+
+        comandos = New OleDbCommand(actualizar, conexion)
+        comandos.ExecuteNonQuery()
+        MsgBox("Changes Done", vbInformation, "Alert")
+
+    End Sub
 End Class
