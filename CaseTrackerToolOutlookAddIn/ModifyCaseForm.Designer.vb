@@ -303,7 +303,7 @@ Partial Class ModifyCaseForm
         Me.Label9.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.Label9.Font = New System.Drawing.Font("Segoe UI", 10.0!)
         Me.Label9.ForeColor = System.Drawing.Color.White
-        Me.Label9.Location = New System.Drawing.Point(24, 367)
+        Me.Label9.Location = New System.Drawing.Point(28, 352)
         Me.Label9.Name = "Label9"
         Me.Label9.Size = New System.Drawing.Size(98, 19)
         Me.Label9.TabIndex = 62
