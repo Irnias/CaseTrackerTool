@@ -194,9 +194,6 @@ Salir:
         conection.Close()
     End Sub
 
-    Private Sub ActCategoryBox_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ActCategoryBox.SelectedIndexChanged
-
-    End Sub
 End Class
 
 

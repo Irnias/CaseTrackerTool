@@ -54,11 +54,12 @@ Partial Class NewCaseForm
         '
         'CreateCaseButton
         '
+        Me.CreateCaseButton.FlatAppearance.BorderSize = 0
         Me.CreateCaseButton.Font = New System.Drawing.Font("Segoe UI", 8.0!)
         Me.CreateCaseButton.Location = New System.Drawing.Point(189, 349)
         Me.CreateCaseButton.Name = "CreateCaseButton"
         Me.CreateCaseButton.Size = New System.Drawing.Size(55, 32)
-        Me.CreateCaseButton.TabIndex = 0
+        Me.CreateCaseButton.TabIndex = 12
         Me.CreateCaseButton.Text = "Create"
         Me.CreateCaseButton.UseVisualStyleBackColor = True
         '
@@ -69,7 +70,7 @@ Partial Class NewCaseForm
         Me.Label1.ForeColor = System.Drawing.Color.White
         Me.Label1.Location = New System.Drawing.Point(12, 14)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(81, 19)
+        Me.Label1.Size = New System.Drawing.Size(80, 19)
         Me.Label1.TabIndex = 1
         Me.Label1.Text = "Tracking ID:"
         '
@@ -94,7 +95,7 @@ Partial Class NewCaseForm
         Me.RequestorBox.Location = New System.Drawing.Point(117, 181)
         Me.RequestorBox.Name = "RequestorBox"
         Me.RequestorBox.Size = New System.Drawing.Size(126, 25)
-        Me.RequestorBox.TabIndex = 4
+        Me.RequestorBox.TabIndex = 6
         '
         'Label4
         '
@@ -125,7 +126,7 @@ Partial Class NewCaseForm
         Me.TicketNumberBox.Location = New System.Drawing.Point(117, 153)
         Me.TicketNumberBox.Name = "TicketNumberBox"
         Me.TicketNumberBox.Size = New System.Drawing.Size(126, 25)
-        Me.TicketNumberBox.TabIndex = 8
+        Me.TicketNumberBox.TabIndex = 5
         '
         'Label7
         '
@@ -146,7 +147,7 @@ Partial Class NewCaseForm
         Me.ResponsibleBox.Location = New System.Drawing.Point(117, 209)
         Me.ResponsibleBox.Name = "ResponsibleBox"
         Me.ResponsibleBox.Size = New System.Drawing.Size(126, 25)
-        Me.ResponsibleBox.TabIndex = 14
+        Me.ResponsibleBox.TabIndex = 7
         '
         'DataGridView1
         '
@@ -163,7 +164,7 @@ Partial Class NewCaseForm
         Me.DateBox.Location = New System.Drawing.Point(117, 125)
         Me.DateBox.Name = "DateBox"
         Me.DateBox.Size = New System.Drawing.Size(126, 25)
-        Me.DateBox.TabIndex = 19
+        Me.DateBox.TabIndex = 4
         '
         'Label9
         '
@@ -183,7 +184,7 @@ Partial Class NewCaseForm
         Me.RegionBox.Location = New System.Drawing.Point(117, 237)
         Me.RegionBox.Name = "RegionBox"
         Me.RegionBox.Size = New System.Drawing.Size(126, 25)
-        Me.RegionBox.TabIndex = 21
+        Me.RegionBox.TabIndex = 8
         '
         'Label3
         '
@@ -203,7 +204,7 @@ Partial Class NewCaseForm
         Me.PendingSrcBox.Location = New System.Drawing.Point(117, 265)
         Me.PendingSrcBox.Name = "PendingSrcBox"
         Me.PendingSrcBox.Size = New System.Drawing.Size(126, 25)
-        Me.PendingSrcBox.TabIndex = 23
+        Me.PendingSrcBox.TabIndex = 9
         '
         'Label6
         '
@@ -212,7 +213,7 @@ Partial Class NewCaseForm
         Me.Label6.ForeColor = System.Drawing.Color.White
         Me.Label6.Location = New System.Drawing.Point(11, 265)
         Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(84, 19)
+        Me.Label6.Size = New System.Drawing.Size(83, 19)
         Me.Label6.TabIndex = 24
         Me.Label6.Text = "Pending Src:"
         '
@@ -235,7 +236,7 @@ Partial Class NewCaseForm
         Me.ConectionBox.Location = New System.Drawing.Point(117, 97)
         Me.ConectionBox.Name = "ConectionBox"
         Me.ConectionBox.Size = New System.Drawing.Size(126, 25)
-        Me.ConectionBox.TabIndex = 27
+        Me.ConectionBox.TabIndex = 3
         '
         'Label10
         '
@@ -256,7 +257,7 @@ Partial Class NewCaseForm
         Me.StatusBox.Location = New System.Drawing.Point(117, 293)
         Me.StatusBox.Name = "StatusBox"
         Me.StatusBox.Size = New System.Drawing.Size(126, 25)
-        Me.StatusBox.TabIndex = 30
+        Me.StatusBox.TabIndex = 10
         '
         'ActCategoryBox
         '
@@ -266,7 +267,7 @@ Partial Class NewCaseForm
         Me.ActCategoryBox.Location = New System.Drawing.Point(117, 69)
         Me.ActCategoryBox.Name = "ActCategoryBox"
         Me.ActCategoryBox.Size = New System.Drawing.Size(126, 25)
-        Me.ActCategoryBox.TabIndex = 31
+        Me.ActCategoryBox.TabIndex = 2
         '
         'Label12
         '
@@ -297,7 +298,7 @@ Partial Class NewCaseForm
         Me.TeamBox.Location = New System.Drawing.Point(117, 41)
         Me.TeamBox.Name = "TeamBox"
         Me.TeamBox.Size = New System.Drawing.Size(126, 25)
-        Me.TeamBox.TabIndex = 34
+        Me.TeamBox.TabIndex = 1
         '
         'Label13
         '
@@ -306,7 +307,7 @@ Partial Class NewCaseForm
         Me.Label13.ForeColor = System.Drawing.Color.White
         Me.Label13.Location = New System.Drawing.Point(11, 41)
         Me.Label13.Name = "Label13"
-        Me.Label13.Size = New System.Drawing.Size(45, 19)
+        Me.Label13.Size = New System.Drawing.Size(44, 19)
         Me.Label13.TabIndex = 35
         Me.Label13.Text = "Team:"
         '
@@ -328,7 +329,7 @@ Partial Class NewCaseForm
         Me.CommentsBox.Location = New System.Drawing.Point(117, 321)
         Me.CommentsBox.Name = "CommentsBox"
         Me.CommentsBox.Size = New System.Drawing.Size(126, 25)
-        Me.CommentsBox.TabIndex = 37
+        Me.CommentsBox.TabIndex = 11
         '
         'NewCaseForm
         '
@@ -338,7 +339,7 @@ Partial Class NewCaseForm
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.ActiveCaptionText
         Me.CausesValidation = False
-        Me.ClientSize = New System.Drawing.Size(248, 409)
+        Me.ClientSize = New System.Drawing.Size(248, 408)
         Me.Controls.Add(Me.CommentsBox)
         Me.Controls.Add(Me.Label14)
         Me.Controls.Add(Me.Label13)

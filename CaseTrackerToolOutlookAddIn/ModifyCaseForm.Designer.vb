@@ -66,7 +66,7 @@ Partial Class ModifyCaseForm
         Me.TicketNumberBox.Location = New System.Drawing.Point(117, 41)
         Me.TicketNumberBox.Name = "TicketNumberBox"
         Me.TicketNumberBox.Size = New System.Drawing.Size(126, 25)
-        Me.TicketNumberBox.TabIndex = 14
+        Me.TicketNumberBox.TabIndex = 2
         '
         'CloseButton
         '
@@ -75,7 +75,7 @@ Partial Class ModifyCaseForm
         Me.CloseButton.Location = New System.Drawing.Point(130, 72)
         Me.CloseButton.Name = "CloseButton"
         Me.CloseButton.Size = New System.Drawing.Size(55, 32)
-        Me.CloseButton.TabIndex = 16
+        Me.CloseButton.TabIndex = 0
         Me.CloseButton.Text = "Close"
         Me.CloseButton.UseVisualStyleBackColor = True
         '
@@ -93,7 +93,7 @@ Partial Class ModifyCaseForm
         Me.SearchButton.Location = New System.Drawing.Point(71, 72)
         Me.SearchButton.Name = "SearchButton"
         Me.SearchButton.Size = New System.Drawing.Size(55, 32)
-        Me.SearchButton.TabIndex = 18
+        Me.SearchButton.TabIndex = 0
         Me.SearchButton.Text = "Search"
         Me.SearchButton.UseVisualStyleBackColor = True
         '
@@ -103,7 +103,7 @@ Partial Class ModifyCaseForm
         Me.OpenButton.Location = New System.Drawing.Point(188, 72)
         Me.OpenButton.Name = "OpenButton"
         Me.OpenButton.Size = New System.Drawing.Size(55, 32)
-        Me.OpenButton.TabIndex = 33
+        Me.OpenButton.TabIndex = 0
         Me.OpenButton.Text = "Open"
         Me.OpenButton.UseVisualStyleBackColor = True
         '
@@ -114,7 +114,7 @@ Partial Class ModifyCaseForm
         Me.ConectionBox.Location = New System.Drawing.Point(117, 13)
         Me.ConectionBox.Name = "ConectionBox"
         Me.ConectionBox.Size = New System.Drawing.Size(126, 25)
-        Me.ConectionBox.TabIndex = 34
+        Me.ConectionBox.TabIndex = 1
         '
         'Label8
         '
@@ -134,7 +134,7 @@ Partial Class ModifyCaseForm
         Me.Label6.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.Label6.Font = New System.Drawing.Font("Segoe UI", 10.0!)
         Me.Label6.ForeColor = System.Drawing.Color.White
-        Me.Label6.Location = New System.Drawing.Point(9, 331)
+        Me.Label6.Location = New System.Drawing.Point(9, 311)
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(79, 19)
         Me.Label6.TabIndex = 61
@@ -146,9 +146,9 @@ Partial Class ModifyCaseForm
         Me.Label7.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.Label7.Font = New System.Drawing.Font("Segoe UI", 10.0!)
         Me.Label7.ForeColor = System.Drawing.Color.White
-        Me.Label7.Location = New System.Drawing.Point(9, 294)
+        Me.Label7.Location = New System.Drawing.Point(9, 283)
         Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(84, 19)
+        Me.Label7.Size = New System.Drawing.Size(83, 19)
         Me.Label7.TabIndex = 60
         Me.Label7.Text = "Pending Src:"
         '
@@ -158,7 +158,7 @@ Partial Class ModifyCaseForm
         Me.Label3.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.Label3.Font = New System.Drawing.Font("Segoe UI", 10.0!)
         Me.Label3.ForeColor = System.Drawing.Color.White
-        Me.Label3.Location = New System.Drawing.Point(9, 263)
+        Me.Label3.Location = New System.Drawing.Point(9, 255)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(74, 19)
         Me.Label3.TabIndex = 59
@@ -170,7 +170,7 @@ Partial Class ModifyCaseForm
         Me.Label2.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.Label2.Font = New System.Drawing.Font("Segoe UI", 10.0!)
         Me.Label2.ForeColor = System.Drawing.Color.White
-        Me.Label2.Location = New System.Drawing.Point(9, 233)
+        Me.Label2.Location = New System.Drawing.Point(9, 227)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(94, 19)
         Me.Label2.TabIndex = 58
@@ -194,7 +194,7 @@ Partial Class ModifyCaseForm
         Me.Label10.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.Label10.Font = New System.Drawing.Font("Segoe UI", 10.0!)
         Me.Label10.ForeColor = System.Drawing.Color.White
-        Me.Label10.Location = New System.Drawing.Point(9, 203)
+        Me.Label10.Location = New System.Drawing.Point(9, 199)
         Me.Label10.Name = "Label10"
         Me.Label10.Size = New System.Drawing.Size(54, 19)
         Me.Label10.TabIndex = 56
@@ -207,7 +207,7 @@ Partial Class ModifyCaseForm
         Me.CommentsBox.Multiline = True
         Me.CommentsBox.Name = "CommentsBox"
         Me.CommentsBox.Size = New System.Drawing.Size(126, 25)
-        Me.CommentsBox.TabIndex = 55
+        Me.CommentsBox.TabIndex = 9
         '
         'StatusBox
         '
@@ -218,7 +218,7 @@ Partial Class ModifyCaseForm
         Me.StatusBox.Location = New System.Drawing.Point(114, 143)
         Me.StatusBox.Name = "StatusBox"
         Me.StatusBox.Size = New System.Drawing.Size(126, 25)
-        Me.StatusBox.TabIndex = 54
+        Me.StatusBox.TabIndex = 3
         '
         'PendingSourceBox
         '
@@ -226,7 +226,7 @@ Partial Class ModifyCaseForm
         Me.PendingSourceBox.Location = New System.Drawing.Point(114, 283)
         Me.PendingSourceBox.Name = "PendingSourceBox"
         Me.PendingSourceBox.Size = New System.Drawing.Size(126, 25)
-        Me.PendingSourceBox.TabIndex = 53
+        Me.PendingSourceBox.TabIndex = 8
         '
         'ResponsibleBox
         '
@@ -234,7 +234,7 @@ Partial Class ModifyCaseForm
         Me.ResponsibleBox.Location = New System.Drawing.Point(114, 171)
         Me.ResponsibleBox.Name = "ResponsibleBox"
         Me.ResponsibleBox.Size = New System.Drawing.Size(126, 25)
-        Me.ResponsibleBox.TabIndex = 47
+        Me.ResponsibleBox.TabIndex = 4
         '
         'ModifyCaseButton
         '
@@ -243,7 +243,7 @@ Partial Class ModifyCaseForm
         Me.ModifyCaseButton.Location = New System.Drawing.Point(185, 339)
         Me.ModifyCaseButton.Name = "ModifyCaseButton"
         Me.ModifyCaseButton.Size = New System.Drawing.Size(55, 32)
-        Me.ModifyCaseButton.TabIndex = 46
+        Me.ModifyCaseButton.TabIndex = 10
         Me.ModifyCaseButton.Text = "Modify"
         Me.ModifyCaseButton.UseVisualStyleBackColor = True
         '
@@ -253,7 +253,7 @@ Partial Class ModifyCaseForm
         Me.RegionBox.Location = New System.Drawing.Point(114, 199)
         Me.RegionBox.Name = "RegionBox"
         Me.RegionBox.Size = New System.Drawing.Size(126, 25)
-        Me.RegionBox.TabIndex = 48
+        Me.RegionBox.TabIndex = 5
         '
         'RequestorBox
         '
@@ -261,7 +261,7 @@ Partial Class ModifyCaseForm
         Me.RequestorBox.Location = New System.Drawing.Point(114, 255)
         Me.RequestorBox.Name = "RequestorBox"
         Me.RequestorBox.Size = New System.Drawing.Size(126, 25)
-        Me.RequestorBox.TabIndex = 52
+        Me.RequestorBox.TabIndex = 7
         '
         'OpenedDateBox
         '
@@ -269,7 +269,7 @@ Partial Class ModifyCaseForm
         Me.OpenedDateBox.Location = New System.Drawing.Point(114, 227)
         Me.OpenedDateBox.Name = "OpenedDateBox"
         Me.OpenedDateBox.Size = New System.Drawing.Size(126, 25)
-        Me.OpenedDateBox.TabIndex = 51
+        Me.OpenedDateBox.TabIndex = 6
         '
         'Label5
         '
@@ -277,7 +277,7 @@ Partial Class ModifyCaseForm
         Me.Label5.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.Label5.Font = New System.Drawing.Font("Segoe UI", 10.0!)
         Me.Label5.ForeColor = System.Drawing.Color.White
-        Me.Label5.Location = New System.Drawing.Point(9, 173)
+        Me.Label5.Location = New System.Drawing.Point(9, 171)
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(84, 19)
         Me.Label5.TabIndex = 49
