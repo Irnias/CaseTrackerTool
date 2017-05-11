@@ -46,6 +46,7 @@ Partial Class ModifyCaseForm
         Me.OpenedDateBox = New System.Windows.Forms.TextBox()
         Me.Label5 = New System.Windows.Forms.Label()
         Me.ModifyCaseCheckBox = New System.Windows.Forms.CheckBox()
+        Me.Label9 = New System.Windows.Forms.Label()
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -148,7 +149,7 @@ Partial Class ModifyCaseForm
         Me.Label7.ForeColor = System.Drawing.Color.White
         Me.Label7.Location = New System.Drawing.Point(9, 283)
         Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(83, 19)
+        Me.Label7.Size = New System.Drawing.Size(84, 19)
         Me.Label7.TabIndex = 60
         Me.Label7.Text = "Pending Src:"
         '
@@ -295,6 +296,19 @@ Partial Class ModifyCaseForm
         Me.ModifyCaseCheckBox.Text = "Modify Case"
         Me.ModifyCaseCheckBox.UseVisualStyleBackColor = True
         '
+        'Label9
+        '
+        Me.Label9.AllowDrop = True
+        Me.Label9.AutoSize = True
+        Me.Label9.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Label9.Font = New System.Drawing.Font("Segoe UI", 10.0!)
+        Me.Label9.ForeColor = System.Drawing.Color.White
+        Me.Label9.Location = New System.Drawing.Point(24, 367)
+        Me.Label9.Name = "Label9"
+        Me.Label9.Size = New System.Drawing.Size(98, 19)
+        Me.Label9.TabIndex = 62
+        Me.Label9.Text = "soy un cambio"
+        '
         'ModifyCaseForm
         '
         Me.AllowDrop = True
@@ -302,6 +316,7 @@ Partial Class ModifyCaseForm
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.ActiveCaptionText
         Me.ClientSize = New System.Drawing.Size(248, 408)
+        Me.Controls.Add(Me.Label9)
         Me.Controls.Add(Me.Label6)
         Me.Controls.Add(Me.Label7)
         Me.Controls.Add(Me.Label3)
@@ -362,4 +377,5 @@ Partial Class ModifyCaseForm
     Friend WithEvents OpenedDateBox As System.Windows.Forms.TextBox
     Friend WithEvents Label5 As System.Windows.Forms.Label
     Friend WithEvents ModifyCaseCheckBox As System.Windows.Forms.CheckBox
+    Friend WithEvents Label9 As System.Windows.Forms.Label
 End Class
