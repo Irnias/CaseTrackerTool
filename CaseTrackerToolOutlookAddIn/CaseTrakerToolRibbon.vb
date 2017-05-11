@@ -27,6 +27,7 @@ Public Class CaseTrackerTool
     End Sub
 
     Private Sub NotifyIssueButton_Click(sender As Object, e As RibbonControlEventArgs) Handles NotifyIssueButton.Click
+
         Dim NewMessage As Outlook.MailItem
         Dim OutlookAppli As Outlook.Application
         OutlookAppli = CreateObject("Outlook.Application")
@@ -34,5 +35,13 @@ Public Class CaseTrackerTool
         NewMessage.To = "CaseTrackingToolSupport@accenture.com"
         NewMessage.Subject = "Case Tracker Tool | Issue Notification"
         NewMessage.Display()
+    End Sub
+
+    Private Sub Button1_Click(sender As Object, e As RibbonControlEventArgs) Handles Button1.Click
+        Dim OutApp As Outlook.Application
+        Dim OutItem As Outlook.MailItem
+        Dim ID As String
+        Dim ID2 As String
+
     End Sub
 End Class

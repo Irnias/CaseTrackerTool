@@ -50,6 +50,7 @@
         Me.IssuesGroup = Me.Factory.CreateRibbonGroup
         Me.NotifyIssueButton = Me.Factory.CreateRibbonButton
         Me.NotifyIcon1 = New System.Windows.Forms.NotifyIcon(Me.components)
+        Me.Button1 = Me.Factory.CreateRibbonButton
         Me.CaseTrackerToolTab.SuspendLayout()
         Me.OptionsGroup.SuspendLayout()
         Me.IssuesGroup.SuspendLayout()
@@ -89,6 +90,7 @@
         'IssuesGroup
         '
         Me.IssuesGroup.Items.Add(Me.NotifyIssueButton)
+        Me.IssuesGroup.Items.Add(Me.Button1)
         Me.IssuesGroup.Label = "Issues"
         Me.IssuesGroup.Name = "IssuesGroup"
         '
@@ -104,6 +106,11 @@
         '
         Me.NotifyIcon1.Text = "NotifyIcon1"
         Me.NotifyIcon1.Visible = True
+        '
+        'Button1
+        '
+        Me.Button1.Label = "Button1"
+        Me.Button1.Name = "Button1"
         '
         'CaseTrackerTool
         '
@@ -129,6 +136,7 @@
     Friend WithEvents ModifyCaseButton As Microsoft.Office.Tools.Ribbon.RibbonButton
     Friend WithEvents IssuesGroup As Microsoft.Office.Tools.Ribbon.RibbonGroup
     Friend WithEvents NotifyIssueButton As Microsoft.Office.Tools.Ribbon.RibbonButton
+    Friend WithEvents Button1 As RibbonButton
 End Class
 
 Partial Class ThisRibbonCollection
