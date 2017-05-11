@@ -288,6 +288,7 @@ Salir2:
         Subject = OutItem.Subject
         OriginalEmailTime = OutItem.ReceivedTime
 
+        lista = OutItem.id
 
 Salir1:
     End Sub
