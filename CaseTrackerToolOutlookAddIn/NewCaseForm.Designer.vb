@@ -70,7 +70,7 @@ Partial Class NewCaseForm
         Me.Label1.ForeColor = System.Drawing.Color.White
         Me.Label1.Location = New System.Drawing.Point(12, 14)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(80, 19)
+        Me.Label1.Size = New System.Drawing.Size(81, 19)
         Me.Label1.TabIndex = 1
         Me.Label1.Text = "Tracking ID:"
         '
@@ -92,7 +92,7 @@ Partial Class NewCaseForm
         '
         Me.RequestorBox.AllowDrop = True
         Me.RequestorBox.Font = New System.Drawing.Font("Segoe UI", 10.0!)
-        Me.RequestorBox.Location = New System.Drawing.Point(117, 181)
+        Me.RequestorBox.Location = New System.Drawing.Point(117, 209)
         Me.RequestorBox.Name = "RequestorBox"
         Me.RequestorBox.Size = New System.Drawing.Size(126, 25)
         Me.RequestorBox.TabIndex = 6
@@ -102,7 +102,7 @@ Partial Class NewCaseForm
         Me.Label4.AutoSize = True
         Me.Label4.Font = New System.Drawing.Font("Segoe UI", 10.0!)
         Me.Label4.ForeColor = System.Drawing.Color.White
-        Me.Label4.Location = New System.Drawing.Point(11, 181)
+        Me.Label4.Location = New System.Drawing.Point(11, 209)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(74, 19)
         Me.Label4.TabIndex = 5
@@ -113,7 +113,7 @@ Partial Class NewCaseForm
         Me.Label5.AutoSize = True
         Me.Label5.Font = New System.Drawing.Font("Segoe UI", 10.0!)
         Me.Label5.ForeColor = System.Drawing.Color.White
-        Me.Label5.Location = New System.Drawing.Point(11, 209)
+        Me.Label5.Location = New System.Drawing.Point(11, 125)
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(84, 19)
         Me.Label5.TabIndex = 6
@@ -123,7 +123,7 @@ Partial Class NewCaseForm
         '
         Me.TicketNumberBox.AllowDrop = True
         Me.TicketNumberBox.Font = New System.Drawing.Font("Segoe UI", 10.0!)
-        Me.TicketNumberBox.Location = New System.Drawing.Point(117, 153)
+        Me.TicketNumberBox.Location = New System.Drawing.Point(117, 181)
         Me.TicketNumberBox.Name = "TicketNumberBox"
         Me.TicketNumberBox.Size = New System.Drawing.Size(126, 25)
         Me.TicketNumberBox.TabIndex = 5
@@ -133,7 +133,7 @@ Partial Class NewCaseForm
         Me.Label7.AutoSize = True
         Me.Label7.Font = New System.Drawing.Font("Segoe UI", 10.0!)
         Me.Label7.ForeColor = System.Drawing.Color.White
-        Me.Label7.Location = New System.Drawing.Point(11, 153)
+        Me.Label7.Location = New System.Drawing.Point(11, 181)
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(99, 19)
         Me.Label7.TabIndex = 11
@@ -144,7 +144,7 @@ Partial Class NewCaseForm
         Me.ResponsibleBox.AllowDrop = True
         Me.ResponsibleBox.Font = New System.Drawing.Font("Segoe UI", 10.0!)
         Me.ResponsibleBox.FormattingEnabled = True
-        Me.ResponsibleBox.Location = New System.Drawing.Point(117, 209)
+        Me.ResponsibleBox.Location = New System.Drawing.Point(117, 125)
         Me.ResponsibleBox.Name = "ResponsibleBox"
         Me.ResponsibleBox.Size = New System.Drawing.Size(126, 25)
         Me.ResponsibleBox.TabIndex = 7
@@ -161,7 +161,7 @@ Partial Class NewCaseForm
         '
         Me.DateBox.AllowDrop = True
         Me.DateBox.Font = New System.Drawing.Font("Segoe UI", 10.0!)
-        Me.DateBox.Location = New System.Drawing.Point(117, 125)
+        Me.DateBox.Location = New System.Drawing.Point(117, 153)
         Me.DateBox.Name = "DateBox"
         Me.DateBox.Size = New System.Drawing.Size(126, 25)
         Me.DateBox.TabIndex = 4
@@ -171,7 +171,7 @@ Partial Class NewCaseForm
         Me.Label9.AutoSize = True
         Me.Label9.Font = New System.Drawing.Font("Segoe UI", 10.0!)
         Me.Label9.ForeColor = System.Drawing.Color.White
-        Me.Label9.Location = New System.Drawing.Point(11, 125)
+        Me.Label9.Location = New System.Drawing.Point(11, 153)
         Me.Label9.Name = "Label9"
         Me.Label9.Size = New System.Drawing.Size(41, 19)
         Me.Label9.TabIndex = 20
@@ -213,7 +213,7 @@ Partial Class NewCaseForm
         Me.Label6.ForeColor = System.Drawing.Color.White
         Me.Label6.Location = New System.Drawing.Point(11, 265)
         Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(83, 19)
+        Me.Label6.Size = New System.Drawing.Size(84, 19)
         Me.Label6.TabIndex = 24
         Me.Label6.Text = "Pending Src:"
         '
@@ -233,7 +233,7 @@ Partial Class NewCaseForm
         Me.ConectionBox.AllowDrop = True
         Me.ConectionBox.Font = New System.Drawing.Font("Segoe UI", 10.0!)
         Me.ConectionBox.FormattingEnabled = True
-        Me.ConectionBox.Location = New System.Drawing.Point(117, 97)
+        Me.ConectionBox.Location = New System.Drawing.Point(117, 39)
         Me.ConectionBox.Name = "ConectionBox"
         Me.ConectionBox.Size = New System.Drawing.Size(126, 25)
         Me.ConectionBox.TabIndex = 3
@@ -243,7 +243,7 @@ Partial Class NewCaseForm
         Me.Label10.AutoSize = True
         Me.Label10.Font = New System.Drawing.Font("Segoe UI", 10.0!)
         Me.Label10.ForeColor = System.Drawing.Color.White
-        Me.Label10.Location = New System.Drawing.Point(11, 97)
+        Me.Label10.Location = New System.Drawing.Point(11, 39)
         Me.Label10.Name = "Label10"
         Me.Label10.Size = New System.Drawing.Size(74, 19)
         Me.Label10.TabIndex = 28
@@ -264,7 +264,7 @@ Partial Class NewCaseForm
         Me.ActCategoryBox.AllowDrop = True
         Me.ActCategoryBox.Font = New System.Drawing.Font("Segoe UI", 10.0!)
         Me.ActCategoryBox.FormattingEnabled = True
-        Me.ActCategoryBox.Location = New System.Drawing.Point(117, 69)
+        Me.ActCategoryBox.Location = New System.Drawing.Point(117, 96)
         Me.ActCategoryBox.Name = "ActCategoryBox"
         Me.ActCategoryBox.Size = New System.Drawing.Size(126, 25)
         Me.ActCategoryBox.TabIndex = 2
@@ -274,7 +274,7 @@ Partial Class NewCaseForm
         Me.Label12.AutoSize = True
         Me.Label12.Font = New System.Drawing.Font("Segoe UI", 10.0!)
         Me.Label12.ForeColor = System.Drawing.Color.White
-        Me.Label12.Location = New System.Drawing.Point(12, 69)
+        Me.Label12.Location = New System.Drawing.Point(12, 96)
         Me.Label12.Name = "Label12"
         Me.Label12.Size = New System.Drawing.Size(95, 19)
         Me.Label12.TabIndex = 32
@@ -295,7 +295,7 @@ Partial Class NewCaseForm
         Me.TeamBox.Font = New System.Drawing.Font("Segoe UI", 10.0!)
         Me.TeamBox.FormattingEnabled = True
         Me.TeamBox.ImeMode = System.Windows.Forms.ImeMode.Off
-        Me.TeamBox.Location = New System.Drawing.Point(117, 41)
+        Me.TeamBox.Location = New System.Drawing.Point(117, 67)
         Me.TeamBox.Name = "TeamBox"
         Me.TeamBox.Size = New System.Drawing.Size(126, 25)
         Me.TeamBox.TabIndex = 1
@@ -305,9 +305,9 @@ Partial Class NewCaseForm
         Me.Label13.AutoSize = True
         Me.Label13.Font = New System.Drawing.Font("Segoe UI", 10.0!)
         Me.Label13.ForeColor = System.Drawing.Color.White
-        Me.Label13.Location = New System.Drawing.Point(11, 41)
+        Me.Label13.Location = New System.Drawing.Point(11, 67)
         Me.Label13.Name = "Label13"
-        Me.Label13.Size = New System.Drawing.Size(44, 19)
+        Me.Label13.Size = New System.Drawing.Size(45, 19)
         Me.Label13.TabIndex = 35
         Me.Label13.Text = "Team:"
         '
@@ -339,7 +339,7 @@ Partial Class NewCaseForm
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.ActiveCaptionText
         Me.CausesValidation = False
-        Me.ClientSize = New System.Drawing.Size(248, 408)
+        Me.ClientSize = New System.Drawing.Size(248, 409)
         Me.Controls.Add(Me.CommentsBox)
         Me.Controls.Add(Me.Label14)
         Me.Controls.Add(Me.Label13)

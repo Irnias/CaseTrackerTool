@@ -18,6 +18,7 @@ Public Class NewCaseForm
     Dim adaptador As New OleDbDataAdapter
     Dim registros As New DataSet
     Dim consulta As String
+    Dim items As Integer
     Dim lista As Long
     Public filePath As String
     Public filePath2 As String
@@ -38,9 +39,14 @@ Public Class NewCaseForm
         ConectionBox.Items.Add("Home")
         StatusBox.Items.Add("Closed")
         StatusBox.Items.Add("Open")
-        TextBox6.Text = (DateTime.Now.ToString("MM/dd/yyyy"))
-        filePath = "C:\Users\" & Environment.UserName & "\Resource Planning Tool.txt"
-        ActCategoryBox.Items.AddRange(File.ReadAllLines(filePath))
+
+        TeamBox.Enabled = False
+        ActCategoryBox.Enabled = False
+        ResponsibleBox.Enabled = False
+
+
+
+
     End Sub
 
     Private Sub NewCaseForm_Closed(sender As Object, e As EventArgs) Handles Me.Closed
@@ -139,9 +145,123 @@ Public Class NewCaseForm
 
         Catch ex As Exception
             MsgBox("There is an error with the conections. Please report issue using the 'Notify issue' button", vbCritical)
-            GoTo Salir
+            GoTo Salir1
         End Try
 
+
+
+        TeamBox.Items.Clear()
+        Try
+            consulta = ("SELECT * FROM SubTeams ORDER BY ID DESC")
+            adaptador = New OleDbDataAdapter(consulta, conection)
+            registros = New DataSet
+            adaptador.Fill(registros, "SubTeams")
+            lista = registros.Tables("SubTeams").Rows.Count
+            If lista <> 0 Then
+                DataGridView1.DataSource = registros
+                DataGridView1.DataMember = "SubTeams"
+                items = (registros.Tables("SubTeams").Rows(0).Item("ID"))
+                For x = 0 To items - 1
+                    TeamBox.Items.Add(registros.Tables("SubTeams").Rows(x).Item("Team"))
+                Next
+            End If
+
+            TeamBox.Enabled = True
+
+
+        Catch ex As Exception
+            MsgBox("Error", vbCritical)
+            GoTo Salir1
+        End Try
+
+        'DESCOMENTAR ESTA PARTE SI ES NECESARIO
+
+        'filePath = "C:\Users\" & Environment.UserName & "\UserList.txt"
+
+        'Try
+        '    DateBox.Text = (DateTime.Now.ToString("MM/dd/yyyy"))
+
+        'Try
+
+        '    OutApp = CreateObject("Outlook.Application")
+        '    OutItem = OutApp.ActiveInspector.CurrentItem
+        '    EmailSender = OutItem.SenderName
+        '    RequestorBox.Text = EmailSender
+        '    Subject = OutItem.Subject
+        '    OriginalEmailTime = OutItem.ReceivedTime
+
+        '    ' TextBox6.Text = "Closed"
+
+        'Catch ex As Exception
+        '    MsgBox("Error when trying to get data from the current email item", vbCritical)
+        'End Try
+
+Salir1:
+
+    End Sub
+
+    Private Sub NewCaseConection_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
+        conection.Close()
+    End Sub
+
+    Private Sub TeamBox_SelectedIndexChanged(sender As Object, e As EventArgs) Handles TeamBox.SelectedIndexChanged
+
+        ActCategoryBox.Items.Clear()
+        Try
+            consulta = ("SELECT * FROM TeamsActivities WHERE SubTeam = '" & TeamBox.Text & " ' ORDER BY ID DESC")
+            adaptador = New OleDbDataAdapter(consulta, conection)
+            registros = New DataSet
+            adaptador.Fill(registros, "TeamsActivities")
+            lista = registros.Tables("TeamsActivities").Rows.Count
+            If lista <> 0 Then
+                DataGridView1.DataSource = registros
+                DataGridView1.DataMember = "TeamsActivities"
+                items = (registros.Tables("TeamsActivities").Rows(0).Item("ID"))
+
+                For x = 0 To lista - 1
+                    ActCategoryBox.Items.Add(registros.Tables("TeamsActivities").Rows(x).Item("Activity"))
+                Next
+            End If
+            ActCategoryBox.Enabled = True
+        Catch ex As Exception
+            MsgBox("Error en la parte del activity", vbCritical)
+            GoTo Salir2
+
+        End Try
+Salir2:
+
+    End Sub
+
+    Private Sub ActCategoryBox_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ActCategoryBox.SelectedIndexChanged
+        ResponsibleBox.Items.Clear()
+        Try
+            consulta = ("SELECT * FROM TeamMembers ORDER BY ID DESC")
+            adaptador = New OleDbDataAdapter(consulta, conection)
+            registros = New DataSet
+            adaptador.Fill(registros, "TeamMembers")
+            lista = registros.Tables("TeamMembers").Rows.Count
+            If lista <> 0 Then
+                DataGridView1.DataSource = registros
+                DataGridView1.DataMember = "TeamMembers"
+                items = (registros.Tables("TeamMembers").Rows(0).Item("ID"))
+
+                For x = 0 To items - 1
+                    ResponsibleBox.Items.Add(registros.Tables("TeamMembers").Rows(x).Item("MemberEnterpriceID"))
+                Next
+            End If
+            ResponsibleBox.Enabled = True
+        Catch ex As Exception
+            MsgBox("Error en la parte del analyst", vbCritical)
+            GoTo Salir2
+        End Try
+
+        DateBox.Text = (DateTime.Now.ToString("MM/dd/yyyy"))
+
+
+Salir2:
+    End Sub
+
+    Private Sub ResponsibleBox_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ResponsibleBox.SelectedIndexChanged
 
         Try
             consulta = ("SELECT * FROM TestTable ORDER BY ID DESC")
@@ -153,47 +273,24 @@ Public Class NewCaseForm
                 DataGridView1.DataSource = registros
                 DataGridView1.DataMember = "TestTable"
                 TrakingID.Text = (registros.Tables("TestTable").Rows(0).Item("TicketNumber")) + 1
-                TicketNumberBox.Text = TeamBox.Text & TrakingID.Text                                     'FUNCIONA PARA BSI
+                TicketNumberBox.Text = TeamBox.Text & TrakingID.Text
             End If
+            TicketNumberBox.Visible = True
         Catch ex As Exception
             MsgBox("Error when trying to get the ticket number. Please contact the administrator", vbCritical)
-            GoTo Salir
+            GoTo Salir1
         End Try
 
-        filePath = "C:\Users\" & Environment.UserName & "\UserList.txt"
+        OutApp = CreateObject("Outlook.Application")
+        OutItem = OutApp.ActiveInspector.CurrentItem
+        EmailSender = OutItem.SenderName
+        RequestorBox.Text = EmailSender
+        Subject = OutItem.Subject
+        OriginalEmailTime = OutItem.ReceivedTime
 
-        Try
-            DateBox.Text = (DateTime.Now.ToString("MM/dd/yyyy"))
-            ResponsibleBox.Items.Clear()
-            ResponsibleBox.Items.AddRange(File.ReadAllLines(filePath))
 
-        Catch ex As Exception
-            MsgBox("Error when trying yo get the analyst names", vbCritical)
-        End Try
-
-        Try
-
-            OutApp = CreateObject("Outlook.Application")
-            OutItem = OutApp.ActiveInspector.CurrentItem
-            EmailSender = OutItem.SenderName
-            RequestorBox.Text = EmailSender
-            Subject = OutItem.Subject
-            OriginalEmailTime = OutItem.ReceivedTime
-
-            ' TextBox6.Text = "Closed"
-
-        Catch ex As Exception
-            MsgBox("Error when trying to get data from the current email item", vbCritical)
-        End Try
-
-Salir:
-
+Salir1:
     End Sub
-
-    Private Sub NewCaseConection_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
-        conection.Close()
-    End Sub
-
 End Class
 
 
