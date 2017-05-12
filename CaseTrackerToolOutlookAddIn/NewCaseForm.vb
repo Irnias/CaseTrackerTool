@@ -286,23 +286,6 @@ Salir2:
             GoTo Salir1
         End Try
 
-        Try
-            consulta = ("SELECT * FROM UsersByRegion WHERE Name = '" & RequestorBox.Text & " ' ORDER BY ID DESC")
-            adaptador = New OleDbDataAdapter(consulta, conection)
-            registros = New DataSet
-            adaptador.Fill(registros, "UsersByRegion")
-            lista = registros.Tables("UsersByRegion").Rows.Count
-            If lista <> 0 Then
-                DataGridView1.DataSource = registros
-                DataGridView1.DataMember = "UsersByRegion"
-                RequestorBox.Text = (registros.Tables("UsersByRegion").Rows(0).Item("Region")) + 1
-
-            End If
-        Catch ex As Exception
-            GoTo Salir1
-        End Try
-
-
 
         OutApp = CreateObject("Outlook.Application")
         OutItem = OutApp.ActiveInspector.CurrentItem
@@ -310,6 +293,23 @@ Salir2:
         RequestorBox.Text = EmailSender
         Subject = OutItem.Subject
         OriginalEmailTime = OutItem.ReceivedTime
+
+        Try
+            consulta = ("SELECT * FROM UsersByRegion WHERE Name = '" & RequestorBox.Text & "' ORDER BY ID DESC")
+            adaptador = New OleDbDataAdapter(consulta, conection)
+            registros = New DataSet
+            adaptador.Fill(registros, "UsersByRegion")
+            lista = registros.Tables("UsersByRegion").Rows.Count
+            If lista <> 0 Then
+                DataGridView1.DataSource = registros
+                DataGridView1.DataMember = "UsersByRegion"
+                RequestorBox.Text = (registros.Tables("UsersByRegion").Rows(0).Item("Region"))
+
+            End If
+        Catch ex As Exception
+            GoTo Salir1
+        End Try
+
 
 
 Salir1:
