@@ -43,6 +43,7 @@ Public Class NewCaseForm
         TeamBox.Enabled = False
         ActCategoryBox.Enabled = False
         ResponsibleBox.Enabled = False
+        StatusBox.Enabled = False
 
 
 
@@ -221,7 +222,9 @@ Salir1:
                 For x = 0 To lista - 1
                     ActCategoryBox.Items.Add(registros.Tables("TeamsActivities").Rows(x).Item("Activity"))
                 Next
+
             End If
+
             ActCategoryBox.Enabled = True
         Catch ex As Exception
             MsgBox("Error en la parte del activity", vbCritical)
@@ -249,7 +252,9 @@ Salir2:
                     ResponsibleBox.Items.Add(registros.Tables("TeamMembers").Rows(x).Item("MemberEnterpriceID"))
                 Next
             End If
+            ResponsibleBox.Text = Environment.UserName
             ResponsibleBox.Enabled = True
+            StatusBox.Enabled = True
         Catch ex As Exception
             MsgBox("Error en la parte del analyst", vbCritical)
             GoTo Salir2
@@ -281,6 +286,24 @@ Salir2:
             GoTo Salir1
         End Try
 
+        Try
+            consulta = ("SELECT * FROM UsersByRegion WHERE Name = '" & RequestorBox.Text & " ' ORDER BY ID DESC")
+            adaptador = New OleDbDataAdapter(consulta, conection)
+            registros = New DataSet
+            adaptador.Fill(registros, "UsersByRegion")
+            lista = registros.Tables("UsersByRegion").Rows.Count
+            If lista <> 0 Then
+                DataGridView1.DataSource = registros
+                DataGridView1.DataMember = "UsersByRegion"
+                RequestorBox.Text = (registros.Tables("UsersByRegion").Rows(0).Item("Region")) + 1
+
+            End If
+        Catch ex As Exception
+            GoTo Salir1
+        End Try
+
+
+
         OutApp = CreateObject("Outlook.Application")
         OutItem = OutApp.ActiveInspector.CurrentItem
         EmailSender = OutItem.SenderName
@@ -288,7 +311,6 @@ Salir2:
         Subject = OutItem.Subject
         OriginalEmailTime = OutItem.ReceivedTime
 
-        lista = OutItem.id
 
 Salir1:
     End Sub
