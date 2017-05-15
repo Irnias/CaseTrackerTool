@@ -45,6 +45,7 @@ Public Class ModifyCaseForm
             Dim lista As Byte
             If TicketNumberBox.Text <> "" Then
                 consultar = "SELECT * FROM TestTable WHERE TicketNumber = '" & TicketNumberBox.Text & "'"
+                MsgBox(consultar)
                 adaptador = New OleDbDataAdapter(consultar, conexion)
                 registros = New DataSet
                 adaptador.Fill(registros, "TestTable")
@@ -61,8 +62,8 @@ Public Class ModifyCaseForm
                     CommentsBox.Text = registros.Tables("TestTable").Rows(0).Item("Comments")
 
                 Else
-                    MsgBox("Unable to find case", vbExclamation, "Alert")
-                    TicketNumberBox.Clear()
+                    MsgBox("Error", vbExclamation, "Alert")
+                    'TicketNumberBox.Clear()
                     DataGridView1.Columns.Clear()
                     TicketNumberBox.Focus()
                 End If
@@ -174,22 +175,26 @@ Public Class ModifyCaseForm
     End Sub
 
     Private Sub ComboBox2_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ConectionBox.SelectedIndexChanged
-        If ConectionBox.Text = "Office" Then
-            conexion.ConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source = \\10.21.144.6\GBS Accenture Data\RTR\GA\MIS\Test1.accdb"
-            conexion.Open()
-        Else
-            conexion.ConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source = \\ramxilss002-f04.bp.com\ACNOPs\BA\Mariner\Mariner\RTR\MIS\Test1.accdb"
-            conexion.Open()
-        End If
+        Try
 
-        conexion.Open()
-        ResponsibleBox.Enabled = False
-        RegionBox.Enabled = False
-        OpenedDateBox.Enabled = False
-        RequestorBox.Enabled = False
-        PendingSourceBox.Enabled = False
-        StatusBox.Enabled = False
-        TicketNumberBox.Focus()
+            If ConectionBox.Text = "Office" Then
+                conexion.ConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source = \\10.21.144.6\GBS Accenture Data\RTR\GA\MIS\Test1.accdb"
+                conexion.Open()
+            Else
+                conexion.ConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source = \\ramxilss002-f04.bp.com\ACNOPs\BA\Mariner\Mariner\RTR\MIS\Test1.accdb"
+                conexion.Open()
+            End If
+
+            ResponsibleBox.Enabled = False
+            RegionBox.Enabled = False
+            OpenedDateBox.Enabled = False
+            RequestorBox.Enabled = False
+            PendingSourceBox.Enabled = False
+            StatusBox.Enabled = False
+            TicketNumberBox.Focus()
+        Catch ex As Exception
+            MsgBox("Conecntion failed! Please contact the administrator", vbCritical)
+        End Try
     End Sub
 
     Private Sub ModifyCaseCheckBox_CheckedChanged(sender As Object, e As EventArgs) Handles ModifyCaseCheckBox.CheckedChanged
@@ -214,6 +219,10 @@ Public Class ModifyCaseForm
         comandos = New OleDbCommand(actualizar, conexion)
         comandos.ExecuteNonQuery()
         MsgBox("Changes Done", vbInformation, "Alert")
+
+    End Sub
+
+    Private Sub StatusBox_TextChanged(sender As Object, e As EventArgs) Handles StatusBox.TextChanged
 
     End Sub
 End Class

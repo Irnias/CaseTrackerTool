@@ -85,8 +85,8 @@ Public Class NewCaseForm
                     TicketNumberBox.Text = TeamBox.Text & TrakingID.Text
                 End If
 
-                comands = New OleDbCommand("INSERT INTO TestTable(MyITCase, Opened, Requestor, Analyst, BU, Description, PendingSource, Closed, ActivityCategory, Comments, OriginalEmailTime )" & Chr(13) &
-                                           "VALUES(Textbox3, Textbox5, Textbox1, Combobox1, Textbox2, Subject, Textbox4, TextBox6, ComboBox4, TextBox7, OriginalEmailTime)", conection)
+                comands = New OleDbCommand("INSERT INTO TestTable(MyITCase, Opened, Requestor, Analyst, BU, Description, PendingSource, OriginalEmailTime, Closed, ActivityCategory, Comments)" & Chr(13) &
+                                           "VALUES(TicketNumberBox, DateBox, RequestorBox, ResponsibleBox, RegionBox, Subject, PendingSrcBox, OriginalEmailTime, DateBox, ActCategoryBox, CommentsBox)", conection)
 
                 comands.Parameters.AddWithValue("@MyITCase", TicketNumberBox.Text)
                 comands.Parameters.AddWithValue("@Opened", DateBox.Text)
@@ -99,7 +99,7 @@ Public Class NewCaseForm
 
 
                 If StatusBox.Text = "Closed" Then
-                    comands.Parameters.AddWithValue("@Closed", TextBox6.Text)
+                    comands.Parameters.AddWithValue("@Closed", DateBox.Text)
                 Else
                     comands.Parameters.AddWithValue("@Closed", DBNull.Value)
                 End If
@@ -113,7 +113,7 @@ Public Class NewCaseForm
                 If StatusBox.Text = "Closed" Then               'si el caso fue cerrado o no
                     OutItem.Subject = TeamBox.Text & " | " & OutItem.Subject & " | " & TrakingID.Text & " Completed"
                 Else
-                    OutItem.Subject = TeamBox.Text & " | " & OutItem.Subject & " - " & TrakingID.Text
+                    OutItem.Subject = TeamBox.Text & " | " & OutItem.Subject & " | " & TrakingID.Text
                 End If
 
                 OutItem.Save()
@@ -269,6 +269,11 @@ Salir2:
     Private Sub ResponsibleBox_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ResponsibleBox.SelectedIndexChanged
         OutApp = CreateObject("Outlook.Application")
         OutItem = OutApp.ActiveInspector.CurrentItem
+
+        EmailSender = OutItem.SenderName
+        RequestorBox.Text = EmailSender
+        Subject = OutItem.Subject
+        OriginalEmailTime = OutItem.ReceivedTime
 
         Try
             consulta = ("SELECT * FROM TestTable ORDER BY ID DESC")
