@@ -111,9 +111,9 @@ Public Class NewCaseForm
                 conection.Close()
 
                 If StatusBox.Text = "Closed" Then               'si el caso fue cerrado o no
-                    OutItem.Subject = OutItem.Subject & " - " & TrakingID.Text & " Completed"
+                    OutItem.Subject = TeamBox.Text & " | " & OutItem.Subject & " | " & TrakingID.Text & " Completed"
                 Else
-                    OutItem.Subject = OutItem.Subject & " - " & TrakingID.Text
+                    OutItem.Subject = TeamBox.Text & " | " & OutItem.Subject & " - " & TrakingID.Text
                 End If
 
                 OutItem.Save()
@@ -267,6 +267,8 @@ Salir2:
     End Sub
 
     Private Sub ResponsibleBox_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ResponsibleBox.SelectedIndexChanged
+        OutApp = CreateObject("Outlook.Application")
+        OutItem = OutApp.ActiveInspector.CurrentItem
 
         Try
             consulta = ("SELECT * FROM TestTable ORDER BY ID DESC")
@@ -286,16 +288,8 @@ Salir2:
             GoTo Salir1
         End Try
 
-
-        OutApp = CreateObject("Outlook.Application")
-        OutItem = OutApp.ActiveInspector.CurrentItem
-        EmailSender = OutItem.SenderName
-        RequestorBox.Text = EmailSender
-        Subject = OutItem.Subject
-        OriginalEmailTime = OutItem.ReceivedTime
-
         Try
-            consulta = ("SELECT * FROM UsersByRegion WHERE Name = '" & RequestorBox.Text & "' ORDER BY ID DESC")
+            consulta = ("SELECT * FROM UsersByRegion WHERE Name = '" & OutItem.SenderName & "' ORDER BY ID DESC")
             adaptador = New OleDbDataAdapter(consulta, conection)
             registros = New DataSet
             adaptador.Fill(registros, "UsersByRegion")
@@ -303,7 +297,7 @@ Salir2:
             If lista <> 0 Then
                 DataGridView1.DataSource = registros
                 DataGridView1.DataMember = "UsersByRegion"
-                RequestorBox.Text = (registros.Tables("UsersByRegion").Rows(0).Item("Region"))
+                RegionBox.Text = (registros.Tables("UsersByRegion").Rows(0).Item("Region"))
 
             End If
         Catch ex As Exception
@@ -311,8 +305,33 @@ Salir2:
         End Try
 
 
+        Try
+            consulta = ("SELECT * FROM DefaultStatusByTeam WHERE Team = '" & TeamBox.Text & "' ORDER BY ID DESC")
+            adaptador = New OleDbDataAdapter(consulta, conection)
+            registros = New DataSet
+            adaptador.Fill(registros, "DefaultStatusByTeam")
+            lista = registros.Tables("DefaultStatusByTeam").Rows.Count
+            If lista <> 0 Then
+                DataGridView1.DataSource = registros
+                DataGridView1.DataMember = "DefaultStatusByTeam"
+                RegionBox.Text = (registros.Tables("DefaultStatusByTeam").Rows(0).Item("DefaultStatus"))
+
+            End If
+        Catch ex As Exception
+            GoTo Salir1
+        End Try
+
+        EmailSender = OutItem.SenderName
+        RequestorBox.Text = EmailSender
+        Subject = OutItem.Subject
+        OriginalEmailTime = OutItem.ReceivedTime
+
 
 Salir1:
+    End Sub
+
+    Private Sub StatusBox_SelectedIndexChanged(sender As Object, e As EventArgs) Handles StatusBox.SelectedIndexChanged
+
     End Sub
 End Class
 

@@ -142,6 +142,7 @@ Partial Class NewCaseForm
         'ResponsibleBox
         '
         Me.ResponsibleBox.AllowDrop = True
+        Me.ResponsibleBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.ResponsibleBox.Font = New System.Drawing.Font("Segoe UI", 10.0!)
         Me.ResponsibleBox.FormattingEnabled = True
         Me.ResponsibleBox.Location = New System.Drawing.Point(117, 125)
@@ -160,6 +161,7 @@ Partial Class NewCaseForm
         'DateBox
         '
         Me.DateBox.AllowDrop = True
+        Me.DateBox.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.DateBox.Font = New System.Drawing.Font("Segoe UI", 10.0!)
         Me.DateBox.Location = New System.Drawing.Point(117, 153)
         Me.DateBox.Name = "DateBox"
@@ -231,6 +233,7 @@ Partial Class NewCaseForm
         'ConectionBox
         '
         Me.ConectionBox.AllowDrop = True
+        Me.ConectionBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.ConectionBox.Font = New System.Drawing.Font("Segoe UI", 10.0!)
         Me.ConectionBox.FormattingEnabled = True
         Me.ConectionBox.Location = New System.Drawing.Point(117, 39)
@@ -252,6 +255,7 @@ Partial Class NewCaseForm
         'StatusBox
         '
         Me.StatusBox.AllowDrop = True
+        Me.StatusBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.StatusBox.Font = New System.Drawing.Font("Segoe UI", 10.0!)
         Me.StatusBox.FormattingEnabled = True
         Me.StatusBox.Location = New System.Drawing.Point(117, 293)
@@ -262,6 +266,7 @@ Partial Class NewCaseForm
         'ActCategoryBox
         '
         Me.ActCategoryBox.AllowDrop = True
+        Me.ActCategoryBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.ActCategoryBox.Font = New System.Drawing.Font("Segoe UI", 10.0!)
         Me.ActCategoryBox.FormattingEnabled = True
         Me.ActCategoryBox.Location = New System.Drawing.Point(117, 96)
@@ -292,9 +297,9 @@ Partial Class NewCaseForm
         'TeamBox
         '
         Me.TeamBox.AllowDrop = True
+        Me.TeamBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.TeamBox.Font = New System.Drawing.Font("Segoe UI", 10.0!)
-        Me.TeamBox.FormattingEnabled = True
-        Me.TeamBox.ImeMode = System.Windows.Forms.ImeMode.Off
+        Me.TeamBox.ImeMode = System.Windows.Forms.ImeMode.Disable
         Me.TeamBox.Location = New System.Drawing.Point(117, 67)
         Me.TeamBox.Name = "TeamBox"
         Me.TeamBox.Size = New System.Drawing.Size(126, 25)

@@ -109,6 +109,7 @@ Partial Class ModifyCaseForm
         '
         'ConectionBox
         '
+        Me.ConectionBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.ConectionBox.Font = New System.Drawing.Font("Segoe UI", 10.0!)
         Me.ConectionBox.FormattingEnabled = True
         Me.ConectionBox.Location = New System.Drawing.Point(117, 13)
@@ -213,6 +214,7 @@ Partial Class ModifyCaseForm
         '
         Me.StatusBox.BackColor = System.Drawing.Color.LightGray
         Me.StatusBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.StatusBox.Enabled = False
         Me.StatusBox.Font = New System.Drawing.Font("Segoe UI", 10.0!)
         Me.StatusBox.ForeColor = System.Drawing.Color.DodgerBlue
         Me.StatusBox.Location = New System.Drawing.Point(114, 143)

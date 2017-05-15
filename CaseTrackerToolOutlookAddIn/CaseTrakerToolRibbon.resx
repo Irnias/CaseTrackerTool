@@ -121,7 +121,7 @@
   <data name="AddCaseButton.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAQAAAAEACAYAAABccqhmAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
-        wwAADsMBx2+oZAAAGXlJREFUeF7tnYuPVEUWxvtf282a3bjRYNxoJGs0Go0uCkJAUARFEIUFFVlBCIgE
+        wgAADsIBFShKgAAAGXlJREFUeF7tnYuPVEUWxvtf282a3bjRYNxoJGs0Go0uCkJAUARFEIUFFVlBCIgE
         FgILK4ICIogLoiAEBEVAFmTeMz2vnul5zzC1+1V3D93TZ3q6b1fdrrr3+yVfYpymH7fqfrcep85JKMcY
         HhlX6YG7qiM1plo6RtXtphF17bdhdenG4ITO/zKozlwe0Dpxvl99ebZvQofPpNX+r3tF7Trao7Z/kQpN
         +Dzpe0BHvr/3nSH8jtxvwu/L/72/1g+rO80j+nqk0nf19SHEBDUxgPFxpRraRtWB/6TV0k3t6qnlzWrG
@@ -236,7 +236,7 @@
   <data name="ModifyCaseButton.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAQAAAAEACAYAAABccqhmAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
-        wwAADsMBx2+oZAAAFy1JREFUeF7tnf2PFEUexu9fu4vGi+aM5oxGItFoNHooiEHBQ0AEUREUDgUhIBoQ
+        wgAADsIBFShKgAAAFy1JREFUeF7tnf2PFEUexu9fu4vGi+aM5oxGItFoNHooiEHBQ0AEUREUDgUhIBoQ
         AoKi3MGBIAqHB0JAUIQTQdi32Z3d2ff32aXuntqZY4ACdruqu75V/XyS5zfdGbpqPl1dXfWt36kccuWK
         Uv2DV1RH94hqKZXVxcZh9dOFQXXi3ID67nS/OnyqXx043qf2fd+r9hzpVTsP9ehs/7pbbd03vmzY1ak+
         /kc22by3y/gdJpod3479O2uz63CPvg61OXiyT1+jYz8P6Gt25uKg+qVuSNW3lFWxY0Rf157+UVUu/+9C
@@ -341,7 +341,7 @@
   <data name="NotifyIssueButton.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAQAAAAEACAYAAABccqhmAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
-        wwAADsMBx2+oZAAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAADNVSURBVHhe7X0H
+        wgAADsIBFShKgAAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAADNVSURBVHhe7X0H
         eB7FtbYIBIeWhEsnJqGFJJCEGkgC5OaSJ8m9EFL+kJAbAik/Di4YDKa44gLupjdjsAGb4kK3rWZVS7Ll
         Jhe5F7nLTZZlW73Nnfd8u5Is7Sdtma3feZ/nPBT7253dnfedM2fOnEkSDAYjYREZAVi/75j4bPV+MT6j
         RPT4sFj8+tWl4jtP54lvPZUjkh5MFUm9kkVS73b2wDxx+YgF4rvy7/3qlaWixwfFYvz8EjFnzQGx+UCl
@@ -570,4 +570,7 @@
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>73</value>
   </metadata>
+  <data name="$this.RibbonType" xml:space="preserve">
+    <value>Microsoft.Outlook.Appointment, Microsoft.Outlook.Explorer, Microsoft.Outlook.Mail.Compose, Microsoft.Outlook.Mail.Read, Microsoft.Outlook.MeetingRequest.Read, Microsoft.Outlook.MeetingRequest.Send, Microsoft.Outlook.Resend, Microsoft.Outlook.Response.Compose, Microsoft.Outlook.Task</value>
+  </data>
 </root>

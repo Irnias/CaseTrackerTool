@@ -37,6 +37,6 @@ Public Class CaseTrackerTool
         NewMessage.Display()
     End Sub
 
-    Private Sub Button1_Click(sender As Object, e As RibbonControlEventArgs) Handles Button1.Click
+    Private Sub Button1_Click(sender As Object, e As RibbonControlEventArgs)
     End Sub
 End Class
