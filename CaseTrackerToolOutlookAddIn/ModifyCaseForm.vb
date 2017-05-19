@@ -40,82 +40,74 @@ Public Class ModifyCaseForm
     End Sub
 
     Private Sub SearchButton_Click(sender As Object, e As EventArgs) Handles SearchButton.Click
-        Dim Rows As Integer
-
         'Validate ticket existence
-        If SearchTicket(Rows) Then
+        If SearchTicket(TicketNumberBox.Text) Then
 
             'Retrieve ticket information
             RetrieveTicketInformation()
         Else
-            MsgBox("No case was find", vbExclamation, "Alert")
+            MsgBox("No ticket was find", vbExclamation, "Alert")
             TicketNumberBox.Clear()
             DataGridView1.Columns.Clear()
             TicketNumberBox.Focus()
         End If
     End Sub
 
-    Private Sub CheckBox1_CheckedChanged(sender As Object, e As EventArgs)
-        ResponsibleBox.Enabled = True
-        RegionBox.Enabled = True
-        OpenedDateBox.Enabled = True
-        RequestorBox.Enabled = True
-        PendingSourceBox.Enabled = True
-        CommentsBox.Enabled = True
-    End Sub
-
-    Private Sub Button3_Click(sender As Object, e As EventArgs)
-        Dim actualizar As String
-        '  actualizar = "UPDATE TestTable SET PendingSource = '" & TextBox6.Text & "' WHERE MyITCase = '" & TextBox1.Text & "'"
-
-        actualizar = "UPDATE TestTable SET Analyst = '" & ResponsibleBox.Text &
-         "', BU = '" & RegionBox.Text &
-         "', Opened = '" & OpenedDateBox.Text &
-         "', Requestor = '" & RequestorBox.Text &
-         "', PendingSource = '" & PendingSourceBox.Text &
-         "', Comments = '" & CommentsBox.Text &
-         "' WHERE MyITCase = '" & TicketNumberBox.Text & "'"
-
-        command = New OleDbCommand(actualizar, conection)
-        command.ExecuteNonQuery()
-        MsgBox("Changes Done", vbInformation, "Alert")
-        conection.Close()
-
-    End Sub
-
     Private Sub CloseButton_Click(sender As Object, e As EventArgs) Handles CloseButton.Click
+        Dim updateQuery As String
 
-
-        If StatusBox.Text <> "Closed" Or PendingSourceBox.Text <> "" Then
-
-            Try
-                Dim actualizar As String
-                'actualizar = "UPDATE TestTable SET Closed = '" & (DateTime.Now.ToString("MM/dd/yyyy")) & "' WHERE TicketNumber = '" & TicketNumberBox.Text & "'"
-
-                actualizar = "UPDATE Testable SET Closed = '" & (DateTime.Now.ToString("MM/dd/yyyy")) & "' ,PendingSource = '" & DBNull.Value & "' WHERE TicketNumber = '" & TicketNumberBox.Text & "'"
-
-                command = New OleDbCommand(actualizar, conection)
-                command.ExecuteNonQuery()
-                ' Outlookitem.Subject = Outlookitem.Subject & " - " & "Ticket closed"
-                MsgBox("Case closed correctly", vbInformation, "Correct")
-
-            Catch ex As Exception
-                MsgBox("The Case cannot be closed", vbInformation, "Correct")
-            End Try
-
-            OutlookAppli = CreateObject("Outlook.Application")
-            Outlookitem = OutlookAppli.ActiveInspector.CurrentItem
-
-            Try
-                Outlookitem.Subject = Outlookitem.Subject & " Completed"
-            Catch ex As Exception
-            End Try
-
-            StatusBox.Text = "Closed"
-            Outlookitem.Save()
+        'Validate ticket existence
+        If Not SearchTicket(TicketNumberBox.Text) Then
+            'Ticket does not exist
+            MsgBox("No ticket was find", vbExclamation, "Alert")
+            Exit Sub
         Else
-            MsgBox("Make sure the ticket Is Not already closed And the pending source field Is blank", vbInformation, "Ticket already closed")
+            'Retrieve ticket information
+            RetrieveTicketInformation()
         End If
+
+        'Ticket must be open
+        If StatusBox.Text = "Closed" Then
+            MsgBox("Ticket already closed", vbExclamation, "Alert")
+            Exit Sub
+        End If
+
+        'Format Query
+        updateQuery = "UPDATE Testable SET "
+        updateQuery = updateQuery & "Closed = '" & (DateTime.Now.ToString("MM/dd/yyyy")) & "'"
+        updateQuery = updateQuery & ","
+        updateQuery = updateQuery & "PendingSource = '" & DBNull.Value & "'"
+        updateQuery = updateQuery & "WHERE TicketNumber = " & TicketNumberBox.Text
+        Try
+            'Perform close
+            command = New OleDbCommand(updateQuery, conection)
+            command.ExecuteNonQuery()
+            MsgBox("Ticket closed", vbExclamation, "Alert")
+
+            'Change mail status 
+            'Team | Task | Mail Subject | Ticket Number| Ticket Status
+            'HAY QUE VER QUE TIPO DE FORMATO DE MAIL USAMOS
+            Outlookitem.Subject = records.Tables("TestTable").Rows(0).Item("Team") & "|"
+            Outlookitem.Subject = Outlookitem.Subject & "|"
+            Outlookitem.Subject = Outlookitem.Subject & "|"
+            Outlookitem.Subject = Outlookitem.Subject & "|"
+            Outlookitem.Subject = Outlookitem.Subject
+        Catch ex As Exception
+            MsgBox(ex.Message)
+        End Try
+
+        'No se para que esta esto
+        'OutlookAppli = CreateObject("Outlook.Application")
+        '    Outlookitem = OutlookAppli.ActiveInspector.CurrentItem
+
+        '    Try
+        '        Outlookitem.Subject = Outlookitem.Subject & " Completed"
+        '    Catch ex As Exception
+        '    End Try
+
+        '    StatusBox.Text = "Closed"
+        Outlookitem.Save()
+        Me.Close()
     End Sub
 
     Private Sub OpenButton_Click(sender As Object, e As EventArgs) Handles OpenButton.Click
@@ -153,19 +145,22 @@ Public Class ModifyCaseForm
 
     Private Sub ComboBox2_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ConectionBox.SelectedIndexChanged
         'Restart conection if open
-        If conection.State. = "Open" Then
+        If conection.State = ConnectionState.Open Then
             conection.Close()
         End If
 
-        If ConectionBox.Text = "Office" Then
-            conection.ConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source = \\10.21.144.6\GBS Accenture Data\RTR\GA\MIS\Test1.accdb"
-            conection.Open()
-        Else
-            conection.ConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source = \\ramxilss002-f04.bp.com\ACNOPs\BA\Mariner\Mariner\RTR\MIS\Test1.accdb"
-            conection.Open()
-        End If
+        Try
+            If ConectionBox.Text = "Office" Then
+                conection.ConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source = \\10.21.144.6\GBS Accenture Data\RTR\GA\MIS\Test1.accdb"
+                conection.Open()
+            Else
+                conection.ConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source = \\ramxilss002-f04.bp.com\ACNOPs\BA\Mariner\Mariner\RTR\MIS\Test1.accdb"
+                conection.Open()
+            End If
+        Catch ex As Exception
+            MsgBox(ex.Message)
+        End Try
 
-        conection.Open()
         ResponsibleBox.Enabled = False
         RegionBox.Enabled = False
         OpenedDateBox.Enabled = False
@@ -176,12 +171,30 @@ Public Class ModifyCaseForm
     End Sub
 
     Private Sub ModifyCaseCheckBox_CheckedChanged(sender As Object, e As EventArgs) Handles ModifyCaseCheckBox.CheckedChanged
-        ResponsibleBox.Enabled = True
-        RegionBox.Enabled = True
-        OpenedDateBox.Enabled = True
-        RequestorBox.Enabled = True
-        PendingSourceBox.Enabled = True
-        StatusBox.Enabled = True
+        'Validate Ticket Existencce
+        If SearchTicket(TicketNumberBox.Text) Then
+            'Enable Modification fields
+            If ModifyCaseCheckBox.Checked Then
+                ResponsibleBox.Enabled = True
+                RegionBox.Enabled = True
+                OpenedDateBox.Enabled = True
+                RequestorBox.Enabled = True
+                PendingSourceBox.Enabled = True
+                StatusBox.Enabled = True
+            Else
+                'Disable Modification fields
+                ResponsibleBox.Enabled = False
+                RegionBox.Enabled = False
+                OpenedDateBox.Enabled = False
+                RequestorBox.Enabled = False
+                PendingSourceBox.Enabled = False
+                StatusBox.Enabled = False
+            End If
+        Else
+            'Ticket does not exist
+            MsgBox("No case was find", vbExclamation, "Alert")
+        End If
+
     End Sub
 
     Private Sub ModifyCaseButton_Click(sender As Object, e As EventArgs) Handles ModifyCaseButton.Click
@@ -200,24 +213,24 @@ Public Class ModifyCaseForm
 
     End Sub
 
-    Private Function SearchTicket(Rows As Integer) As Boolean
-        Dim consult As String
+    Private Function SearchTicket(TicketNumber As String) As Boolean
         Dim result As Boolean = False
+        Dim consult As String
+        Dim Rows As Integer
 
         If TicketNumberBox.Text <> "" Then
-            consult = "SELECT * FROM TestTable WHERE TicketNumber = '" & TicketNumberBox.Text & "'"
-            adapter = New OleDbDataAdapter(consult, conection)
-            records = New DataSet
-            adapter.Fill(records, "TestTable")
-            Rows = records.Tables("TestTable").Rows.Count
+            Try
+                consult = "SELECT * FROM TestTable WHERE TicketNumber = " & TicketNumber
+                adapter = New OleDbDataAdapter(consult, conection)
+                adapter.Fill(records, "TestTable")
+                Rows = records.Tables("TestTable").Rows.Count
 
-            If Rows <> 0 Then
-                result = True
-                MsgBox("Select performed", vbExclamation, "Alert")
-            Else
-                MsgBox("Error in selection", vbExclamation, "Alert")
-            End If
-
+                If Rows <> 0 Then
+                    result = True
+                End If
+            Catch ex As Exception
+                MsgBox(ex.Message)
+            End Try
         End If
 
         Return result
@@ -233,9 +246,6 @@ Public Class ModifyCaseForm
         PendingSourceBox.Text = records.Tables("TestTable").Rows(0).Item("PendingSource")
         StatusBox.Text = records.Tables("TestTable").Rows(0).Item("Status")
         CommentsBox.Text = records.Tables("TestTable").Rows(0).Item("Comments")
-
-        'Borrar
-        MsgBox("Case Found", vbExclamation, "Alert")
     End Sub
 
 End Class
