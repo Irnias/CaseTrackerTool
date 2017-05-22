@@ -82,34 +82,12 @@ Public Class NewCaseForm
 
         NextNumber = getNextTicketNumber()
 
-        Try
+        If NextNumber = 0 Then Exit Sub
 
 
-            comands = New OleDbCommand("INSERT INTO TestTable(MyITCase, Opened, Requestor, Analyst, BU, Description, PendingSource, Closed, ActivityCategory, Comments, OriginalEmailTime )" & Chr(13) &
-                                           "VALUES(Textbox3, Textbox5, Textbox1, Combobox1, Textbox2, Subject, Textbox4, TextBox6, ComboBox4, TextBox7, OriginalEmailTime)", conection)
+        If InsertTicket() Then
 
-            comands.Parameters.AddWithValue("@MyITCase", TicketNumberBox.Text)
-            comands.Parameters.AddWithValue("@Opened", DateBox.Text)
-            comands.Parameters.AddWithValue("@Requestor", RequestorBox.Text)
-            comands.Parameters.AddWithValue("@Analyst", ResponsibleBox.Text)
-            comands.Parameters.AddWithValue("@BU", RegionBox.Text)
-            comands.Parameters.AddWithValue("@Description", Subject)
-            comands.Parameters.AddWithValue("@PendingSource", PendingSrcBox.Text)
-            comands.Parameters.AddWithValue("@OriginalEmailTime", OriginalEmailTime)
-
-
-            If StatusBox.Text = "Closed" Then
-                comands.Parameters.AddWithValue("@Closed", TextBox6.Text)
-            Else
-                comands.Parameters.AddWithValue("@Closed", DBNull.Value)
-            End If
-
-            comands.Parameters.AddWithValue("@ActivityCategory", ActCategoryBox.Text)
-            comands.Parameters.AddWithValue("@Comments", CommentsBox.Text)
-            comands.ExecuteNonQuery()
-
-            conection.Close()
-
+            'FORMATEAR EL ASUNTO
             If StatusBox.Text = "Closed" Then               'si el caso fue cerrado o no
                 OutItem.Subject = OutItem.Subject & " - " & TrakingID.Text & " Completed"
             Else
@@ -117,19 +95,13 @@ Public Class NewCaseForm
             End If
 
             OutItem.Save()
-            MsgBox("Saved", vbInformation)
-
-
-        Catch ex As Exception
-
-            MsgBox("For some reason the case cannot be created. Please contact the administrator", vbCritical)
-
-        End Try
+            MsgBox("Saved", vbExclamation, "Alert")
+        Else
+            MsgBox("Creation Failed", vbExclamation, "Alert")
+        End If
 
         conection.Close()
         Me.Close()
-
-
     End Sub
 
     Public Sub ComboBox2_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ConectionBox.SelectedIndexChanged
@@ -300,7 +272,7 @@ Salir1:
             adapter.Fill(record, "TestTable")
             Rows = record.Tables("TestTable").Rows.Count
             If Rows <> 0 Then
-                result = (CLng(TrakingID.Text) + 1
+                result = CLng(TrakingID.Text) + 1
                 TicketNumberBox.Text = TeamBox.Text & TrakingID.Text
             End If
         Catch ex As Exception
@@ -308,5 +280,55 @@ Salir1:
         End Try
 
         Return result
+    End Function
+
+    Private Function InsertTicket() As Boolean
+        Dim result As Boolean = False
+        Dim query As String
+        Dim Rows As Integer
+
+        'Format query
+        query = "INSERT INTO TestTable(MyITCase, Opened, Requestor, Analyst, BU, Description, PendingSource, Closed, ActivityCategory, Comments, OriginalEmailTime )"
+        query = query & "VALUES("
+        'MyITCase = TicketNumberBox.Text
+        query = query & TicketNumberBox.Text
+        'Opened = DateBox.Text
+        query = query & DateBox.Text
+        'Requestor = RequestorBox.Text
+        query = query & "'" & RequestorBox.Text & "'"
+        'Analyst = ResponsibleBox.Text
+        query = query & "'" & ResponsibleBox.Text & "'"
+        'BU = RegionBox.Text
+        query = query & "'" & RegionBox.Text & "'"
+        'Description = Subject
+        query = query & "'" & Subject & "'"
+        'PendingSource = PendingSrcBox.Text
+        query = query & "'" & PendingSrcBox.Text & "'"
+        'Closed
+        If StatusBox.Text = "Closed" Then
+            query = query & "'" & TextBox6.Text & "'"
+        Else
+            query = query & DBNull.Value
+        End If
+        'ActivityCategory = ActCategoryBox.Text
+        query = query & "'" & ActCategoryBox.Text & "'"
+        'Comments = CommentsBox.Text
+        query = query & "'" & CommentsBox.Text & "'"
+        'OriginalEmailTime = OriginalEmailTime
+        query = query & OriginalEmailTime & ")"
+
+        Try
+            comands = New OleDbCommand(query, conection)
+            comands.ExecuteNonQuery()
+            result = True
+        Catch ex As Exception
+            MsgBox(ex.Message)
+        End Try
+
+
+        conection.Close()
+
+        Return result
+
     End Function
 End Class
