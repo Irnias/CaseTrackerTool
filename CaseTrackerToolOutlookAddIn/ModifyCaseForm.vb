@@ -88,10 +88,10 @@ Public Class ModifyCaseForm
             'Team | Task | Mail Subject | Ticket Number| Ticket Status
             'HAY QUE VER QUE TIPO DE FORMATO DE MAIL USAMOS
             Outlookitem.Subject = records.Tables("TestTable").Rows(0).Item("Team") & "|"
-            Outlookitem.Subject = Outlookitem.Subject & "|"
-            Outlookitem.Subject = Outlookitem.Subject & "|"
-            Outlookitem.Subject = Outlookitem.Subject & "|"
-            Outlookitem.Subject = Outlookitem.Subject
+            Outlookitem.Subject = Outlookitem.Subject & records.Tables("TestTable").Rows(0).Item("ActivityCategory") & "|"
+            Outlookitem.Subject = Outlookitem.Subject & records.Tables("TestTable").Rows(0).Item("Description") & "|"
+            Outlookitem.Subject = Outlookitem.Subject & records.Tables("TestTable").Rows(0).Item("TicketNumber") & "|"
+            Outlookitem.Subject = Outlookitem.Subject & records.Tables("TestTable").Rows(0).Item("Status")
         Catch ex As Exception
             MsgBox(ex.Message)
         End Try
