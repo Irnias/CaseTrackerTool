@@ -20,6 +20,7 @@ Public Class ModifyCaseForm
         PendingSourceBox.Enabled = False
         CommentsBox.Enabled = False
 
+        'Load ConectionBox
         ConectionBox.Items.Add("Office")
         ConectionBox.Items.Add("Home")
     End Sub
@@ -54,7 +55,6 @@ Public Class ModifyCaseForm
     End Sub
 
     Private Sub CloseButton_Click(sender As Object, e As EventArgs) Handles CloseButton.Click
-        Dim updateQuery As String
 
         'Validate ticket existence
         If Not SearchTicket(TicketNumberBox.Text) Then
@@ -72,29 +72,17 @@ Public Class ModifyCaseForm
             Exit Sub
         End If
 
-        'Format Query
-        updateQuery = "UPDATE Testable SET "
-        updateQuery = updateQuery & "Closed = '" & (DateTime.Now.ToString("MM/dd/yyyy")) & "'"
-        updateQuery = updateQuery & ","
-        updateQuery = updateQuery & "PendingSource = '" & DBNull.Value & "'"
-        updateQuery = updateQuery & "WHERE TicketNumber = " & TicketNumberBox.Text
-        Try
-            'Perform close
-            command = New OleDbCommand(updateQuery, conection)
-            command.ExecuteNonQuery()
-            MsgBox("Ticket closed", vbExclamation, "Alert")
+        'Update Ticket
+        If UpdateTicket("Close") Then
 
             'Change mail status 
             'Team | Task | Mail Subject | Ticket Number| Ticket Status
-            'HAY QUE VER QUE TIPO DE FORMATO DE MAIL USAMOS
             Outlookitem.Subject = records.Tables("TestTable").Rows(0).Item("Team") & "|"
-            Outlookitem.Subject = Outlookitem.Subject & records.Tables("TestTable").Rows(0).Item("ActivityCategory") & "|"
+            'Outlookitem.Subject = Outlookitem.Subject & records.Tables("TestTable").Rows(0).Item("ActivityCategory") & "|"
             Outlookitem.Subject = Outlookitem.Subject & records.Tables("TestTable").Rows(0).Item("Description") & "|"
             Outlookitem.Subject = Outlookitem.Subject & records.Tables("TestTable").Rows(0).Item("TicketNumber") & "|"
             Outlookitem.Subject = Outlookitem.Subject & records.Tables("TestTable").Rows(0).Item("Status")
-        Catch ex As Exception
-            MsgBox(ex.Message)
-        End Try
+        End If
 
         'No se para que esta esto
         'OutlookAppli = CreateObject("Outlook.Application")
@@ -112,43 +100,80 @@ Public Class ModifyCaseForm
 
     Private Sub OpenButton_Click(sender As Object, e As EventArgs) Handles OpenButton.Click
 
-        If StatusBox.Text <> "Opened" Then
-
-            Try
-                Dim actualizar As String
-
-                actualizar = "UPDATE TestTable Set Closed = NULL WHERE TicketNumber = '" & TicketNumberBox.Text & "'"
-                command = New OleDbCommand(actualizar, conection)
-                command.ExecuteNonQuery()
-                MsgBox("Case Opened correctly", vbInformation, "Correct")
-
-            Catch ex As Exception
-                MsgBox("The case cannot be opened", vbInformation, "Correct")
-            End Try
-
-            OutlookAppli = CreateObject("Outlook.Application")
-            Outlookitem = OutlookAppli.ActiveInspector.CurrentItem
-
-            Try
-                Outlookitem.Subject = Replace(Outlookitem.Subject, "Completed", "")
-            Catch ex As Exception
-            End Try
-
-            StatusBox.Text = "Opened"
-            Outlookitem.Save()
+        'Validate ticket existence
+        If Not SearchTicket(TicketNumberBox.Text) Then
+            'Ticket does not exist
+            MsgBox("No ticket was find", vbExclamation, "Alert")
+            Exit Sub
         Else
-            MsgBox("The ticket is already opened.", vbInformation, "Ticket already opened")
+            'Retrieve ticket information
+            RetrieveTicketInformation()
+        End If
+
+        'Ticket must be closed
+        If StatusBox.Text = "Opened" Then
+            MsgBox("Ticket already open", vbExclamation, "Alert")
+            Exit Sub
+        End If
+
+        If UpdateTicket("Open") Then
+            'Change mail status 
+            'Team | Task | Mail Subject | Ticket Number| Ticket Status
+            Outlookitem.Subject = records.Tables("TestTable").Rows(0).Item("Team") & "|"
+            Outlookitem.Subject = Outlookitem.Subject & records.Tables("TestTable").Rows(0).Item("ActivityCategory") & "|"
+            Outlookitem.Subject = Outlookitem.Subject & records.Tables("TestTable").Rows(0).Item("Description") & "|"
+            Outlookitem.Subject = Outlookitem.Subject & records.Tables("TestTable").Rows(0).Item("TicketNumber") & "|"
+            Outlookitem.Subject = Outlookitem.Subject & records.Tables("TestTable").Rows(0).Item("Status")
 
         End If
 
+        'No se para que esta esto
+        'OutlookAppli = CreateObject("Outlook.Application")
+        'Outlookitem = OutlookAppli.ActiveInspector.CurrentItem
+        'Try
+        '    Outlookitem.Subject = Replace(Outlookitem.Subject, "Completed", "")
+        'Catch ex As Exception
+        'End Try
+        'StatusBox.Text = "Opened"
+        Outlookitem.Save()
+        Me.Close()
     End Sub
 
-    Private Sub ComboBox2_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ConectionBox.SelectedIndexChanged
+    Private Sub ModifyCaseButton_Click(sender As Object, e As EventArgs) Handles ModifyCaseButton.Click
+
+        'Validate ticket existence
+        If Not SearchTicket(TicketNumberBox.Text) Then
+            'Ticket does not exist
+            MsgBox("No ticket was find", vbExclamation, "Alert")
+            Exit Sub
+        Else
+            'Retrieve ticket information
+            RetrieveTicketInformation()
+        End If
+
+        'Update Ticket
+        If UpdateTicket("Modify") Then
+            'Change mail status 
+            'Team | Task | Mail Subject | Ticket Number| Ticket Status
+            Outlookitem.Subject = records.Tables("TestTable").Rows(0).Item("Team") & "|"
+            Outlookitem.Subject = Outlookitem.Subject & records.Tables("TestTable").Rows(0).Item("ActivityCategory") & "|"
+            Outlookitem.Subject = Outlookitem.Subject & records.Tables("TestTable").Rows(0).Item("Description") & "|"
+            Outlookitem.Subject = Outlookitem.Subject & records.Tables("TestTable").Rows(0).Item("TicketNumber") & "|"
+            Outlookitem.Subject = Outlookitem.Subject & records.Tables("TestTable").Rows(0).Item("Status")
+        End If
+
+        Outlookitem.Save()
+        Me.Close()
+
+    End Sub
+
+    Private Sub ConectionBox_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ConectionBox.SelectedIndexChanged
         'Restart conection if open
         If conection.State = ConnectionState.Open Then
             conection.Close()
         End If
 
+        'Start new conection
         Try
             If ConectionBox.Text = "Office" Then
                 conection.ConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source = \\10.21.144.6\GBS Accenture Data\RTR\GA\MIS\Test1.accdb"
@@ -171,57 +196,42 @@ Public Class ModifyCaseForm
     End Sub
 
     Private Sub ModifyCaseCheckBox_CheckedChanged(sender As Object, e As EventArgs) Handles ModifyCaseCheckBox.CheckedChanged
-        'Validate Ticket Existencce
-        If SearchTicket(TicketNumberBox.Text) Then
-            'Enable Modification fields
-            If ModifyCaseCheckBox.Checked Then
-                ResponsibleBox.Enabled = True
-                RegionBox.Enabled = True
-                OpenedDateBox.Enabled = True
-                RequestorBox.Enabled = True
-                PendingSourceBox.Enabled = True
-                StatusBox.Enabled = True
-            Else
-                'Disable Modification fields
-                ResponsibleBox.Enabled = False
-                RegionBox.Enabled = False
-                OpenedDateBox.Enabled = False
-                RequestorBox.Enabled = False
-                PendingSourceBox.Enabled = False
-                StatusBox.Enabled = False
-            End If
-        Else
+
+        'Validate ticket existence
+        If Not SearchTicket(TicketNumberBox.Text) Then
             'Ticket does not exist
-            MsgBox("No case was find", vbExclamation, "Alert")
+            MsgBox("No ticket was find", vbExclamation, "Alert")
+            Exit Sub
         End If
 
-    End Sub
-
-    Private Sub ModifyCaseButton_Click(sender As Object, e As EventArgs) Handles ModifyCaseButton.Click
-        Dim actualizar As String
-        actualizar = "UPDATE TestTable SET Analyst = '" & ResponsibleBox.Text &
-         "', BU = '" & RegionBox.Text &
-         "', Opened = '" & OpenedDateBox.Text &
-         "', Requestor = '" & RequestorBox.Text &
-         "', PendingSource = '" & PendingSourceBox.Text &
-         "', Comments = '" & CommentsBox.Text &
-         "' WHERE TicketNumber = '" & TicketNumberBox.Text & "'"
-
-        command = New OleDbCommand(actualizar, conection)
-        command.ExecuteNonQuery()
-        MsgBox("Changes Done", vbInformation, "Alert")
-
+        'Enable Modification fields
+        If ModifyCaseCheckBox.Checked Then
+            ResponsibleBox.Enabled = True
+            RegionBox.Enabled = True
+            OpenedDateBox.Enabled = True
+            RequestorBox.Enabled = True
+            PendingSourceBox.Enabled = True
+            StatusBox.Enabled = True
+        Else
+            'Disable Modification fields
+            ResponsibleBox.Enabled = False
+            RegionBox.Enabled = False
+            OpenedDateBox.Enabled = False
+            RequestorBox.Enabled = False
+            PendingSourceBox.Enabled = False
+            StatusBox.Enabled = False
+        End If
     End Sub
 
     Private Function SearchTicket(TicketNumber As String) As Boolean
         Dim result As Boolean = False
-        Dim consult As String
+        Dim query As String
         Dim Rows As Integer
 
         If TicketNumberBox.Text <> "" Then
             Try
-                consult = "SELECT * FROM TestTable WHERE TicketNumber = " & TicketNumber
-                adapter = New OleDbDataAdapter(consult, conection)
+                query = "SELECT * FROM TestTable WHERE TicketNumber = " & TicketNumber
+                adapter = New OleDbDataAdapter(query, conection)
                 adapter.Fill(records, "TestTable")
                 Rows = records.Tables("TestTable").Rows.Count
 
@@ -247,5 +257,56 @@ Public Class ModifyCaseForm
         StatusBox.Text = records.Tables("TestTable").Rows(0).Item("Status")
         CommentsBox.Text = records.Tables("TestTable").Rows(0).Item("Comments")
     End Sub
+
+    Private Function UpdateTicket(Action As String) As Boolean
+        Dim result As Boolean = False
+        Dim updateQuery As String = ""
+
+        Select Case (Action)
+
+            Case "Close"
+                updateQuery = "UPDATE Testable SET "
+                updateQuery = updateQuery & "Closed = '" & (DateTime.Now.ToString("MM/dd/yyyy")) & "'"
+                updateQuery = updateQuery & ","
+                updateQuery = updateQuery & "PendingSource = '" & DBNull.Value & "'"
+                updateQuery = updateQuery & "WHERE TicketNumber = " & TicketNumberBox.Text
+
+            Case "Open"
+                updateQuery = "UPDATE TestTable Set Closed = NULL WHERE TicketNumber ="
+                updateQuery = updateQuery & TicketNumberBox.Text
+
+            Case "Modify"
+                updateQuery = "UPDATE TestTable SET Analyst = '" & ResponsibleBox.Text & "'"
+                updateQuery = updateQuery & ", BU = '" & RegionBox.Text & "'"
+                updateQuery = updateQuery & ", Opened = '" & OpenedDateBox.Text & "'"
+                updateQuery = updateQuery & ", Requestor = '" & RequestorBox.Text & "'"
+                updateQuery = updateQuery & ", PendingSource = '" & PendingSourceBox.Text & "'"
+                updateQuery = updateQuery & ", Comments = '" & CommentsBox.Text & "'"
+                updateQuery = updateQuery & " WHERE TicketNumber = " & TicketNumberBox.Text
+        End Select
+
+        Try
+            'Perform query
+            command = New OleDbCommand(updateQuery, conection)
+            command.ExecuteNonQuery()
+
+            'Notify transaction status
+            Select Case (Action)
+                Case "Close"
+                    MsgBox("Ticket closed", vbExclamation, "Alert")
+                Case "Open"
+                    MsgBox("Ticket opened", vbExclamation, "Alert")
+                Case "Modify"
+                    MsgBox("Ticket modified", vbExclamation, "Alert")
+            End Select
+
+            result = True
+
+        Catch ex As Exception
+            MsgBox(ex.Message)
+        End Try
+
+        Return result
+    End Function
 
 End Class
