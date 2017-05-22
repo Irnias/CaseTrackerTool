@@ -35,7 +35,7 @@
     <PublishUrl>C:\Users\lucas.n.angelino\Desktop\</PublishUrl>
     <InstallUrl />
     <TargetCulture>es</TargetCulture>
-    <ApplicationVersion>1.0.0.82</ApplicationVersion>
+    <ApplicationVersion>1.0.0.74</ApplicationVersion>
     <AutoIncrementApplicationRevision>true</AutoIncrementApplicationRevision>
     <UpdateEnabled>true</UpdateEnabled>
     <UpdateInterval>7</UpdateInterval>
@@ -284,10 +284,11 @@
     <ManifestKeyFile>CaseTrakerToolAddIn_1_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>13899918EFE55C4698000B42BB95778DB5315A85</ManifestCertificateThumbprint>
+  <ManifestCertificateThumbprint>FDB93022A580B903E10EC578522B2D391709BCCA</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>false</SignAssembly>
+
   </PropertyGroup>
   <!-- Include the build rules for a Visual Basic project. -->
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
