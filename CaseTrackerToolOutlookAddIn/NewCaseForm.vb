@@ -4,6 +4,8 @@ Imports System.Windows.Forms
 Imports System.IO
 Imports System.ComponentModel
 
+'hola espero que esto funcione
+
 Public Class NewCaseForm
     Dim OutApp As Outlook.Application
     Dim EmailSender As String
