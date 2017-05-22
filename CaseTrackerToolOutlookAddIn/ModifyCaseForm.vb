@@ -43,6 +43,7 @@ Public Class ModifyCaseForm
         'Validate ticket existence
         If SearchTicket(TicketNumberBox.Text) Then
 
+
             'Retrieve ticket information
             RetrieveTicketInformation()
         Else
@@ -51,7 +52,7 @@ Public Class ModifyCaseForm
             DataGridView1.Columns.Clear()
             TicketNumberBox.Focus()
         End If
-    End Sub
+  End Sub
 
     Private Sub CloseButton_Click(sender As Object, e As EventArgs) Handles CloseButton.Click
         Dim updateQuery As String
@@ -144,6 +145,7 @@ Public Class ModifyCaseForm
     End Sub
 
     Private Sub ComboBox2_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ConectionBox.SelectedIndexChanged
+
         'Restart conection if open
         If conection.State = ConnectionState.Open Then
             conection.Close()

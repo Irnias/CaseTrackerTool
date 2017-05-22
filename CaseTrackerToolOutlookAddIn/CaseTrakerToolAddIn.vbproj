@@ -25,14 +25,14 @@
     <ProjectGuid>{69DE3C72-DBB6-4B6D-8EB8-92D7A2A4A6C4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>OutlookAddIn1</RootNamespace>
-    <AssemblyName>CaseTrackerOutlookAddIn</AssemblyName>
+    <AssemblyName>CaseTrakerToolAddIn</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <DefineConstants>VSTO40</DefineConstants>
     <StartupObject>
     </StartupObject>
     <IsWebBootstrapper>False</IsWebBootstrapper>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <PublishUrl>C:\Users\camila.ibar\Desktop\</PublishUrl>
+    <PublishUrl>C:\Users\lucas.n.angelino\Desktop\</PublishUrl>
     <InstallUrl />
     <TargetCulture>es</TargetCulture>
     <ApplicationVersion>1.0.0.74</ApplicationVersion>
@@ -50,7 +50,7 @@
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">
       <Visible>False</Visible>
-      <ProductName>Microsoft .NET Framework 4.5.2 %28x86 and x64%29</ProductName>
+      <ProductName>Microsoft .NET Framework 4.5.2 %28x86 y x64%29</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
@@ -103,7 +103,7 @@
     <DebugSymbols>true</DebugSymbols>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DocumentationFile>CaseTrackerOutlookAddIn.xml</DocumentationFile>
+    <DocumentationFile>CaseTrakerToolAddIn.xml</DocumentationFile>
     <RegisterForComInterop>false</RegisterForComInterop>
     <RemoveIntegerChecks>false</RemoveIntegerChecks>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
@@ -132,7 +132,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DocumentationFile>CaseTrackerOutlookAddIn.xml</DocumentationFile>
+    <DocumentationFile>CaseTrakerToolAddIn.xml</DocumentationFile>
     <RegisterForComInterop>false</RegisterForComInterop>
     <RemoveIntegerChecks>false</RemoveIntegerChecks>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
@@ -284,7 +284,11 @@
     <ManifestKeyFile>CaseTrakerToolAddIn_1_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>FDB93022A580B903E10EC578522B2D391709BCCA</ManifestCertificateThumbprint>
+  <ManifestCertificateThumbprint>FDB93022A580B903E10EC578522B2D391709BCCA</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+
   </PropertyGroup>
   <!-- Include the build rules for a Visual Basic project. -->
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />

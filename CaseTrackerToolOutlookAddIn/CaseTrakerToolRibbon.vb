@@ -37,11 +37,6 @@ Public Class CaseTrackerTool
         NewMessage.Display()
     End Sub
 
-    Private Sub Button1_Click(sender As Object, e As RibbonControlEventArgs) Handles Button1.Click
-        Dim OutApp As Outlook.Application
-        Dim OutItem As Outlook.MailItem
-        Dim ID As String
-        Dim ID2 As String
-
+    Private Sub Button1_Click(sender As Object, e As RibbonControlEventArgs)
     End Sub
 End Class
