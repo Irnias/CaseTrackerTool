@@ -60,9 +60,7 @@ Public Class NewCaseForm
 
     Private Sub CreateCaseButton_Click(sender As Object, e As EventArgs) Handles CreateCaseButton.Click
         Dim NextNumber As Long
-
-        'Validate required fields
-        'If (((ActCategoryBox.Text = "") Or (TicketNumberBox.Text = "")) Or ((StatusBox.Text = "Open") And (PendingSrcBox.Text = ""))) Then MsgBox("The ticket number field and Activity Category cannot be empty! If the ticket is open there must be a pending source.")
+        Dim MailSubject As String
 
         'Validate required fields
         If ActCategoryBox.Text = "" Then
@@ -82,20 +80,23 @@ Public Class NewCaseForm
 
         NextNumber = getNextTicketNumber()
 
+        'Error
         If NextNumber = 0 Then Exit Sub
-
 
         If InsertTicket() Then
 
-            'FORMATEAR EL ASUNTO
-            If StatusBox.Text = "Closed" Then               'si el caso fue cerrado o no
-                OutItem.Subject = OutItem.Subject & " - " & TrakingID.Text & " Completed"
-            Else
-                OutItem.Subject = OutItem.Subject & " - " & TrakingID.Text
-            End If
+            'Save previous subject
+            MailSubject = Me.Subject
+            'Change mail status 
+            'Team | Task | Mail Subject | Ticket Number| Ticket Status
+            Me.Subject = TeamBox.Text & "|"
+            'Outlookitem.Subject = ActCategoryBox.Text & "|"
+            Me.Subject = MailSubject & "|"
+            Me.Subject = NextNumber & "|"
+            Me.Subject = StatusBox.Text
 
             OutItem.Save()
-            MsgBox("Saved", vbExclamation, "Alert")
+            MsgBox("Ticket " & NextNumber & " created", vbExclamation, "Alert")
         Else
             MsgBox("Creation Failed", vbExclamation, "Alert")
         End If
@@ -105,7 +106,8 @@ Public Class NewCaseForm
     End Sub
 
     Public Sub ComboBox2_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ConectionBox.SelectedIndexChanged
-
+        Dim rows As Integer
+        Dim items As Object
         Try
             If ConectionBox.Text = "Office" Then
                 conection.ConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source = \\10.21.144.6\GBS Accenture Data\RTR\GA\MIS\Test1.accdb"
@@ -173,6 +175,8 @@ Salir1:
     End Sub
 
     Private Sub TeamBox_SelectedIndexChanged(sender As Object, e As EventArgs) Handles TeamBox.SelectedIndexChanged
+        Dim rows As Integer
+        Dim items As Object
 
         ActCategoryBox.Items.Clear()
         Try
@@ -201,6 +205,9 @@ Salir2:
     End Sub
 
     Private Sub ActCategoryBox_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ActCategoryBox.SelectedIndexChanged
+        Dim rows As Integer
+        Dim items As Object
+
         ResponsibleBox.Items.Clear()
         Try
             consulta = ("SELECT * FROM TeamMembers ORDER BY ID DESC")
@@ -230,6 +237,7 @@ Salir2:
     End Sub
 
     Private Sub ResponsibleBox_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ResponsibleBox.SelectedIndexChanged
+        Dim rows As Integer
 
         Try
             consulta = ("SELECT * FROM TestTable ORDER BY ID DESC")
@@ -324,7 +332,6 @@ Salir1:
         Catch ex As Exception
             MsgBox(ex.Message)
         End Try
-
 
         conection.Close()
 
