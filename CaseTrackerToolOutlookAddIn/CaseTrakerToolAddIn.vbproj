@@ -35,7 +35,7 @@
     <PublishUrl>C:\Users\lucas.n.angelino\Desktop\</PublishUrl>
     <InstallUrl />
     <TargetCulture>es</TargetCulture>
-    <ApplicationVersion>1.0.0.74</ApplicationVersion>
+    <ApplicationVersion>1.0.0.82</ApplicationVersion>
     <AutoIncrementApplicationRevision>true</AutoIncrementApplicationRevision>
     <UpdateEnabled>true</UpdateEnabled>
     <UpdateInterval>7</UpdateInterval>
@@ -235,6 +235,7 @@
       <DependentUpon>CaseTrakerToolRibbon.vb</DependentUpon>
     </EmbeddedResource>
     <None Include="CaseTrakerToolAddIn_1_TemporaryKey.pfx" />
+    <None Include="CaseTrakerToolAddIn_2_TemporaryKey.pfx" />
     <None Include="CaseTrakerToolAddIn_TemporaryKey.pfx" />
     <None Include="ThisAddIn.Designer.xml">
       <DependentUpon>ThisAddIn.vb</DependentUpon>
@@ -281,14 +282,13 @@
     <SignManifests>true</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>CaseTrakerToolAddIn_1_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestKeyFile>CaseTrakerToolAddIn_2_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-  <ManifestCertificateThumbprint>FDB93022A580B903E10EC578522B2D391709BCCA</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>0E65B40A3A60BC862372ED4126B9CEBC05044F20</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>false</SignAssembly>
-
   </PropertyGroup>
   <!-- Include the build rules for a Visual Basic project. -->
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />

@@ -73,7 +73,7 @@ Public Class NewCaseForm
             Exit Sub
         End If
 
-        If PendingSrcBox.Text = "" Then
+        If PendingSrcBox.Text = "" And StatusBox.Text = "Opened" Then
             MsgBox("Must complete pending source", vbExclamation, "Alert")
             Exit Sub
         End If
@@ -164,7 +164,8 @@ Public Class NewCaseForm
         '    Subject = OutItem.Subject
         '    OriginalEmailTime = OutItem.ReceivedTime
 
-        '    ' TextBox6.Text = "Closed"
+        '    ' 
+        '.Text = "Closed"
 
         'Catch ex As Exception
         '    MsgBox("Error when trying to get data from the current email item", vbCritical)
@@ -293,37 +294,36 @@ Salir1:
     Private Function InsertTicket() As Boolean
         Dim result As Boolean = False
         Dim query As String
-        Dim Rows As Integer
 
         'Format query
-        query = "INSERT INTO TestTable(MyITCase, Opened, Requestor, Analyst, BU, Description, PendingSource, Closed, ActivityCategory, Comments, OriginalEmailTime )"
+        query = "INSERT INTO TestTable(MyITCase, Opened, Requestor, Analyst, BU, Description, PendingSource, Closed, ActivityCategory, Comments, OriginalEmailTime)"
         query = query & "VALUES("
         'MyITCase = TicketNumberBox.Text
-        query = query & TicketNumberBox.Text
+        query = query & "'" & TicketNumberBox.Text & "',"
         'Opened = DateBox.Text
-        query = query & DateBox.Text
+        query = query & "'" & DateBox.Text & "',"
         'Requestor = RequestorBox.Text
-        query = query & "'" & RequestorBox.Text & "'"
+        query = query & "'" & RequestorBox.Text & "',"
         'Analyst = ResponsibleBox.Text
-        query = query & "'" & ResponsibleBox.Text & "'"
+        query = query & "'" & ResponsibleBox.Text & "',"
         'BU = RegionBox.Text
-        query = query & "'" & RegionBox.Text & "'"
+        query = query & "'" & RegionBox.Text & "',"
         'Description = Subject
-        query = query & "'" & Subject & "'"
+        query = query & "'" & Subject & "',"
         'PendingSource = PendingSrcBox.Text
-        query = query & "'" & PendingSrcBox.Text & "'"
+        query = query & "'" & PendingSrcBox.Text & "',"
         'Closed
         If StatusBox.Text = "Closed" Then
-            query = query & "'" & TextBox6.Text & "'"
+            query = query & "'" & DateBox.Text & "',"
         Else
             query = query & DBNull.Value
         End If
         'ActivityCategory = ActCategoryBox.Text
-        query = query & "'" & ActCategoryBox.Text & "'"
+        query = query & "'" & ActCategoryBox.Text & "',"
         'Comments = CommentsBox.Text
-        query = query & "'" & CommentsBox.Text & "'"
+        query = query & "'" & CommentsBox.Text & "',"
         'OriginalEmailTime = OriginalEmailTime
-        query = query & OriginalEmailTime & ")"
+        query = query & "'" & OriginalEmailTime & "')"
 
         Try
             comands = New OleDbCommand(query, conection)
@@ -331,6 +331,7 @@ Salir1:
             result = True
         Catch ex As Exception
             MsgBox(ex.Message)
+            MsgBox(query)
         End Try
 
         conection.Close()
