@@ -74,7 +74,7 @@ Public Class NewCaseForm
         End If
 
         If PendingSrcBox.Text = "" And StatusBox.Text = "Opened" Then
-            MsgBox("Must complete pending source", vbExclamation, "Alert")
+            MsgBox("Must complete pending source if the ticket remains open", vbExclamation, "Alert")
             Exit Sub
         End If
 
@@ -318,7 +318,7 @@ Salir1:
         If StatusBox.Text = "Closed" Then
             query = query & "'" & DateBox.Text & "',"
         Else
-            query = query & DBNull.Value
+            query = query & "'" & DBNull.Value & "',"
         End If
         'ActivityCategory = ActCategoryBox.Text
         query = query & "'" & ActCategoryBox.Text & "',"

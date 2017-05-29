@@ -212,6 +212,7 @@ Public Class ModifyCaseForm
             RequestorBox.Enabled = True
             PendingSourceBox.Enabled = True
             StatusBox.Enabled = True
+            CommentsBox.Enabled = True
         Else
             'Disable Modification fields
             ResponsibleBox.Enabled = False
@@ -220,6 +221,7 @@ Public Class ModifyCaseForm
             RequestorBox.Enabled = False
             PendingSourceBox.Enabled = False
             StatusBox.Enabled = False
+            CommentsBox.Enabled = False
         End If
     End Sub
 
