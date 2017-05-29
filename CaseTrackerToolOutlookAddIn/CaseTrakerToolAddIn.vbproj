@@ -35,7 +35,7 @@
     <PublishUrl>C:\Users\lucas.n.angelino\Desktop\</PublishUrl>
     <InstallUrl />
     <TargetCulture>es</TargetCulture>
-    <ApplicationVersion>1.0.0.82</ApplicationVersion>
+    <ApplicationVersion>1.0.0.84</ApplicationVersion>
     <AutoIncrementApplicationRevision>true</AutoIncrementApplicationRevision>
     <UpdateEnabled>true</UpdateEnabled>
     <UpdateInterval>7</UpdateInterval>

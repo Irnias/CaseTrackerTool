@@ -89,11 +89,13 @@ Public Class NewCaseForm
             MailSubject = Me.Subject
             'Change mail status 
             'Team | Task | Mail Subject | Ticket Number| Ticket Status
-            Me.Subject = TeamBox.Text & "|"
+            Me.Subject = TeamBox.Text & " | "
             'Outlookitem.Subject = ActCategoryBox.Text & "|"
-            Me.Subject = MailSubject & "|"
-            Me.Subject = NextNumber & "|"
-            Me.Subject = StatusBox.Text
+            Me.Subject = Me.Subject & MailSubject & " | "
+            Me.Subject = Me.Subject & NextNumber & " | "
+            Me.Subject = Me.Subject & StatusBox.Text
+
+            OutItem.Subject = Me.Subject
 
             OutItem.Save()
             MsgBox("Ticket " & NextNumber & " created", vbExclamation, "Alert")
@@ -331,7 +333,6 @@ Salir1:
             result = True
         Catch ex As Exception
             MsgBox(ex.Message)
-            MsgBox(query)
         End Try
 
         conection.Close()
