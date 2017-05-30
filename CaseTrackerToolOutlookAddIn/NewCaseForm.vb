@@ -103,7 +103,7 @@ Public Class NewCaseForm
     End Sub
 
     Public Sub ConectionBox_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ConectionBox.SelectedIndexChanged
-        
+
         'Restart conection if open
         If conection.State = ConnectionState.Open Then
             conection.Close()
@@ -124,13 +124,11 @@ Public Class NewCaseForm
 
         'Reaload Teambox
         TeamBox.Items.Clear()
-        FillTeamBox()
+        LoadTeamBox()
 
     End Sub
 
     Private Sub TeamBox_SelectedIndexChanged(sender As Object, e As EventArgs) Handles TeamBox.SelectedIndexChanged
-        Dim rows As Integer
-        Dim items As Object
 
         'Reload Activities
         ActCategoryBox.Items.Clear()
@@ -138,8 +136,6 @@ Public Class NewCaseForm
     End Sub
 
     Private Sub ActCategoryBox_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ActCategoryBox.SelectedIndexChanged
-        Dim rows As Integer
-        Dim items As Object
 
         'Reload Responsible Box
         ResponsibleBox.Items.Clear()
@@ -149,15 +145,16 @@ Public Class NewCaseForm
     End Sub
 
     Private Sub ResponsibleBox_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ResponsibleBox.SelectedIndexChanged
+        Dim query As String = ""
         Dim rows As Integer
 
         Try
-            consulta = ("SELECT * FROM TestTable ORDER BY ID DESC")
-            adapter = New OleDbDataAdapter(consulta, conection)
+            query = ("SELECT * FROM TestTable ORDER BY ID DESC")
+            adapter = New OleDbDataAdapter(query, conection)
             record = New DataSet
             adapter.Fill(record, "TestTable")
-            Rows = record.Tables("TestTable").Rows.Count
-            If Rows <> 0 Then
+            rows = record.Tables("TestTable").Rows.Count
+            If rows <> 0 Then
                 DataGridView1.DataSource = record
                 DataGridView1.DataMember = "TestTable"
                 TrakingID.Text = (record.Tables("TestTable").Rows(0).Item("TicketNumber")) + 1
@@ -181,12 +178,12 @@ Public Class NewCaseForm
 
     Private Function getNextTicketNumber() As Long
         Dim result As Long = 0
-        Dim query As String
+        Dim query As String = ""
         Dim Rows As Integer
 
         Try
             query = ("SELECT TOP 1 TicketNumber FROM TestTable ORDER BY 1 DESC")
-            adapter = New OleDbDataAdapter(consulta, conection)
+            adapter = New OleDbDataAdapter(query, conection)
             adapter.Fill(record, "TestTable")
             Rows = record.Tables("TestTable").Rows.Count
             If Rows <> 0 Then
@@ -202,7 +199,7 @@ Public Class NewCaseForm
 
     Private Function InsertTicket() As Boolean
         Dim result As Boolean = False
-        Dim query As String
+        Dim query As String = ""
 
         'Format query
         query = "INSERT INTO TestTable(MyITCase, Opened, Requestor, Analyst, BU, Description, PendingSource, Closed, ActivityCategory, Comments, OriginalEmailTime)"
@@ -247,15 +244,16 @@ Public Class NewCaseForm
         Return result
 
     End Function
-    
+
     Private Sub LoadTeamBox()
         Dim query As String = ""
-        Dim rows As Integer 
+        Dim rows As Integer
+        Dim items As Object
         TeamBox.Enabled = False
-        
+
         Try
             query = ("SELECT * FROM SubTeams ORDER BY ID DESC")
-            adapter = New OleDbDataAdapter(consulta, conection)
+            adapter = New OleDbDataAdapter(query, conection)
             record = New DataSet
             adapter.Fill(record, "SubTeams")
             rows = record.Tables("SubTeams").Rows.Count
@@ -268,7 +266,7 @@ Public Class NewCaseForm
                 Next
             End If
             TeamBox.Enabled = True
-        
+
         Catch ex As Exception
             MsgBox(ex)
         End Try
@@ -276,12 +274,13 @@ Public Class NewCaseForm
 
     Private Sub LoadTeamActivitiesBox()
         Dim query As String = ""
-        Dim rows As Integer    
+        Dim rows As Integer
+        Dim items As Object
         ActCategoryBox.Enabled = False
 
         Try
             query = ("SELECT * FROM TeamsActivities WHERE SubTeam = '" & TeamBox.Text & " ' ORDER BY ID DESC")
-            adapter = New OleDbDataAdapter(consulta, conection)
+            adapter = New OleDbDataAdapter(query, conection)
             record = New DataSet
             adapter.Fill(record, "TeamsActivities")
             rows = record.Tables("TeamsActivities").Rows.Count
@@ -302,12 +301,13 @@ Public Class NewCaseForm
 
     Private Sub LoadResponsibleBox()
         Dim query As String = ""
-        Dim rows As Integer 
+        Dim rows As Integer
+        Dim items As Object
         ResponsibleBox.Enabled = False
-        
+
         Try
             query = ("SELECT * FROM TeamMembers ORDER BY ID DESC")
-            adapter = New OleDbDataAdapter(consulta, conection)
+            adapter = New OleDbDataAdapter(query, conection)
             record = New DataSet
             adapter.Fill(record, "TeamMembers")
             rows = record.Tables("TeamMembers").Rows.Count
@@ -321,7 +321,7 @@ Public Class NewCaseForm
                 Next
             End If
             ResponsibleBox.Enabled = True
-        
+
         Catch ex As Exception
             MsgBox(ex)
         End Try
