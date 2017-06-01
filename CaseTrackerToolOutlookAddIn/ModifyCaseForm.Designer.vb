@@ -22,20 +22,20 @@ Partial Class ModifyCaseForm
     'No lo modifique con el editor de código.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
-        Me.Label1 = New System.Windows.Forms.Label()
+        Me.TicketNumberLabel = New System.Windows.Forms.Label()
         Me.TicketNumberBox = New System.Windows.Forms.TextBox()
         Me.CloseButton = New System.Windows.Forms.Button()
         Me.DataGridView1 = New System.Windows.Forms.DataGridView()
         Me.SearchButton = New System.Windows.Forms.Button()
         Me.OpenButton = New System.Windows.Forms.Button()
         Me.ConectionBox = New System.Windows.Forms.ComboBox()
-        Me.Label8 = New System.Windows.Forms.Label()
-        Me.Label6 = New System.Windows.Forms.Label()
-        Me.Label7 = New System.Windows.Forms.Label()
-        Me.Label3 = New System.Windows.Forms.Label()
-        Me.Label2 = New System.Windows.Forms.Label()
-        Me.Label4 = New System.Windows.Forms.Label()
-        Me.Label10 = New System.Windows.Forms.Label()
+        Me.ConectionLabel = New System.Windows.Forms.Label()
+        Me.CommentsLabel = New System.Windows.Forms.Label()
+        Me.PendingSrcLabel = New System.Windows.Forms.Label()
+        Me.RequestorLabel = New System.Windows.Forms.Label()
+        Me.OpenedDateLabel = New System.Windows.Forms.Label()
+        Me.StatusLabel = New System.Windows.Forms.Label()
+        Me.RegionLabel = New System.Windows.Forms.Label()
         Me.CommentsBox = New System.Windows.Forms.TextBox()
         Me.StatusBox = New System.Windows.Forms.TextBox()
         Me.PendingSourceBox = New System.Windows.Forms.TextBox()
@@ -44,24 +44,25 @@ Partial Class ModifyCaseForm
         Me.RegionBox = New System.Windows.Forms.TextBox()
         Me.RequestorBox = New System.Windows.Forms.TextBox()
         Me.OpenedDateBox = New System.Windows.Forms.TextBox()
-        Me.Label5 = New System.Windows.Forms.Label()
+        Me.ResponsibleLabel = New System.Windows.Forms.Label()
         Me.ModifyCaseCheckBox = New System.Windows.Forms.CheckBox()
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
-        'Label1
+        'TicketNumberLabel
         '
-        Me.Label1.AutoSize = True
-        Me.Label1.Font = New System.Drawing.Font("Segoe UI", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label1.ForeColor = System.Drawing.Color.White
-        Me.Label1.Location = New System.Drawing.Point(12, 41)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(99, 19)
-        Me.Label1.TabIndex = 13
-        Me.Label1.Text = "Ticket number:"
+        Me.TicketNumberLabel.AutoSize = True
+        Me.TicketNumberLabel.Font = New System.Drawing.Font("Segoe UI", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.TicketNumberLabel.ForeColor = System.Drawing.Color.White
+        Me.TicketNumberLabel.Location = New System.Drawing.Point(12, 41)
+        Me.TicketNumberLabel.Name = "TicketNumberLabel"
+        Me.TicketNumberLabel.Size = New System.Drawing.Size(96, 19)
+        Me.TicketNumberLabel.TabIndex = 13
+        Me.TicketNumberLabel.Text = "Ticket number"
         '
         'TicketNumberBox
         '
+        Me.TicketNumberBox.Enabled = False
         Me.TicketNumberBox.Font = New System.Drawing.Font("Segoe UI", 10.0!)
         Me.TicketNumberBox.Location = New System.Drawing.Point(117, 41)
         Me.TicketNumberBox.Name = "TicketNumberBox"
@@ -109,8 +110,9 @@ Partial Class ModifyCaseForm
         '
         'ConectionBox
         '
-    Me.ConectionBox.AllowDrop = True
+        Me.ConectionBox.AllowDrop = True
         Me.ConectionBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.ConectionBox.Enabled = False
         Me.ConectionBox.Font = New System.Drawing.Font("Segoe UI", 10.0!)
         Me.ConectionBox.FormattingEnabled = True
         Me.ConectionBox.Location = New System.Drawing.Point(117, 13)
@@ -118,92 +120,93 @@ Partial Class ModifyCaseForm
         Me.ConectionBox.Size = New System.Drawing.Size(126, 25)
         Me.ConectionBox.TabIndex = 1
         '
-        'Label8
+        'ConectionLabel
         '
-        Me.Label8.AutoSize = True
-        Me.Label8.Font = New System.Drawing.Font("Segoe UI", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label8.ForeColor = System.Drawing.Color.White
-        Me.Label8.Location = New System.Drawing.Point(12, 14)
-        Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(74, 19)
-        Me.Label8.TabIndex = 35
-        Me.Label8.Text = "Conection:"
+        Me.ConectionLabel.AutoSize = True
+        Me.ConectionLabel.Font = New System.Drawing.Font("Segoe UI", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ConectionLabel.ForeColor = System.Drawing.Color.White
+        Me.ConectionLabel.Location = New System.Drawing.Point(12, 14)
+        Me.ConectionLabel.Name = "ConectionLabel"
+        Me.ConectionLabel.Size = New System.Drawing.Size(71, 19)
+        Me.ConectionLabel.TabIndex = 35
+        Me.ConectionLabel.Text = "Conection"
         '
-        'Label6
+        'CommentsLabel
         '
-        Me.Label6.AllowDrop = True
-        Me.Label6.AutoSize = True
-        Me.Label6.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Label6.Font = New System.Drawing.Font("Segoe UI", 10.0!)
-        Me.Label6.ForeColor = System.Drawing.Color.White
-        Me.Label6.Location = New System.Drawing.Point(9, 311)
-        Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(79, 19)
-        Me.Label6.TabIndex = 61
-        Me.Label6.Text = "Comments:"
+        Me.CommentsLabel.AllowDrop = True
+        Me.CommentsLabel.AutoSize = True
+        Me.CommentsLabel.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.CommentsLabel.Font = New System.Drawing.Font("Segoe UI", 10.0!)
+        Me.CommentsLabel.ForeColor = System.Drawing.Color.White
+        Me.CommentsLabel.Location = New System.Drawing.Point(9, 311)
+        Me.CommentsLabel.Name = "CommentsLabel"
+        Me.CommentsLabel.Size = New System.Drawing.Size(76, 19)
+        Me.CommentsLabel.TabIndex = 61
+        Me.CommentsLabel.Text = "Comments"
         '
-        'Label7
+        'PendingSrcLabel
         '
-        Me.Label7.AutoSize = True
-        Me.Label7.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Label7.Font = New System.Drawing.Font("Segoe UI", 10.0!)
-        Me.Label7.ForeColor = System.Drawing.Color.White
-        Me.Label7.Location = New System.Drawing.Point(9, 283)
-        Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(83, 19)
-        Me.Label7.TabIndex = 60
-        Me.Label7.Text = "Pending Src:"
+        Me.PendingSrcLabel.AutoSize = True
+        Me.PendingSrcLabel.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.PendingSrcLabel.Font = New System.Drawing.Font("Segoe UI", 10.0!)
+        Me.PendingSrcLabel.ForeColor = System.Drawing.Color.White
+        Me.PendingSrcLabel.Location = New System.Drawing.Point(9, 283)
+        Me.PendingSrcLabel.Name = "PendingSrcLabel"
+        Me.PendingSrcLabel.Size = New System.Drawing.Size(80, 19)
+        Me.PendingSrcLabel.TabIndex = 60
+        Me.PendingSrcLabel.Text = "Pending Src"
         '
-        'Label3
+        'RequestorLabel
         '
-        Me.Label3.AutoSize = True
-        Me.Label3.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Label3.Font = New System.Drawing.Font("Segoe UI", 10.0!)
-        Me.Label3.ForeColor = System.Drawing.Color.White
-        Me.Label3.Location = New System.Drawing.Point(9, 255)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(74, 19)
-        Me.Label3.TabIndex = 59
-        Me.Label3.Text = "Requestor:"
+        Me.RequestorLabel.AutoSize = True
+        Me.RequestorLabel.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.RequestorLabel.Font = New System.Drawing.Font("Segoe UI", 10.0!)
+        Me.RequestorLabel.ForeColor = System.Drawing.Color.White
+        Me.RequestorLabel.Location = New System.Drawing.Point(9, 255)
+        Me.RequestorLabel.Name = "RequestorLabel"
+        Me.RequestorLabel.Size = New System.Drawing.Size(71, 19)
+        Me.RequestorLabel.TabIndex = 59
+        Me.RequestorLabel.Text = "Requestor"
         '
-        'Label2
+        'OpenedDateLabel
         '
-        Me.Label2.AutoSize = True
-        Me.Label2.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Label2.Font = New System.Drawing.Font("Segoe UI", 10.0!)
-        Me.Label2.ForeColor = System.Drawing.Color.White
-        Me.Label2.Location = New System.Drawing.Point(9, 227)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(94, 19)
-        Me.Label2.TabIndex = 58
-        Me.Label2.Text = "Opened Date:"
+        Me.OpenedDateLabel.AutoSize = True
+        Me.OpenedDateLabel.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.OpenedDateLabel.Font = New System.Drawing.Font("Segoe UI", 10.0!)
+        Me.OpenedDateLabel.ForeColor = System.Drawing.Color.White
+        Me.OpenedDateLabel.Location = New System.Drawing.Point(9, 227)
+        Me.OpenedDateLabel.Name = "OpenedDateLabel"
+        Me.OpenedDateLabel.Size = New System.Drawing.Size(91, 19)
+        Me.OpenedDateLabel.TabIndex = 58
+        Me.OpenedDateLabel.Text = "Opened Date"
         '
-        'Label4
+        'StatusLabel
         '
-        Me.Label4.AutoSize = True
-        Me.Label4.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Label4.Font = New System.Drawing.Font("Segoe UI", 10.0!)
-        Me.Label4.ForeColor = System.Drawing.Color.DodgerBlue
-        Me.Label4.Location = New System.Drawing.Point(9, 143)
-        Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(47, 19)
-        Me.Label4.TabIndex = 57
-        Me.Label4.Text = "Status"
+        Me.StatusLabel.AutoSize = True
+        Me.StatusLabel.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.StatusLabel.Font = New System.Drawing.Font("Segoe UI", 10.0!)
+        Me.StatusLabel.ForeColor = System.Drawing.Color.DodgerBlue
+        Me.StatusLabel.Location = New System.Drawing.Point(9, 143)
+        Me.StatusLabel.Name = "StatusLabel"
+        Me.StatusLabel.Size = New System.Drawing.Size(47, 19)
+        Me.StatusLabel.TabIndex = 57
+        Me.StatusLabel.Text = "Status"
         '
-        'Label10
+        'RegionLabel
         '
-        Me.Label10.AutoSize = True
-        Me.Label10.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Label10.Font = New System.Drawing.Font("Segoe UI", 10.0!)
-        Me.Label10.ForeColor = System.Drawing.Color.White
-        Me.Label10.Location = New System.Drawing.Point(9, 199)
-        Me.Label10.Name = "Label10"
-        Me.Label10.Size = New System.Drawing.Size(54, 19)
-        Me.Label10.TabIndex = 56
-        Me.Label10.Text = "Region:"
+        Me.RegionLabel.AutoSize = True
+        Me.RegionLabel.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.RegionLabel.Font = New System.Drawing.Font("Segoe UI", 10.0!)
+        Me.RegionLabel.ForeColor = System.Drawing.Color.White
+        Me.RegionLabel.Location = New System.Drawing.Point(9, 199)
+        Me.RegionLabel.Name = "RegionLabel"
+        Me.RegionLabel.Size = New System.Drawing.Size(51, 19)
+        Me.RegionLabel.TabIndex = 56
+        Me.RegionLabel.Text = "Region"
         '
         'CommentsBox
         '
+        Me.CommentsBox.Enabled = False
         Me.CommentsBox.Font = New System.Drawing.Font("Segoe UI", 10.0!)
         Me.CommentsBox.Location = New System.Drawing.Point(114, 311)
         Me.CommentsBox.Multiline = True
@@ -221,10 +224,11 @@ Partial Class ModifyCaseForm
         Me.StatusBox.Location = New System.Drawing.Point(114, 143)
         Me.StatusBox.Name = "StatusBox"
         Me.StatusBox.Size = New System.Drawing.Size(126, 25)
-        Me.StatusBox.TabIndex = 3
+        Me.StatusBox.TabIndex = 0
         '
         'PendingSourceBox
         '
+        Me.PendingSourceBox.Enabled = False
         Me.PendingSourceBox.Font = New System.Drawing.Font("Segoe UI", 10.0!)
         Me.PendingSourceBox.Location = New System.Drawing.Point(114, 283)
         Me.PendingSourceBox.Name = "PendingSourceBox"
@@ -233,6 +237,7 @@ Partial Class ModifyCaseForm
         '
         'ResponsibleBox
         '
+        Me.ResponsibleBox.Enabled = False
         Me.ResponsibleBox.Font = New System.Drawing.Font("Segoe UI", 10.0!)
         Me.ResponsibleBox.Location = New System.Drawing.Point(114, 171)
         Me.ResponsibleBox.Name = "ResponsibleBox"
@@ -246,12 +251,13 @@ Partial Class ModifyCaseForm
         Me.ModifyCaseButton.Location = New System.Drawing.Point(185, 339)
         Me.ModifyCaseButton.Name = "ModifyCaseButton"
         Me.ModifyCaseButton.Size = New System.Drawing.Size(55, 32)
-        Me.ModifyCaseButton.TabIndex = 10
+        Me.ModifyCaseButton.TabIndex = 0
         Me.ModifyCaseButton.Text = "Modify"
         Me.ModifyCaseButton.UseVisualStyleBackColor = True
         '
         'RegionBox
         '
+        Me.RegionBox.Enabled = False
         Me.RegionBox.Font = New System.Drawing.Font("Segoe UI", 10.0!)
         Me.RegionBox.Location = New System.Drawing.Point(114, 199)
         Me.RegionBox.Name = "RegionBox"
@@ -260,7 +266,9 @@ Partial Class ModifyCaseForm
         '
         'RequestorBox
         '
+        Me.RequestorBox.Enabled = False
         Me.RequestorBox.Font = New System.Drawing.Font("Segoe UI", 10.0!)
+        Me.RequestorBox.ImeMode = System.Windows.Forms.ImeMode.NoControl
         Me.RequestorBox.Location = New System.Drawing.Point(114, 255)
         Me.RequestorBox.Name = "RequestorBox"
         Me.RequestorBox.Size = New System.Drawing.Size(126, 25)
@@ -268,23 +276,24 @@ Partial Class ModifyCaseForm
         '
         'OpenedDateBox
         '
+        Me.OpenedDateBox.Enabled = False
         Me.OpenedDateBox.Font = New System.Drawing.Font("Segoe UI", 10.0!)
         Me.OpenedDateBox.Location = New System.Drawing.Point(114, 227)
         Me.OpenedDateBox.Name = "OpenedDateBox"
         Me.OpenedDateBox.Size = New System.Drawing.Size(126, 25)
         Me.OpenedDateBox.TabIndex = 6
         '
-        'Label5
+        'ResponsibleLabel
         '
-        Me.Label5.AutoSize = True
-        Me.Label5.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Label5.Font = New System.Drawing.Font("Segoe UI", 10.0!)
-        Me.Label5.ForeColor = System.Drawing.Color.White
-        Me.Label5.Location = New System.Drawing.Point(9, 171)
-        Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(84, 19)
-        Me.Label5.TabIndex = 49
-        Me.Label5.Text = "Responsible:"
+        Me.ResponsibleLabel.AutoSize = True
+        Me.ResponsibleLabel.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.ResponsibleLabel.Font = New System.Drawing.Font("Segoe UI", 10.0!)
+        Me.ResponsibleLabel.ForeColor = System.Drawing.Color.White
+        Me.ResponsibleLabel.Location = New System.Drawing.Point(9, 171)
+        Me.ResponsibleLabel.Name = "ResponsibleLabel"
+        Me.ResponsibleLabel.Size = New System.Drawing.Size(81, 19)
+        Me.ResponsibleLabel.TabIndex = 49
+        Me.ResponsibleLabel.Text = "Responsible"
         '
         'ModifyCaseCheckBox
         '
@@ -294,7 +303,7 @@ Partial Class ModifyCaseForm
         Me.ModifyCaseCheckBox.Location = New System.Drawing.Point(9, 110)
         Me.ModifyCaseCheckBox.Name = "ModifyCaseCheckBox"
         Me.ModifyCaseCheckBox.Size = New System.Drawing.Size(89, 17)
-        Me.ModifyCaseCheckBox.TabIndex = 50
+        Me.ModifyCaseCheckBox.TabIndex = 3
         Me.ModifyCaseCheckBox.Text = "Modify Case"
         Me.ModifyCaseCheckBox.UseVisualStyleBackColor = True
         '
@@ -305,12 +314,12 @@ Partial Class ModifyCaseForm
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.ActiveCaptionText
         Me.ClientSize = New System.Drawing.Size(248, 408)
-        Me.Controls.Add(Me.Label6)
-        Me.Controls.Add(Me.Label7)
-        Me.Controls.Add(Me.Label3)
-        Me.Controls.Add(Me.Label2)
-        Me.Controls.Add(Me.Label4)
-        Me.Controls.Add(Me.Label10)
+        Me.Controls.Add(Me.CommentsLabel)
+        Me.Controls.Add(Me.PendingSrcLabel)
+        Me.Controls.Add(Me.RequestorLabel)
+        Me.Controls.Add(Me.OpenedDateLabel)
+        Me.Controls.Add(Me.StatusLabel)
+        Me.Controls.Add(Me.RegionLabel)
         Me.Controls.Add(Me.CommentsBox)
         Me.Controls.Add(Me.StatusBox)
         Me.Controls.Add(Me.PendingSourceBox)
@@ -319,16 +328,16 @@ Partial Class ModifyCaseForm
         Me.Controls.Add(Me.RegionBox)
         Me.Controls.Add(Me.RequestorBox)
         Me.Controls.Add(Me.OpenedDateBox)
-        Me.Controls.Add(Me.Label5)
+        Me.Controls.Add(Me.ResponsibleLabel)
         Me.Controls.Add(Me.ModifyCaseCheckBox)
-        Me.Controls.Add(Me.Label8)
+        Me.Controls.Add(Me.ConectionLabel)
         Me.Controls.Add(Me.ConectionBox)
         Me.Controls.Add(Me.OpenButton)
         Me.Controls.Add(Me.SearchButton)
         Me.Controls.Add(Me.DataGridView1)
         Me.Controls.Add(Me.CloseButton)
         Me.Controls.Add(Me.TicketNumberBox)
-        Me.Controls.Add(Me.Label1)
+        Me.Controls.Add(Me.TicketNumberLabel)
         Me.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
         Me.KeyPreview = True
         Me.MaximumSize = New System.Drawing.Size(264, 447)
@@ -341,20 +350,20 @@ Partial Class ModifyCaseForm
         Me.PerformLayout()
 
     End Sub
-    Friend WithEvents Label1 As System.Windows.Forms.Label
+    Friend WithEvents TicketNumberLabel As System.Windows.Forms.Label
     Friend WithEvents TicketNumberBox As System.Windows.Forms.TextBox
     Friend WithEvents CloseButton As System.Windows.Forms.Button
     Friend WithEvents DataGridView1 As System.Windows.Forms.DataGridView
     Friend WithEvents SearchButton As System.Windows.Forms.Button
     Friend WithEvents OpenButton As System.Windows.Forms.Button
     Friend WithEvents ConectionBox As System.Windows.Forms.ComboBox
-    Friend WithEvents Label8 As System.Windows.Forms.Label
-    Friend WithEvents Label6 As System.Windows.Forms.Label
-    Friend WithEvents Label7 As System.Windows.Forms.Label
-    Friend WithEvents Label3 As System.Windows.Forms.Label
-    Friend WithEvents Label2 As System.Windows.Forms.Label
-    Friend WithEvents Label4 As System.Windows.Forms.Label
-    Friend WithEvents Label10 As System.Windows.Forms.Label
+    Friend WithEvents ConectionLabel As System.Windows.Forms.Label
+    Friend WithEvents CommentsLabel As System.Windows.Forms.Label
+    Friend WithEvents PendingSrcLabel As System.Windows.Forms.Label
+    Friend WithEvents RequestorLabel As System.Windows.Forms.Label
+    Friend WithEvents OpenedDateLabel As System.Windows.Forms.Label
+    Friend WithEvents StatusLabel As System.Windows.Forms.Label
+    Friend WithEvents RegionLabel As System.Windows.Forms.Label
     Friend WithEvents CommentsBox As System.Windows.Forms.TextBox
     Friend WithEvents StatusBox As System.Windows.Forms.TextBox
     Friend WithEvents PendingSourceBox As System.Windows.Forms.TextBox
@@ -363,6 +372,6 @@ Partial Class ModifyCaseForm
     Friend WithEvents RegionBox As System.Windows.Forms.TextBox
     Friend WithEvents RequestorBox As System.Windows.Forms.TextBox
     Friend WithEvents OpenedDateBox As System.Windows.Forms.TextBox
-    Friend WithEvents Label5 As System.Windows.Forms.Label
+    Friend WithEvents ResponsibleLabel As System.Windows.Forms.Label
     Friend WithEvents ModifyCaseCheckBox As System.Windows.Forms.CheckBox
 End Class

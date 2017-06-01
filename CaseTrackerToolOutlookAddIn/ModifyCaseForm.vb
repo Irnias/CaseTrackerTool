@@ -13,12 +13,8 @@ Public Class ModifyCaseForm
     Dim command As New OleDbCommand
 
     Private Sub ModifyCaseForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        ResponsibleBox.Enabled = False
-        RegionBox.Enabled = False
-        OpenedDateBox.Enabled = False
-        RequestorBox.Enabled = False
-        PendingSourceBox.Enabled = False
-        CommentsBox.Enabled = False
+        'Enable conection box
+        ConectionBox.Enabled = True
 
         'Load ConectionBox
         ConectionBox.Items.Add("Office")
@@ -83,17 +79,10 @@ Public Class ModifyCaseForm
             Outlookitem.Subject = Outlookitem.Subject & records.Tables("TestTable").Rows(0).Item("TicketNumber") & "|"
             Outlookitem.Subject = Outlookitem.Subject & records.Tables("TestTable").Rows(0).Item("Status")
         End If
+                  
+        'Retrieve updated ticket information
+        RetrieveTicketInformation()
 
-        'No se para que esta esto
-        'OutlookAppli = CreateObject("Outlook.Application")
-        '    Outlookitem = OutlookAppli.ActiveInspector.CurrentItem
-
-        '    Try
-        '        Outlookitem.Subject = Outlookitem.Subject & " Completed"
-        '    Catch ex As Exception
-        '    End Try
-
-        '    StatusBox.Text = "Closed"
         Outlookitem.Save()
         Me.Close()
     End Sub
@@ -126,15 +115,10 @@ Public Class ModifyCaseForm
             Outlookitem.Subject = Outlookitem.Subject & records.Tables("TestTable").Rows(0).Item("Status")
 
         End If
+                          
+        'Retrieve updated ticket information
+        RetrieveTicketInformation()
 
-        'No se para que esta esto
-        'OutlookAppli = CreateObject("Outlook.Application")
-        'Outlookitem = OutlookAppli.ActiveInspector.CurrentItem
-        'Try
-        '    Outlookitem.Subject = Replace(Outlookitem.Subject, "Completed", "")
-        'Catch ex As Exception
-        'End Try
-        'StatusBox.Text = "Opened"
         Outlookitem.Save()
         Me.Close()
     End Sub
@@ -146,9 +130,6 @@ Public Class ModifyCaseForm
             'Ticket does not exist
             MsgBox("No ticket was find", vbExclamation, "Alert")
             Exit Sub
-        Else
-            'Retrieve ticket information
-            RetrieveTicketInformation()
         End If
 
         'Update Ticket
@@ -162,9 +143,12 @@ Public Class ModifyCaseForm
             Outlookitem.Subject = Outlookitem.Subject & records.Tables("TestTable").Rows(0).Item("Status")
         End If
 
+                          
+        'Retrieve updated ticket information
+        RetrieveTicketInformation()
+
         Outlookitem.Save()
         Me.Close()
-
     End Sub
 
     Private Sub ConectionBox_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ConectionBox.SelectedIndexChanged
@@ -186,12 +170,8 @@ Public Class ModifyCaseForm
             MsgBox(ex.Message)
         End Try
 
-        ResponsibleBox.Enabled = False
-        RegionBox.Enabled = False
-        OpenedDateBox.Enabled = False
-        RequestorBox.Enabled = False
-        PendingSourceBox.Enabled = False
-        StatusBox.Enabled = False
+        'Enable and set focus over Ticket Number Box
+        TicketNumberBox.Enabled = True
         TicketNumberBox.Focus()
     End Sub
 
@@ -202,6 +182,9 @@ Public Class ModifyCaseForm
             'Ticket does not exist
             MsgBox("No ticket was find", vbExclamation, "Alert")
             Exit Sub
+        Else
+            'Retrieve updated ticket information
+            RetrieveTicketInformation()
         End If
 
         'Enable Modification fields
@@ -310,5 +293,4 @@ Public Class ModifyCaseForm
 
         Return result
     End Function
-
 End Class

@@ -23,31 +23,30 @@ Partial Class NewCaseForm
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.CreateCaseButton = New System.Windows.Forms.Button()
-        Me.Label1 = New System.Windows.Forms.Label()
         Me.TrakingID = New System.Windows.Forms.Label()
         Me.RequestorBox = New System.Windows.Forms.TextBox()
-        Me.Label4 = New System.Windows.Forms.Label()
-        Me.Label5 = New System.Windows.Forms.Label()
+        Me.RequestorLabel = New System.Windows.Forms.Label()
+        Me.ResponsibleLabel = New System.Windows.Forms.Label()
         Me.TicketNumberBox = New System.Windows.Forms.TextBox()
-        Me.Label7 = New System.Windows.Forms.Label()
+        Me.TicketNumberLabel = New System.Windows.Forms.Label()
         Me.ResponsibleBox = New System.Windows.Forms.ComboBox()
         Me.DataGridView1 = New System.Windows.Forms.DataGridView()
         Me.DateBox = New System.Windows.Forms.TextBox()
-        Me.Label9 = New System.Windows.Forms.Label()
+        Me.StatusLabel = New System.Windows.Forms.Label()
         Me.RegionBox = New System.Windows.Forms.TextBox()
-        Me.Label3 = New System.Windows.Forms.Label()
+        Me.RegionLabel = New System.Windows.Forms.Label()
         Me.PendingSrcBox = New System.Windows.Forms.TextBox()
-        Me.Label6 = New System.Windows.Forms.Label()
-        Me.Label8 = New System.Windows.Forms.Label()
+        Me.PendingSrcLabel = New System.Windows.Forms.Label()
+        Me.DateLabel = New System.Windows.Forms.Label()
         Me.ConectionBox = New System.Windows.Forms.ComboBox()
-        Me.Label10 = New System.Windows.Forms.Label()
+        Me.ConectionLabel = New System.Windows.Forms.Label()
         Me.StatusBox = New System.Windows.Forms.ComboBox()
         Me.ActCategoryBox = New System.Windows.Forms.ComboBox()
-        Me.Label12 = New System.Windows.Forms.Label()
+        Me.ActCategoryLabel = New System.Windows.Forms.Label()
         Me.TextBox6 = New System.Windows.Forms.TextBox()
         Me.TeamBox = New System.Windows.Forms.ComboBox()
-        Me.Label13 = New System.Windows.Forms.Label()
-        Me.Label14 = New System.Windows.Forms.Label()
+        Me.TeamLabel = New System.Windows.Forms.Label()
+        Me.CommentsLabel = New System.Windows.Forms.Label()
         Me.CommentsBox = New System.Windows.Forms.TextBox()
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -56,23 +55,12 @@ Partial Class NewCaseForm
         '
         Me.CreateCaseButton.FlatAppearance.BorderSize = 0
         Me.CreateCaseButton.Font = New System.Drawing.Font("Segoe UI", 8.0!)
-        Me.CreateCaseButton.Location = New System.Drawing.Point(189, 349)
+        Me.CreateCaseButton.Location = New System.Drawing.Point(188, 321)
         Me.CreateCaseButton.Name = "CreateCaseButton"
         Me.CreateCaseButton.Size = New System.Drawing.Size(55, 32)
         Me.CreateCaseButton.TabIndex = 12
         Me.CreateCaseButton.Text = "Create"
         Me.CreateCaseButton.UseVisualStyleBackColor = True
-        '
-        'Label1
-        '
-        Me.Label1.AutoSize = True
-        Me.Label1.Font = New System.Drawing.Font("Segoe UI", 10.0!)
-        Me.Label1.ForeColor = System.Drawing.Color.White
-        Me.Label1.Location = New System.Drawing.Point(12, 14)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(81, 19)
-        Me.Label1.TabIndex = 1
-        Me.Label1.Text = "Tracking ID:"
         '
         'TrakingID
         '
@@ -91,64 +79,67 @@ Partial Class NewCaseForm
         'RequestorBox
         '
         Me.RequestorBox.AllowDrop = True
+        Me.RequestorBox.Enabled = False
         Me.RequestorBox.Font = New System.Drawing.Font("Segoe UI", 10.0!)
-        Me.RequestorBox.Location = New System.Drawing.Point(117, 209)
+        Me.RequestorBox.Location = New System.Drawing.Point(117, 181)
         Me.RequestorBox.Name = "RequestorBox"
         Me.RequestorBox.Size = New System.Drawing.Size(126, 25)
-        Me.RequestorBox.TabIndex = 6
+        Me.RequestorBox.TabIndex = 7
         '
-        'Label4
+        'RequestorLabel
         '
-        Me.Label4.AutoSize = True
-        Me.Label4.Font = New System.Drawing.Font("Segoe UI", 10.0!)
-        Me.Label4.ForeColor = System.Drawing.Color.White
-        Me.Label4.Location = New System.Drawing.Point(11, 209)
-        Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(74, 19)
-        Me.Label4.TabIndex = 5
-        Me.Label4.Text = "Requestor:"
+        Me.RequestorLabel.AutoSize = True
+        Me.RequestorLabel.Font = New System.Drawing.Font("Segoe UI", 10.0!)
+        Me.RequestorLabel.ForeColor = System.Drawing.Color.White
+        Me.RequestorLabel.Location = New System.Drawing.Point(11, 181)
+        Me.RequestorLabel.Name = "RequestorLabel"
+        Me.RequestorLabel.Size = New System.Drawing.Size(71, 19)
+        Me.RequestorLabel.TabIndex = 5
+        Me.RequestorLabel.Text = "Requestor"
         '
-        'Label5
+        'ResponsibleLabel
         '
-        Me.Label5.AutoSize = True
-        Me.Label5.Font = New System.Drawing.Font("Segoe UI", 10.0!)
-        Me.Label5.ForeColor = System.Drawing.Color.White
-        Me.Label5.Location = New System.Drawing.Point(11, 125)
-        Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(84, 19)
-        Me.Label5.TabIndex = 6
-        Me.Label5.Text = "Responsible:"
+        Me.ResponsibleLabel.AutoSize = True
+        Me.ResponsibleLabel.Font = New System.Drawing.Font("Segoe UI", 10.0!)
+        Me.ResponsibleLabel.ForeColor = System.Drawing.Color.White
+        Me.ResponsibleLabel.Location = New System.Drawing.Point(11, 96)
+        Me.ResponsibleLabel.Name = "ResponsibleLabel"
+        Me.ResponsibleLabel.Size = New System.Drawing.Size(81, 19)
+        Me.ResponsibleLabel.TabIndex = 6
+        Me.ResponsibleLabel.Text = "Responsible"
         '
         'TicketNumberBox
         '
         Me.TicketNumberBox.AllowDrop = True
+        Me.TicketNumberBox.Enabled = False
         Me.TicketNumberBox.Font = New System.Drawing.Font("Segoe UI", 10.0!)
-        Me.TicketNumberBox.Location = New System.Drawing.Point(117, 181)
+        Me.TicketNumberBox.Location = New System.Drawing.Point(117, 153)
         Me.TicketNumberBox.Name = "TicketNumberBox"
         Me.TicketNumberBox.Size = New System.Drawing.Size(126, 25)
-        Me.TicketNumberBox.TabIndex = 5
+        Me.TicketNumberBox.TabIndex = 6
         '
-        'Label7
+        'TicketNumberLabel
         '
-        Me.Label7.AutoSize = True
-        Me.Label7.Font = New System.Drawing.Font("Segoe UI", 10.0!)
-        Me.Label7.ForeColor = System.Drawing.Color.White
-        Me.Label7.Location = New System.Drawing.Point(11, 181)
-        Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(99, 19)
-        Me.Label7.TabIndex = 11
-        Me.Label7.Text = "Ticket number:"
+        Me.TicketNumberLabel.AutoSize = True
+        Me.TicketNumberLabel.Font = New System.Drawing.Font("Segoe UI", 10.0!)
+        Me.TicketNumberLabel.ForeColor = System.Drawing.Color.White
+        Me.TicketNumberLabel.Location = New System.Drawing.Point(11, 153)
+        Me.TicketNumberLabel.Name = "TicketNumberLabel"
+        Me.TicketNumberLabel.Size = New System.Drawing.Size(96, 19)
+        Me.TicketNumberLabel.TabIndex = 11
+        Me.TicketNumberLabel.Text = "Ticket number"
         '
         'ResponsibleBox
         '
         Me.ResponsibleBox.AllowDrop = True
         Me.ResponsibleBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.ResponsibleBox.Enabled = False
         Me.ResponsibleBox.Font = New System.Drawing.Font("Segoe UI", 10.0!)
         Me.ResponsibleBox.FormattingEnabled = True
-        Me.ResponsibleBox.Location = New System.Drawing.Point(117, 125)
+        Me.ResponsibleBox.Location = New System.Drawing.Point(117, 96)
         Me.ResponsibleBox.Name = "ResponsibleBox"
         Me.ResponsibleBox.Size = New System.Drawing.Size(126, 25)
-        Me.ResponsibleBox.TabIndex = 7
+        Me.ResponsibleBox.TabIndex = 4
         '
         'DataGridView1
         '
@@ -162,128 +153,134 @@ Partial Class NewCaseForm
         '
         Me.DateBox.AllowDrop = True
         Me.DateBox.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.DateBox.Enabled = False
         Me.DateBox.Font = New System.Drawing.Font("Segoe UI", 10.0!)
-        Me.DateBox.Location = New System.Drawing.Point(117, 153)
+        Me.DateBox.Location = New System.Drawing.Point(117, 265)
         Me.DateBox.Name = "DateBox"
         Me.DateBox.Size = New System.Drawing.Size(126, 25)
-        Me.DateBox.TabIndex = 4
+        Me.DateBox.TabIndex = 10
         '
-        'Label9
+        'StatusLabel
         '
-        Me.Label9.AutoSize = True
-        Me.Label9.Font = New System.Drawing.Font("Segoe UI", 10.0!)
-        Me.Label9.ForeColor = System.Drawing.Color.White
-        Me.Label9.Location = New System.Drawing.Point(11, 153)
-        Me.Label9.Name = "Label9"
-        Me.Label9.Size = New System.Drawing.Size(41, 19)
-        Me.Label9.TabIndex = 20
-        Me.Label9.Text = "Date:"
+        Me.StatusLabel.AutoSize = True
+        Me.StatusLabel.Font = New System.Drawing.Font("Segoe UI", 10.0!)
+        Me.StatusLabel.ForeColor = System.Drawing.Color.White
+        Me.StatusLabel.Location = New System.Drawing.Point(11, 125)
+        Me.StatusLabel.Name = "StatusLabel"
+        Me.StatusLabel.Size = New System.Drawing.Size(47, 19)
+        Me.StatusLabel.TabIndex = 20
+        Me.StatusLabel.Text = "Status"
         '
         'RegionBox
         '
         Me.RegionBox.AllowDrop = True
+        Me.RegionBox.Enabled = False
         Me.RegionBox.Font = New System.Drawing.Font("Segoe UI", 10.0!)
-        Me.RegionBox.Location = New System.Drawing.Point(117, 237)
+        Me.RegionBox.Location = New System.Drawing.Point(117, 209)
         Me.RegionBox.Name = "RegionBox"
         Me.RegionBox.Size = New System.Drawing.Size(126, 25)
         Me.RegionBox.TabIndex = 8
         '
-        'Label3
+        'RegionLabel
         '
-        Me.Label3.AutoSize = True
-        Me.Label3.Font = New System.Drawing.Font("Segoe UI", 10.0!)
-        Me.Label3.ForeColor = System.Drawing.Color.White
-        Me.Label3.Location = New System.Drawing.Point(11, 237)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(54, 19)
-        Me.Label3.TabIndex = 22
-        Me.Label3.Text = "Region:"
+        Me.RegionLabel.AutoSize = True
+        Me.RegionLabel.Font = New System.Drawing.Font("Segoe UI", 10.0!)
+        Me.RegionLabel.ForeColor = System.Drawing.Color.White
+        Me.RegionLabel.Location = New System.Drawing.Point(11, 209)
+        Me.RegionLabel.Name = "RegionLabel"
+        Me.RegionLabel.Size = New System.Drawing.Size(51, 19)
+        Me.RegionLabel.TabIndex = 22
+        Me.RegionLabel.Text = "Region"
         '
         'PendingSrcBox
         '
         Me.PendingSrcBox.AllowDrop = True
+        Me.PendingSrcBox.Enabled = False
         Me.PendingSrcBox.Font = New System.Drawing.Font("Segoe UI", 10.0!)
-        Me.PendingSrcBox.Location = New System.Drawing.Point(117, 265)
+        Me.PendingSrcBox.Location = New System.Drawing.Point(117, 237)
         Me.PendingSrcBox.Name = "PendingSrcBox"
         Me.PendingSrcBox.Size = New System.Drawing.Size(126, 25)
         Me.PendingSrcBox.TabIndex = 9
         '
-        'Label6
+        'PendingSrcLabel
         '
-        Me.Label6.AutoSize = True
-        Me.Label6.Font = New System.Drawing.Font("Segoe UI", 10.0!)
-        Me.Label6.ForeColor = System.Drawing.Color.White
-        Me.Label6.Location = New System.Drawing.Point(11, 265)
-        Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(84, 19)
-        Me.Label6.TabIndex = 24
-        Me.Label6.Text = "Pending Src:"
+        Me.PendingSrcLabel.AutoSize = True
+        Me.PendingSrcLabel.Font = New System.Drawing.Font("Segoe UI", 10.0!)
+        Me.PendingSrcLabel.ForeColor = System.Drawing.Color.White
+        Me.PendingSrcLabel.Location = New System.Drawing.Point(11, 237)
+        Me.PendingSrcLabel.Name = "PendingSrcLabel"
+        Me.PendingSrcLabel.Size = New System.Drawing.Size(80, 19)
+        Me.PendingSrcLabel.TabIndex = 24
+        Me.PendingSrcLabel.Text = "Pending Src"
         '
-        'Label8
+        'DateLabel
         '
-        Me.Label8.AutoSize = True
-        Me.Label8.Font = New System.Drawing.Font("Segoe UI", 10.0!)
-        Me.Label8.ForeColor = System.Drawing.Color.White
-        Me.Label8.Location = New System.Drawing.Point(11, 293)
-        Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(50, 19)
-        Me.Label8.TabIndex = 26
-        Me.Label8.Text = "Status:"
+        Me.DateLabel.AutoSize = True
+        Me.DateLabel.Font = New System.Drawing.Font("Segoe UI", 10.0!)
+        Me.DateLabel.ForeColor = System.Drawing.Color.White
+        Me.DateLabel.Location = New System.Drawing.Point(11, 265)
+        Me.DateLabel.Name = "DateLabel"
+        Me.DateLabel.Size = New System.Drawing.Size(38, 19)
+        Me.DateLabel.TabIndex = 26
+        Me.DateLabel.Text = "Date"
         '
         'ConectionBox
         '
         Me.ConectionBox.AllowDrop = True
         Me.ConectionBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.ConectionBox.Enabled = False
         Me.ConectionBox.Font = New System.Drawing.Font("Segoe UI", 10.0!)
         Me.ConectionBox.FormattingEnabled = True
-        Me.ConectionBox.Location = New System.Drawing.Point(117, 39)
+        Me.ConectionBox.Location = New System.Drawing.Point(117, 11)
         Me.ConectionBox.Name = "ConectionBox"
         Me.ConectionBox.Size = New System.Drawing.Size(126, 25)
-        Me.ConectionBox.TabIndex = 3
+        Me.ConectionBox.TabIndex = 1
         '
-        'Label10
+        'ConectionLabel
         '
-        Me.Label10.AutoSize = True
-        Me.Label10.Font = New System.Drawing.Font("Segoe UI", 10.0!)
-        Me.Label10.ForeColor = System.Drawing.Color.White
-        Me.Label10.Location = New System.Drawing.Point(11, 39)
-        Me.Label10.Name = "Label10"
-        Me.Label10.Size = New System.Drawing.Size(74, 19)
-        Me.Label10.TabIndex = 28
-        Me.Label10.Text = "Conection:"
+        Me.ConectionLabel.AutoSize = True
+        Me.ConectionLabel.Font = New System.Drawing.Font("Segoe UI", 10.0!)
+        Me.ConectionLabel.ForeColor = System.Drawing.Color.White
+        Me.ConectionLabel.Location = New System.Drawing.Point(11, 14)
+        Me.ConectionLabel.Name = "ConectionLabel"
+        Me.ConectionLabel.Size = New System.Drawing.Size(71, 19)
+        Me.ConectionLabel.TabIndex = 28
+        Me.ConectionLabel.Text = "Conection"
         '
         'StatusBox
         '
         Me.StatusBox.AllowDrop = True
         Me.StatusBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.StatusBox.Enabled = False
         Me.StatusBox.Font = New System.Drawing.Font("Segoe UI", 10.0!)
         Me.StatusBox.FormattingEnabled = True
-        Me.StatusBox.Location = New System.Drawing.Point(117, 293)
+        Me.StatusBox.Location = New System.Drawing.Point(117, 125)
         Me.StatusBox.Name = "StatusBox"
         Me.StatusBox.Size = New System.Drawing.Size(126, 25)
-        Me.StatusBox.TabIndex = 10
+        Me.StatusBox.TabIndex = 5
         '
         'ActCategoryBox
         '
         Me.ActCategoryBox.AllowDrop = True
         Me.ActCategoryBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.ActCategoryBox.Enabled = False
         Me.ActCategoryBox.Font = New System.Drawing.Font("Segoe UI", 10.0!)
         Me.ActCategoryBox.FormattingEnabled = True
-        Me.ActCategoryBox.Location = New System.Drawing.Point(117, 96)
+        Me.ActCategoryBox.Location = New System.Drawing.Point(117, 67)
         Me.ActCategoryBox.Name = "ActCategoryBox"
         Me.ActCategoryBox.Size = New System.Drawing.Size(126, 25)
-        Me.ActCategoryBox.TabIndex = 2
+        Me.ActCategoryBox.TabIndex = 3
         '
-        'Label12
+        'ActCategoryLabel
         '
-        Me.Label12.AutoSize = True
-        Me.Label12.Font = New System.Drawing.Font("Segoe UI", 10.0!)
-        Me.Label12.ForeColor = System.Drawing.Color.White
-        Me.Label12.Location = New System.Drawing.Point(12, 96)
-        Me.Label12.Name = "Label12"
-        Me.Label12.Size = New System.Drawing.Size(95, 19)
-        Me.Label12.TabIndex = 32
-        Me.Label12.Text = "Act. Category:"
+        Me.ActCategoryLabel.AutoSize = True
+        Me.ActCategoryLabel.Font = New System.Drawing.Font("Segoe UI", 10.0!)
+        Me.ActCategoryLabel.ForeColor = System.Drawing.Color.White
+        Me.ActCategoryLabel.Location = New System.Drawing.Point(11, 67)
+        Me.ActCategoryLabel.Name = "ActCategoryLabel"
+        Me.ActCategoryLabel.Size = New System.Drawing.Size(92, 19)
+        Me.ActCategoryLabel.TabIndex = 32
+        Me.ActCategoryLabel.Text = "Act. Category"
         '
         'TextBox6
         '
@@ -298,40 +295,42 @@ Partial Class NewCaseForm
         '
         Me.TeamBox.AllowDrop = True
         Me.TeamBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.TeamBox.Enabled = False
         Me.TeamBox.Font = New System.Drawing.Font("Segoe UI", 10.0!)
         Me.TeamBox.ImeMode = System.Windows.Forms.ImeMode.Disable
-        Me.TeamBox.Location = New System.Drawing.Point(117, 67)
+        Me.TeamBox.Location = New System.Drawing.Point(117, 39)
         Me.TeamBox.Name = "TeamBox"
         Me.TeamBox.Size = New System.Drawing.Size(126, 25)
-        Me.TeamBox.TabIndex = 1
+        Me.TeamBox.TabIndex = 2
         '
-        'Label13
+        'TeamLabel
         '
-        Me.Label13.AutoSize = True
-        Me.Label13.Font = New System.Drawing.Font("Segoe UI", 10.0!)
-        Me.Label13.ForeColor = System.Drawing.Color.White
-        Me.Label13.Location = New System.Drawing.Point(11, 67)
-        Me.Label13.Name = "Label13"
-        Me.Label13.Size = New System.Drawing.Size(45, 19)
-        Me.Label13.TabIndex = 35
-        Me.Label13.Text = "Team:"
+        Me.TeamLabel.AutoSize = True
+        Me.TeamLabel.Font = New System.Drawing.Font("Segoe UI", 10.0!)
+        Me.TeamLabel.ForeColor = System.Drawing.Color.White
+        Me.TeamLabel.Location = New System.Drawing.Point(11, 39)
+        Me.TeamLabel.Name = "TeamLabel"
+        Me.TeamLabel.Size = New System.Drawing.Size(41, 19)
+        Me.TeamLabel.TabIndex = 35
+        Me.TeamLabel.Text = "Team"
         '
-        'Label14
+        'CommentsLabel
         '
-        Me.Label14.AutoSize = True
-        Me.Label14.Font = New System.Drawing.Font("Segoe UI", 10.0!)
-        Me.Label14.ForeColor = System.Drawing.Color.White
-        Me.Label14.Location = New System.Drawing.Point(12, 321)
-        Me.Label14.Name = "Label14"
-        Me.Label14.Size = New System.Drawing.Size(79, 19)
-        Me.Label14.TabIndex = 36
-        Me.Label14.Text = "Comments:"
+        Me.CommentsLabel.AutoSize = True
+        Me.CommentsLabel.Font = New System.Drawing.Font("Segoe UI", 10.0!)
+        Me.CommentsLabel.ForeColor = System.Drawing.Color.White
+        Me.CommentsLabel.Location = New System.Drawing.Point(12, 293)
+        Me.CommentsLabel.Name = "CommentsLabel"
+        Me.CommentsLabel.Size = New System.Drawing.Size(76, 19)
+        Me.CommentsLabel.TabIndex = 36
+        Me.CommentsLabel.Text = "Comments"
         '
         'CommentsBox
         '
         Me.CommentsBox.AllowDrop = True
+        Me.CommentsBox.Enabled = False
         Me.CommentsBox.Font = New System.Drawing.Font("Segoe UI", 10.0!)
-        Me.CommentsBox.Location = New System.Drawing.Point(117, 321)
+        Me.CommentsBox.Location = New System.Drawing.Point(117, 293)
         Me.CommentsBox.Name = "CommentsBox"
         Me.CommentsBox.Size = New System.Drawing.Size(126, 25)
         Me.CommentsBox.TabIndex = 11
@@ -344,33 +343,32 @@ Partial Class NewCaseForm
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.ActiveCaptionText
         Me.CausesValidation = False
-        Me.ClientSize = New System.Drawing.Size(248, 409)
+        Me.ClientSize = New System.Drawing.Size(248, 408)
         Me.Controls.Add(Me.CommentsBox)
-        Me.Controls.Add(Me.Label14)
-        Me.Controls.Add(Me.Label13)
+        Me.Controls.Add(Me.CommentsLabel)
+        Me.Controls.Add(Me.TeamLabel)
         Me.Controls.Add(Me.TeamBox)
         Me.Controls.Add(Me.TextBox6)
-        Me.Controls.Add(Me.Label12)
+        Me.Controls.Add(Me.ActCategoryLabel)
         Me.Controls.Add(Me.ActCategoryBox)
         Me.Controls.Add(Me.StatusBox)
-        Me.Controls.Add(Me.Label10)
+        Me.Controls.Add(Me.ConectionLabel)
         Me.Controls.Add(Me.ConectionBox)
-        Me.Controls.Add(Me.Label8)
-        Me.Controls.Add(Me.Label6)
+        Me.Controls.Add(Me.DateLabel)
+        Me.Controls.Add(Me.PendingSrcLabel)
         Me.Controls.Add(Me.PendingSrcBox)
-        Me.Controls.Add(Me.Label3)
+        Me.Controls.Add(Me.RegionLabel)
         Me.Controls.Add(Me.RegionBox)
-        Me.Controls.Add(Me.Label9)
+        Me.Controls.Add(Me.StatusLabel)
         Me.Controls.Add(Me.DateBox)
         Me.Controls.Add(Me.DataGridView1)
         Me.Controls.Add(Me.ResponsibleBox)
-        Me.Controls.Add(Me.Label7)
+        Me.Controls.Add(Me.TicketNumberLabel)
         Me.Controls.Add(Me.TicketNumberBox)
-        Me.Controls.Add(Me.Label5)
-        Me.Controls.Add(Me.Label4)
+        Me.Controls.Add(Me.ResponsibleLabel)
+        Me.Controls.Add(Me.RequestorLabel)
         Me.Controls.Add(Me.RequestorBox)
         Me.Controls.Add(Me.TrakingID)
-        Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.CreateCaseButton)
         Me.ImeMode = System.Windows.Forms.ImeMode.Close
         Me.KeyPreview = True
@@ -386,30 +384,29 @@ Partial Class NewCaseForm
     End Sub
 
     Friend WithEvents CreateCaseButton As System.Windows.Forms.Button
-    Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents TrakingID As System.Windows.Forms.Label
     Friend WithEvents RequestorBox As System.Windows.Forms.TextBox
-    Friend WithEvents Label4 As System.Windows.Forms.Label
-    Friend WithEvents Label5 As System.Windows.Forms.Label
+    Friend WithEvents RequestorLabel As System.Windows.Forms.Label
+    Friend WithEvents ResponsibleLabel As System.Windows.Forms.Label
     Friend WithEvents TicketNumberBox As System.Windows.Forms.TextBox
-    Friend WithEvents Label7 As System.Windows.Forms.Label
+    Friend WithEvents TicketNumberLabel As System.Windows.Forms.Label
     Friend WithEvents ResponsibleBox As System.Windows.Forms.ComboBox
     Friend WithEvents DataGridView1 As System.Windows.Forms.DataGridView
     Friend WithEvents DateBox As System.Windows.Forms.TextBox
-    Friend WithEvents Label9 As System.Windows.Forms.Label
+    Friend WithEvents StatusLabel As System.Windows.Forms.Label
     Friend WithEvents RegionBox As System.Windows.Forms.TextBox
-    Friend WithEvents Label3 As System.Windows.Forms.Label
+    Friend WithEvents RegionLabel As System.Windows.Forms.Label
     Friend WithEvents PendingSrcBox As System.Windows.Forms.TextBox
-    Friend WithEvents Label6 As System.Windows.Forms.Label
-    Friend WithEvents Label8 As System.Windows.Forms.Label
+    Friend WithEvents PendingSrcLabel As System.Windows.Forms.Label
+    Friend WithEvents DateLabel As System.Windows.Forms.Label
     Friend WithEvents ConectionBox As System.Windows.Forms.ComboBox
-    Friend WithEvents Label10 As System.Windows.Forms.Label
+    Friend WithEvents ConectionLabel As System.Windows.Forms.Label
     Friend WithEvents StatusBox As System.Windows.Forms.ComboBox
     Friend WithEvents ActCategoryBox As System.Windows.Forms.ComboBox
-    Friend WithEvents Label12 As System.Windows.Forms.Label
+    Friend WithEvents ActCategoryLabel As System.Windows.Forms.Label
     Friend WithEvents TextBox6 As System.Windows.Forms.TextBox
     Friend WithEvents TeamBox As System.Windows.Forms.ComboBox
-    Friend WithEvents Label13 As System.Windows.Forms.Label
-    Friend WithEvents Label14 As System.Windows.Forms.Label
+    Friend WithEvents TeamLabel As System.Windows.Forms.Label
+    Friend WithEvents CommentsLabel As System.Windows.Forms.Label
     Friend WithEvents CommentsBox As System.Windows.Forms.TextBox
 End Class

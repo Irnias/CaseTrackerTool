@@ -8,17 +8,8 @@ Public Class CaseTrackerTool
     End Sub
 
     Private Sub AddCaseButton_Click(sender As Object, e As RibbonControlEventArgs) Handles AddCaseButton.Click
-        'My.Computer.FileSystem.ReadAllText("C:\Users\" & Environment.UserName & "\Resource Planning Tool.txt", System.Text.Encoding.UTF32)
-        If Not My.Computer.FileSystem.FileExists("C:\Users\" & Environment.UserName & "\Resource Planning Tool.txt") Then
-            MsgBox("It seems that you didn't enter your Team's activities. Please go to Settings and add them")
-        ElseIf Not My.Computer.FileSystem.FileExists("C:\Users\" & Environment.UserName & "\UserList.txt") Then
-            MsgBox("It seems that you didn't enter your Team's members. Please go to Settings and add them")
-        ElseIf Not (My.Computer.FileSystem.FileExists("C:\Users\" & Environment.UserName & "\OfficeConection.txt") Or (My.Computer.FileSystem.FileExists("C:\Users\" & Environment.UserName & "\HomeConection.txt"))) Then
-            MsgBox("To use the tracker, first you need to mapp the database")
-        Else
-            Dim NewCaseForm As New NewCaseForm
-            NewCaseForm.Show()
-        End If
+        Dim NewCaseForm As New NewCaseForm
+        NewCaseForm.Show()
     End Sub
 
     Private Sub ModifyCaseButton_Click(sender As Object, e As RibbonControlEventArgs) Handles ModifyCaseButton.Click
@@ -37,6 +28,4 @@ Public Class CaseTrackerTool
         NewMessage.Display()
     End Sub
 
-    Private Sub Button1_Click(sender As Object, e As RibbonControlEventArgs)
-    End Sub
 End Class

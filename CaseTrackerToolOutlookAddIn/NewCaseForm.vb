@@ -4,8 +4,6 @@ Imports System.Windows.Forms
 Imports System.IO
 Imports System.ComponentModel
 
-'hola espero que esto funcione
-
 Public Class NewCaseForm
     Dim OutApp As Outlook.Application
     Dim EmailSender As String
@@ -14,20 +12,24 @@ Public Class NewCaseForm
     Dim OutItem As Outlook.MailItem
     Dim OutReplyItem As Outlook.MailItem
     Dim conection As New OleDbConnection
-    Dim CaseID As Long
     Dim comands As New OleDbCommand
     Dim adapter As New OleDbDataAdapter
     Dim record As New DataSet
-    Public filePath As String
-    Public filePath2 As String
 
     Public Sub NewCaseForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        TeamBox.Enabled = False
-        ActCategoryBox.Enabled = False
-        ResponsibleBox.Enabled = False
+        ConectionBox.Enabled = True
 
-        'Load Teambox
-        LoadTeamBox()
+        'Clear Options
+        TeamBox.Items.Clear()
+        ActCategoryBox.Items.Clear()
+        ResponsibleBox.Items.Clear()
+        StatusBox.Items.Clear()
+        TicketNumberBox.Clear()
+        RequestorBox.Clear()
+        RegionBox.Clear()
+        PendingSrcBox.Clear()
+        DateBox.Clear()
+        CommentsBox.Clear()
 
         'Load ConectionBox
         ConectionBox.Items.Add("Office")
@@ -78,10 +80,16 @@ Public Class NewCaseForm
         'Error
         If NextNumber = 0 Then Exit Sub
 
+        'Show Ticket Number
+        TicketNumberBox.Text = NextNumber.ToString
+        TicketNumberBox.Visible = True
+
+        'Perform Insert
         If InsertTicket() Then
 
             'Save previous subject
             MailSubject = Me.Subject
+
             'Change mail status 
             'Team | Task | Mail Subject | Ticket Number| Ticket Status
             Me.Subject = TeamBox.Text & " | "
@@ -103,6 +111,10 @@ Public Class NewCaseForm
     End Sub
 
     Public Sub ConectionBox_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ConectionBox.SelectedIndexChanged
+        'Clear Options
+        TeamBox.Items.Clear()
+        ActCategoryBox.Items.Clear()
+        ResponsibleBox.Items.Clear()
 
         'Restart conection if open
         If conection.State = ConnectionState.Open Then
@@ -122,73 +134,74 @@ Public Class NewCaseForm
             MsgBox(ex.Message)
         End Try
 
-        'Reaload Teambox
+        'Reaload and enable Teambox
         TeamBox.Items.Clear()
         LoadTeamBox()
-
+        TeamBox.Enabled = True
     End Sub
 
     Private Sub TeamBox_SelectedIndexChanged(sender As Object, e As EventArgs) Handles TeamBox.SelectedIndexChanged
+        'Clear Options
+        ResponsibleBox.Items.Clear()
 
-        'Reload Activities
+        'Reload and enable Activities Box
         ActCategoryBox.Items.Clear()
         LoadTeamActivitiesBox()
+        ActCategoryBox.Enabled = True
     End Sub
 
     Private Sub ActCategoryBox_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ActCategoryBox.SelectedIndexChanged
 
-        'Reload Responsible Box
+        'Reload and enable Responsible Box
         ResponsibleBox.Items.Clear()
         LoadResponsibleBox()
-
-        DateBox.Text = (DateTime.Now.ToString("MM/dd/yyyy"))
+        ResponsibleBox.Enabled = True
     End Sub
 
     Private Sub ResponsibleBox_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ResponsibleBox.SelectedIndexChanged
-        Dim query As String = ""
-        Dim rows As Integer
 
-        Try
-            query = ("SELECT * FROM TestTable ORDER BY ID DESC")
-            adapter = New OleDbDataAdapter(query, conection)
-            record = New DataSet
-            adapter.Fill(record, "TestTable")
-            rows = record.Tables("TestTable").Rows.Count
-            If rows <> 0 Then
-                DataGridView1.DataSource = record
-                DataGridView1.DataMember = "TestTable"
-                TrakingID.Text = (record.Tables("TestTable").Rows(0).Item("TicketNumber")) + 1
-                TicketNumberBox.Text = TeamBox.Text & TrakingID.Text
-            End If
-            TicketNumberBox.Visible = True
+        'Enable fields
+        StatusBox.Enabled = True
+        'TicketNumberBox.Enabled = True
+        RequestorBox.Enabled = True
+        RegionBox.Enabled = True
+        PendingSrcBox.Enabled = True
+        DateBox.Enabled = True
+        CommentsBox.Enabled = True
 
-            OutApp = CreateObject("Outlook.Application")
-            OutItem = OutApp.ActiveInspector.CurrentItem
-            EmailSender = OutItem.SenderName
-            RequestorBox.Text = EmailSender
-            Subject = OutItem.Subject
-            OriginalEmailTime = OutItem.ReceivedTime
+        'Set default value
+        DateBox.Text = (DateTime.Now.ToString("MM/dd/yyyy"))
 
-            rows = OutItem.id
-        Catch ex As Exception
-            MsgBox(ex)
-        End Try
+        OutApp = CreateObject("Outlook.Application")
+        OutItem = OutApp.ActiveInspector.CurrentItem
+        EmailSender = OutItem.SenderName
+        RequestorBox.Text = EmailSender
+
+    End Sub
+
+    Private Sub DateBox_TextChanged(sender As Object, e As EventArgs) Handles DateBox.TextChanged
+        If IsDate(DateBox.Text) = False Then
+            DateBox.Text = ""
+            MsgBox("Date format not allowed", vbExclamation, "Alert")
+        End If
 
     End Sub
 
     Private Function getNextTicketNumber() As Long
         Dim result As Long = 0
         Dim query As String = ""
-        Dim Rows As Integer
+        Dim rows As Integer
 
         Try
             query = ("SELECT TOP 1 TicketNumber FROM TestTable ORDER BY 1 DESC")
             adapter = New OleDbDataAdapter(query, conection)
             adapter.Fill(record, "TestTable")
-            Rows = record.Tables("TestTable").Rows.Count
-            If Rows <> 0 Then
-                result = CLng(TrakingID.Text) + 1
-                TicketNumberBox.Text = TeamBox.Text & TrakingID.Text
+            rows = record.Tables("TestTable").Rows.Count
+            If rows <> 0 Then
+                DataGridView1.DataSource = record
+                DataGridView1.DataMember = "TestTable"
+                TicketNumberBox.Text = (record.Tables("TestTable").Rows(0).Item("TicketNumber")) + 1
+                result = CLng(record.Tables("TestTable").Rows(0).Item("TicketNumber")) + 1
             End If
         Catch ex As Exception
             MsgBox(ex.Message)
@@ -249,7 +262,6 @@ Public Class NewCaseForm
         Dim query As String = ""
         Dim rows As Integer
         Dim items As Object
-        TeamBox.Enabled = False
 
         Try
             query = ("SELECT * FROM SubTeams ORDER BY ID DESC")
@@ -265,10 +277,8 @@ Public Class NewCaseForm
                     TeamBox.Items.Add(record.Tables("SubTeams").Rows(x).Item("Team"))
                 Next
             End If
-            TeamBox.Enabled = True
-
         Catch ex As Exception
-            MsgBox(ex)
+            MsgBox(ex.Message)
         End Try
     End Sub
 
@@ -276,7 +286,6 @@ Public Class NewCaseForm
         Dim query As String = ""
         Dim rows As Integer
         Dim items As Object
-        ActCategoryBox.Enabled = False
 
         Try
             query = ("SELECT * FROM TeamsActivities WHERE SubTeam = '" & TeamBox.Text & " ' ORDER BY ID DESC")
@@ -293,9 +302,8 @@ Public Class NewCaseForm
                     ActCategoryBox.Items.Add(record.Tables("TeamsActivities").Rows(x).Item("Activity"))
                 Next
             End If
-            ActCategoryBox.Enabled = True
         Catch ex As Exception
-            MsgBox(ex)
+            MsgBox(ex.Message)
         End Try
     End Sub
 
@@ -303,7 +311,6 @@ Public Class NewCaseForm
         Dim query As String = ""
         Dim rows As Integer
         Dim items As Object
-        ResponsibleBox.Enabled = False
 
         Try
             query = ("SELECT * FROM TeamMembers ORDER BY ID DESC")
@@ -320,10 +327,8 @@ Public Class NewCaseForm
                     ResponsibleBox.Items.Add(record.Tables("TeamMembers").Rows(x).Item("MemberEnterpriceID"))
                 Next
             End If
-            ResponsibleBox.Enabled = True
-
         Catch ex As Exception
-            MsgBox(ex)
+            MsgBox(ex.Message)
         End Try
     End Sub
 End Class
