@@ -218,7 +218,7 @@ Public Class NewCaseForm
         query = "INSERT INTO TestTable(MyITCase, Opened, Requestor, Analyst, BU, Description, PendingSource, Closed, ActivityCategory, Comments, OriginalEmailTime)"
         query = query & "VALUES("
         'MyITCase = TicketNumberBox.Text
-        query = query & "'" & TicketNumberBox.Text & "',"
+        query = query & TicketNumberBox.Text & ","
         'Opened = DateBox.Text
         query = query & "'" & DateBox.Text & "',"
         'Requestor = RequestorBox.Text

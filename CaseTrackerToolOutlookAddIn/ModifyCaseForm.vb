@@ -291,6 +291,7 @@ Public Class ModifyCaseForm
             MsgBox(ex.Message)
         End Try
 
+        conection.Close()
         Return result
     End Function
 End Class
