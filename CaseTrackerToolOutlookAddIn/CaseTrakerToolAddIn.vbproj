@@ -32,10 +32,10 @@
     </StartupObject>
     <IsWebBootstrapper>False</IsWebBootstrapper>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <PublishUrl>C:\Users\lucas.n.angelino\Desktop\</PublishUrl>
+    <PublishUrl>C:\Users\camila.ibar\Desktop\</PublishUrl>
     <InstallUrl />
     <TargetCulture>es</TargetCulture>
-    <ApplicationVersion>1.0.0.91</ApplicationVersion>
+    <ApplicationVersion>1.0.0.118</ApplicationVersion>
     <AutoIncrementApplicationRevision>true</AutoIncrementApplicationRevision>
     <UpdateEnabled>true</UpdateEnabled>
     <UpdateInterval>7</UpdateInterval>
@@ -234,7 +234,6 @@
     <EmbeddedResource Include="CaseTrakerToolRibbon.resx">
       <DependentUpon>CaseTrakerToolRibbon.vb</DependentUpon>
     </EmbeddedResource>
-    <None Include="CaseTrakerToolAddIn_1_TemporaryKey.pfx" />
     <None Include="CaseTrakerToolAddIn_TemporaryKey.pfx" />
     <None Include="ThisAddIn.Designer.xml">
       <DependentUpon>ThisAddIn.vb</DependentUpon>
@@ -281,10 +280,10 @@
     <SignManifests>true</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>CaseTrakerToolAddIn_1_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestKeyFile>CaseTrakerToolAddIn_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>64AF5FA300E5A23BC1070C09EE1CA0A41864186D</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>D66993226AA9A7B16682946689B055B6C5E2C982</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>false</SignAssembly>

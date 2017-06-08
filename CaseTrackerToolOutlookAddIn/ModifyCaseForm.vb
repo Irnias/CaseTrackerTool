@@ -7,7 +7,6 @@ Public Class ModifyCaseForm
     Dim conection As New OleDbConnection
     Dim adapter As New OleDbDataAdapter
     Dim records As New DataSet
-    Dim OutlookAppli As Outlook.Application
     Dim Subject As String
     Dim Outlookitem As Outlook.MailItem
     Dim command As New OleDbCommand
@@ -73,11 +72,11 @@ Public Class ModifyCaseForm
 
             'Change mail status 
             'Team | Task | Mail Subject | Ticket Number| Ticket Status
-            Outlookitem.Subject = records.Tables("TestTable").Rows(0).Item("Team") & "|"
-            'Outlookitem.Subject = Outlookitem.Subject & records.Tables("TestTable").Rows(0).Item("ActivityCategory") & "|"
-            Outlookitem.Subject = Outlookitem.Subject & records.Tables("TestTable").Rows(0).Item("Description") & "|"
-            Outlookitem.Subject = Outlookitem.Subject & records.Tables("TestTable").Rows(0).Item("TicketNumber") & "|"
-            Outlookitem.Subject = Outlookitem.Subject & records.Tables("TestTable").Rows(0).Item("Status")
+            Outlookitem.Subject = records.Tables("Tickets").Rows(0).Item("szTeam") & "|"
+            'Outlookitem.Subject = Outlookitem.Subject & records.Tables("Tickets").Rows(0).Item("szActivityCategory") & "|"
+            Outlookitem.Subject = Outlookitem.Subject & records.Tables("Tickets").Rows(0).Item("szDescription") & "|"
+            Outlookitem.Subject = Outlookitem.Subject & records.Tables("Tickets").Rows(0).Item("mnTicketNumber") & "|"
+            Outlookitem.Subject = Outlookitem.Subject & records.Tables("Tickets").Rows(0).Item("szStatus")
         End If
                   
         'Retrieve updated ticket information
@@ -108,11 +107,11 @@ Public Class ModifyCaseForm
         If UpdateTicket("Open") Then
             'Change mail status 
             'Team | Task | Mail Subject | Ticket Number| Ticket Status
-            Outlookitem.Subject = records.Tables("TestTable").Rows(0).Item("Team") & "|"
-            Outlookitem.Subject = Outlookitem.Subject & records.Tables("TestTable").Rows(0).Item("ActivityCategory") & "|"
-            Outlookitem.Subject = Outlookitem.Subject & records.Tables("TestTable").Rows(0).Item("Description") & "|"
-            Outlookitem.Subject = Outlookitem.Subject & records.Tables("TestTable").Rows(0).Item("TicketNumber") & "|"
-            Outlookitem.Subject = Outlookitem.Subject & records.Tables("TestTable").Rows(0).Item("Status")
+            Outlookitem.Subject = records.Tables("Tickets").Rows(0).Item("szTeam") & "|"
+            'Outlookitem.Subject = Outlookitem.Subject & records.Tables("Tickets").Rows(0).Item("szActivityCategory") & "|"
+            Outlookitem.Subject = Outlookitem.Subject & records.Tables("Tickets").Rows(0).Item("szDescription") & "|"
+            Outlookitem.Subject = Outlookitem.Subject & records.Tables("Tickets").Rows(0).Item("mnTicketNumber") & "|"
+            Outlookitem.Subject = Outlookitem.Subject & records.Tables("Tickets").Rows(0).Item("szStatus")
 
         End If
                           
@@ -136,14 +135,13 @@ Public Class ModifyCaseForm
         If UpdateTicket("Modify") Then
             'Change mail status 
             'Team | Task | Mail Subject | Ticket Number| Ticket Status
-            Outlookitem.Subject = records.Tables("TestTable").Rows(0).Item("Team") & "|"
-            Outlookitem.Subject = Outlookitem.Subject & records.Tables("TestTable").Rows(0).Item("ActivityCategory") & "|"
-            Outlookitem.Subject = Outlookitem.Subject & records.Tables("TestTable").Rows(0).Item("Description") & "|"
-            Outlookitem.Subject = Outlookitem.Subject & records.Tables("TestTable").Rows(0).Item("TicketNumber") & "|"
-            Outlookitem.Subject = Outlookitem.Subject & records.Tables("TestTable").Rows(0).Item("Status")
+            Outlookitem.Subject = records.Tables("Tickets").Rows(0).Item("szTeam") & "|"
+            'Outlookitem.Subject = Outlookitem.Subject & records.Tables("Tickets").Rows(0).Item("szActivityCategory") & "|"
+            Outlookitem.Subject = Outlookitem.Subject & records.Tables("Tickets").Rows(0).Item("szDescription") & "|"
+            Outlookitem.Subject = Outlookitem.Subject & records.Tables("Tickets").Rows(0).Item("mnTicketNumber") & "|"
+            Outlookitem.Subject = Outlookitem.Subject & records.Tables("Tickets").Rows(0).Item("szStatus")
         End If
 
-                          
         'Retrieve updated ticket information
         RetrieveTicketInformation()
 
@@ -215,10 +213,10 @@ Public Class ModifyCaseForm
 
         If TicketNumberBox.Text <> "" Then
             Try
-                query = "SELECT * FROM TestTable WHERE TicketNumber = " & TicketNumber
+                query = "SELECT * FROM Tickets WHERE mnTicketNumber = " & TicketNumber
                 adapter = New OleDbDataAdapter(query, conection)
-                adapter.Fill(records, "TestTable")
-                Rows = records.Tables("TestTable").Rows.Count
+                adapter.Fill(records, "Tickets")
+                Rows = records.Tables("Tickets").Rows.Count
 
                 If Rows <> 0 Then
                     result = True
@@ -233,46 +231,78 @@ Public Class ModifyCaseForm
 
     Private Sub RetrieveTicketInformation()
         DataGridView1.DataSource = records
-        DataGridView1.DataMember = "TestTable"
-        ResponsibleBox.Text = records.Tables("TestTable").Rows(0).Item("Analyst")
-        OpenedDateBox.Text = records.Tables("TestTable").Rows(0).Item("Opened")
-        RegionBox.Text = records.Tables("TestTable").Rows(0).Item("BU")
-        RequestorBox.Text = records.Tables("TestTable").Rows(0).Item("Requestor")
-        PendingSourceBox.Text = records.Tables("TestTable").Rows(0).Item("PendingSource")
-        StatusBox.Text = records.Tables("TestTable").Rows(0).Item("Status")
-        CommentsBox.Text = records.Tables("TestTable").Rows(0).Item("Comments")
+        DataGridView1.DataMember = "Tickets"
+
+        StatusBox.Text = records.Tables("Tickets").Rows(0).Item("szStatus")
+        ResponsibleBox.Text = records.Tables("Tickets").Rows(0).Item("szResponsible")
+        RegionBox.Text = records.Tables("Tickets").Rows(0).Item("szBusinessUnit")
+        OpenedDateBox.Text = records.Tables("Tickets").Rows(0).Item("gdOpenDate")
+        RequestorBox.Text = records.Tables("Tickets").Rows(0).Item("szRequestor")
+        PendingSourceBox.Text = records.Tables("Tickets").Rows(0).Item("szPendingSource")
+        CommentsBox.Text = records.Tables("Tickets").Rows(0).Item("szComments")
     End Sub
 
     Private Function UpdateTicket(Action As String) As Boolean
         Dim result As Boolean = False
-        Dim updateQuery As String = ""
+        Dim query As String = ""
 
+        'Format query
+        query = "INSERT INTO Tickets(mnTicketNumber, mnTicketLineNumber, szTeam, szActivityCategory, szResponsible, szStatus, szRequestor, szBusinessUnit, szPendingSource, gdOpenDate, gdCloseDate, szComments, szDescription, gdRequestedTime, mnOpenDays, szAuditUser, szLocation, gdCreationDate)"
+        query = query & "VALUES("
+        'mnTicketNumber
+        query = query & TicketNumberBox.Text & ","
+        'mnTicketLineNumber (First line start with 0)
+        query = query & records.Tables("Tickets").Rows(0).Item("mnTicketLineNumber") + 1 & ", "
+        'szTeam, 
+        query = query & "'" & records.Tables("Tickets").Rows(0).Item("szTeam") & "', "
+        'szActivityCategory
+        query = query & "'" & records.Tables("Tickets").Rows(0).Item("szActivityCategory") & "', "
+        'szResponsible
+        query = query & "'" & ResponsibleBox.Text & "', "
+        'szStatus
+        query = query & "'" & StatusBox.Text & "', "
+        'szRequestor
+        query = query & "'" & RequestorBox.Text & "', "
+        'szBusinessUnit
+        query = query & "'" & RegionBox.Text & "', "
+        'szPendingSource
         Select Case (Action)
-
             Case "Close"
-                updateQuery = "UPDATE Testable SET "
-                updateQuery = updateQuery & "Closed = '" & (DateTime.Now.ToString("MM/dd/yyyy")) & "'"
-                updateQuery = updateQuery & ","
-                updateQuery = updateQuery & "PendingSource = '" & DBNull.Value & "'"
-                updateQuery = updateQuery & "WHERE TicketNumber = " & TicketNumberBox.Text
-
+                query = query & "'" & DBNull.Value & "', "
             Case "Open"
-                updateQuery = "UPDATE TestTable Set Closed = NULL WHERE TicketNumber ="
-                updateQuery = updateQuery & TicketNumberBox.Text
-
+                query = query & "'" & PendingSourceBox.Text & "', "
             Case "Modify"
-                updateQuery = "UPDATE TestTable SET Analyst = '" & ResponsibleBox.Text & "'"
-                updateQuery = updateQuery & ", BU = '" & RegionBox.Text & "'"
-                updateQuery = updateQuery & ", Opened = '" & OpenedDateBox.Text & "'"
-                updateQuery = updateQuery & ", Requestor = '" & RequestorBox.Text & "'"
-                updateQuery = updateQuery & ", PendingSource = '" & PendingSourceBox.Text & "'"
-                updateQuery = updateQuery & ", Comments = '" & CommentsBox.Text & "'"
-                updateQuery = updateQuery & " WHERE TicketNumber = " & TicketNumberBox.Text
+                query = query & "'" & PendingSourceBox.Text & "', "
         End Select
+        'gdOpenDate
+        query = query & "'" & OpenedDateBox.Text & "', "
+        'gdCloseDate
+        Select Case (Action)
+            Case "Close"
+                query = query & "'" & (DateTime.Now.ToString("MM/dd/yyyy")) & "', "
+            Case "Open"
+                query = query & "'" & DBNull.Value & "', "
+            Case "Modify"
+                query = query & "'" & OpenedDateBox.Text & "', "
+        End Select
+        'szComments
+        query = query & "'" & CommentsBox.Text & "', "
+        'szDescription
+        query = query & "'" & Subject & "', "
+        'gdRequestedTime 
+        query = query & "'" & records.Tables("Tickets").Rows(0).Item("gdRequestedTime") & "', "
+        'mnOpenDays
+        query = query & 0 & ", "
+        'szAuditUser
+        query = query & "'" & Environment.UserName & "', "
+        'szLocation
+        query = query & "'" & ConectionBox.Text & "', "
+        'gdCreationDate
+        query = query & "'" & DateTime.Now.ToString("MM/dd/yyyy") & "')"
 
         Try
             'Perform query
-            command = New OleDbCommand(updateQuery, conection)
+            command = New OleDbCommand(query, conection)
             command.ExecuteNonQuery()
 
             'Notify transaction status

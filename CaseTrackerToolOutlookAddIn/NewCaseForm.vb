@@ -1,16 +1,14 @@
 ﻿Imports System.Data
 Imports System.Data.OleDb
 Imports System.Windows.Forms
-Imports System.IO
 Imports System.ComponentModel
 
 Public Class NewCaseForm
     Dim OutApp As Outlook.Application
-    Dim EmailSender As String
-    Dim Subject As String
-    Dim OriginalEmailTime As String
     Dim OutItem As Outlook.MailItem
-    Dim OutReplyItem As Outlook.MailItem
+    Dim myInspector As Outlook.Inspector
+    Dim Subject As String
+    Dim CreationTime As Date
     Dim conection As New OleDbConnection
     Dim comands As New OleDbCommand
     Dim adapter As New OleDbDataAdapter
@@ -24,7 +22,7 @@ Public Class NewCaseForm
         ActCategoryBox.Items.Clear()
         ResponsibleBox.Items.Clear()
         StatusBox.Items.Clear()
-        TicketNumberBox.Clear()
+        PriorityBox.Items.Clear()
         RequestorBox.Clear()
         RegionBox.Clear()
         PendingSrcBox.Clear()
@@ -38,15 +36,24 @@ Public Class NewCaseForm
         'Load StatusBox
         StatusBox.Items.Add("Closed")
         StatusBox.Items.Add("Open")
+
+        'Load PriorityBox
+        PriorityBox.Items.Add("High")
+        PriorityBox.Items.Add("Medium")
+        PriorityBox.Items.Add("Low")
+
+        'Parse Email
+        OutApp = CreateObject("Outlook.Application")
+        OutItem = OutApp.ActiveInspector.CurrentItem
+        RequestorBox.Text = OutItem.SenderName
+        Subject = OutItem.Subject
+        CreationTime = OutItem.CreationTime
+
     End Sub
 
     Private Sub NewCaseForm_Closed(sender As Object, e As EventArgs) Handles Me.Closed
         conection.Close()
         Me.Close()
-    End Sub
-
-    Private Sub NewCaseForm_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
-        conection.Close()
     End Sub
 
     Public Sub NewCaseForm_KeyDown(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles MyBase.KeyDown
@@ -56,8 +63,8 @@ Public Class NewCaseForm
     End Sub
 
     Private Sub CreateCaseButton_Click(sender As Object, e As EventArgs) Handles CreateCaseButton.Click
-        Dim NextNumber As Long
-        Dim MailSubject As String
+        Dim NextNumber As Long = 0
+        Dim MailSubject As String = ""
 
         'Validate required fields
         If ActCategoryBox.Text = "" Then
@@ -75,30 +82,21 @@ Public Class NewCaseForm
             Exit Sub
         End If
 
-        NextNumber = getNextTicketNumber()
-
-        'Error
-        If NextNumber = 0 Then Exit Sub
-
-        'Show Ticket Number
-        TicketNumberBox.Text = NextNumber.ToString
-        TicketNumberBox.Visible = True
-
         'Perform Insert
-        If InsertTicket() Then
+        If InsertTicket(NextNumber) Then
 
             'Save previous subject
-            MailSubject = Me.Subject
+            MailSubject = Subject
 
             'Change mail status 
             'Team | Task | Mail Subject | Ticket Number| Ticket Status
-            Me.Subject = TeamBox.Text & " | "
-            'Outlookitem.Subject = ActCategoryBox.Text & "|"
-            Me.Subject = Me.Subject & MailSubject & " | "
-            Me.Subject = Me.Subject & NextNumber & " | "
-            Me.Subject = Me.Subject & StatusBox.Text
+            Subject = TeamBox.Text & " | "
+            Subject = ActCategoryBox.Text & "|"
+            Subject = Subject & MailSubject & " | "
+            Subject = Subject & NextNumber & " | "
+            Subject = Subject & StatusBox.Text
 
-            OutItem.Subject = Me.Subject
+            OutItem.Subject = Subject
 
             OutItem.Save()
             MsgBox("Ticket " & NextNumber & " created", vbExclamation, "Alert")
@@ -162,7 +160,7 @@ Public Class NewCaseForm
 
         'Enable fields
         StatusBox.Enabled = True
-        'TicketNumberBox.Enabled = True
+        PriorityBox.Enabled = True
         RequestorBox.Enabled = True
         RegionBox.Enabled = True
         PendingSrcBox.Enabled = True
@@ -171,15 +169,9 @@ Public Class NewCaseForm
 
         'Set default value
         DateBox.Text = (DateTime.Now.ToString("MM/dd/yyyy"))
-
-        OutApp = CreateObject("Outlook.Application")
-        OutItem = OutApp.ActiveInspector.CurrentItem
-        EmailSender = OutItem.SenderName
-        RequestorBox.Text = EmailSender
-
     End Sub
 
-    Private Sub DateBox_TextChanged(sender As Object, e As EventArgs) Handles DateBox.TextChanged
+    Private Sub DateBox_TextChanged(sender As Object, e As EventArgs) Handles DateBox.LostFocus
         If IsDate(DateBox.Text) = False Then
             DateBox.Text = ""
             MsgBox("Date format not allowed", vbExclamation, "Alert")
@@ -193,15 +185,16 @@ Public Class NewCaseForm
         Dim rows As Integer
 
         Try
-            query = ("SELECT TOP 1 TicketNumber FROM TestTable ORDER BY 1 DESC")
+            query = ("SELECT TOP 1 mnTicketNumber, mnTicketLineNumber FROM Tickets ORDER BY 1 DESC, 2 DESC")
             adapter = New OleDbDataAdapter(query, conection)
-            adapter.Fill(record, "TestTable")
-            rows = record.Tables("TestTable").Rows.Count
+            adapter.Fill(record, "Tickets")
+            rows = record.Tables("Tickets").Rows.Count
             If rows <> 0 Then
                 DataGridView1.DataSource = record
-                DataGridView1.DataMember = "TestTable"
-                TicketNumberBox.Text = (record.Tables("TestTable").Rows(0).Item("TicketNumber")) + 1
-                result = CLng(record.Tables("TestTable").Rows(0).Item("TicketNumber")) + 1
+                DataGridView1.DataMember = "Tickets"
+                result = CLng(record.Tables("Tickets").Rows(0).Item("mnTicketNumber")) + 1
+            Else
+                result = 1
             End If
         Catch ex As Exception
             MsgBox(ex.Message)
@@ -210,47 +203,68 @@ Public Class NewCaseForm
         Return result
     End Function
 
-    Private Function InsertTicket() As Boolean
+    Private Function InsertTicket(ByRef NextNumber As Long) As Boolean
         Dim result As Boolean = False
         Dim query As String = ""
 
-        'Format query
-        query = "INSERT INTO TestTable(MyITCase, Opened, Requestor, Analyst, BU, Description, PendingSource, Closed, ActivityCategory, Comments, OriginalEmailTime)"
-        query = query & "VALUES("
-        'MyITCase = TicketNumberBox.Text
-        query = query & TicketNumberBox.Text & ","
-        'Opened = DateBox.Text
-        query = query & "'" & DateBox.Text & "',"
-        'Requestor = RequestorBox.Text
-        query = query & "'" & RequestorBox.Text & "',"
-        'Analyst = ResponsibleBox.Text
-        query = query & "'" & ResponsibleBox.Text & "',"
-        'BU = RegionBox.Text
-        query = query & "'" & RegionBox.Text & "',"
-        'Description = Subject
-        query = query & "'" & Subject & "',"
-        'PendingSource = PendingSrcBox.Text
-        query = query & "'" & PendingSrcBox.Text & "',"
-        'Closed
-        If StatusBox.Text = "Closed" Then
-            query = query & "'" & DateBox.Text & "',"
-        Else
-            query = query & " " & DBNull.Value & ","
-        End If
-        'ActivityCategory = ActCategoryBox.Text
-        query = query & "'" & ActCategoryBox.Text & "',"
-        'Comments = CommentsBox.Text
-        query = query & "'" & CommentsBox.Text & "',"
-        'OriginalEmailTime = OriginalEmailTime
-        query = query & "'" & OriginalEmailTime & "')"
+        NextNumber = getNextTicketNumber()
 
-        Try
-            comands = New OleDbCommand(query, conection)
-            comands.ExecuteNonQuery()
-            result = True
-        Catch ex As Exception
-            MsgBox(ex.Message)
-        End Try
+        'Error
+        If NextNumber <> 0 Then
+
+            'Format query
+            query = "INSERT INTO Tickets(mnTicketNumber, mnTicketLineNumber, szTeam, szActivityCategory, szResponsible, szStatus, szRequestor, szBusinessUnit, szPendingSource, gdOpenDate, gdCloseDate, szComments, szDescription, gdRequestedTime, mnOpenDays, szAuditUser, szLocation, gdCreationDate)"
+            query = query & "VALUES("
+            'mnTicketNumber
+            query = query & NextNumber & ","
+            'mnTicketLineNumber (First line start with 0)
+            query = query & 0 & ","
+            'szTeam
+            query = query & "'" & TeamBox.Text & "',"
+            'szActivityCategory
+            query = query & "'" & ActCategoryBox.Text & "',"
+            'szResponsible
+            query = query & "'" & ResponsibleBox.Text & "',"
+            'szStatus
+            query = query & "'" & StatusBox.Text & "',"
+            'szRequestor
+            query = query & "'" & RequestorBox.Text & "',"
+            'szBusinessUnit
+            query = query & "'" & RegionBox.Text & "',"
+            'szPendingSource
+            query = query & "'" & PendingSrcBox.Text & "',"
+            'gdOpenDate
+            query = query & "'" & DateBox.Text & "',"
+            'gdCloseDate
+            If StatusBox.Text = "Closed" Then
+                query = query & "'" & DateBox.Text & "',"
+            Else
+                query = query & "'" & DBNull.Value & "',"
+            End If
+            'szComments
+            query = query & "'" & CommentsBox.Text & "',"
+            'szDescription
+            query = query & "'" & Subject & "',"
+            'gdRequestedTime 
+            query = query & "'" & CreationTime.ToString("MM/dd/yyyy") & "',"
+            'mnOpenDays
+            query = query & 0 & ","
+            'szAuditUser
+            query = query & "'" & Environment.UserName & "',"
+            'szLocation
+            query = query & "'" & ConectionBox.Text & "',"
+            'gdCreationDate
+            query = query & "'" & DateTime.Now.ToString("MM/dd/yyyy") & "')"
+
+            Try
+                comands = New OleDbCommand(query, conection)
+                comands.ExecuteNonQuery()
+                result = True
+            Catch ex As Exception
+                MsgBox(ex.Message)
+            End Try
+
+        End If
 
         conection.Close()
 

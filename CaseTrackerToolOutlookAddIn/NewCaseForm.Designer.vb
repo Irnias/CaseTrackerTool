@@ -27,8 +27,6 @@ Partial Class NewCaseForm
         Me.RequestorBox = New System.Windows.Forms.TextBox()
         Me.RequestorLabel = New System.Windows.Forms.Label()
         Me.ResponsibleLabel = New System.Windows.Forms.Label()
-        Me.TicketNumberBox = New System.Windows.Forms.TextBox()
-        Me.TicketNumberLabel = New System.Windows.Forms.Label()
         Me.ResponsibleBox = New System.Windows.Forms.ComboBox()
         Me.DataGridView1 = New System.Windows.Forms.DataGridView()
         Me.DateBox = New System.Windows.Forms.TextBox()
@@ -48,6 +46,8 @@ Partial Class NewCaseForm
         Me.TeamLabel = New System.Windows.Forms.Label()
         Me.CommentsLabel = New System.Windows.Forms.Label()
         Me.CommentsBox = New System.Windows.Forms.TextBox()
+        Me.PriorityLabel = New System.Windows.Forms.Label()
+        Me.PriorityBox = New System.Windows.Forms.ComboBox()
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -107,27 +107,6 @@ Partial Class NewCaseForm
         Me.ResponsibleLabel.Size = New System.Drawing.Size(81, 19)
         Me.ResponsibleLabel.TabIndex = 6
         Me.ResponsibleLabel.Text = "Responsible"
-        '
-        'TicketNumberBox
-        '
-        Me.TicketNumberBox.AllowDrop = True
-        Me.TicketNumberBox.Enabled = False
-        Me.TicketNumberBox.Font = New System.Drawing.Font("Segoe UI", 10.0!)
-        Me.TicketNumberBox.Location = New System.Drawing.Point(117, 153)
-        Me.TicketNumberBox.Name = "TicketNumberBox"
-        Me.TicketNumberBox.Size = New System.Drawing.Size(126, 25)
-        Me.TicketNumberBox.TabIndex = 6
-        '
-        'TicketNumberLabel
-        '
-        Me.TicketNumberLabel.AutoSize = True
-        Me.TicketNumberLabel.Font = New System.Drawing.Font("Segoe UI", 10.0!)
-        Me.TicketNumberLabel.ForeColor = System.Drawing.Color.White
-        Me.TicketNumberLabel.Location = New System.Drawing.Point(11, 153)
-        Me.TicketNumberLabel.Name = "TicketNumberLabel"
-        Me.TicketNumberLabel.Size = New System.Drawing.Size(96, 19)
-        Me.TicketNumberLabel.TabIndex = 11
-        Me.TicketNumberLabel.Text = "Ticket number"
         '
         'ResponsibleBox
         '
@@ -335,6 +314,29 @@ Partial Class NewCaseForm
         Me.CommentsBox.Size = New System.Drawing.Size(126, 25)
         Me.CommentsBox.TabIndex = 11
         '
+        'PriorityLabel
+        '
+        Me.PriorityLabel.AutoSize = True
+        Me.PriorityLabel.Font = New System.Drawing.Font("Segoe UI", 10.0!)
+        Me.PriorityLabel.ForeColor = System.Drawing.Color.White
+        Me.PriorityLabel.Location = New System.Drawing.Point(11, 153)
+        Me.PriorityLabel.Name = "PriorityLabel"
+        Me.PriorityLabel.Size = New System.Drawing.Size(53, 19)
+        Me.PriorityLabel.TabIndex = 11
+        Me.PriorityLabel.Text = "Priority"
+        '
+        'PriorityBox
+        '
+        Me.PriorityBox.AllowDrop = True
+        Me.PriorityBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.PriorityBox.Enabled = False
+        Me.PriorityBox.Font = New System.Drawing.Font("Segoe UI", 10.0!)
+        Me.PriorityBox.FormattingEnabled = True
+        Me.PriorityBox.Location = New System.Drawing.Point(117, 153)
+        Me.PriorityBox.Name = "PriorityBox"
+        Me.PriorityBox.Size = New System.Drawing.Size(126, 25)
+        Me.PriorityBox.TabIndex = 37
+        '
         'NewCaseForm
         '
         Me.AcceptButton = Me.CreateCaseButton
@@ -344,6 +346,7 @@ Partial Class NewCaseForm
         Me.BackColor = System.Drawing.SystemColors.ActiveCaptionText
         Me.CausesValidation = False
         Me.ClientSize = New System.Drawing.Size(248, 408)
+        Me.Controls.Add(Me.PriorityBox)
         Me.Controls.Add(Me.CommentsBox)
         Me.Controls.Add(Me.CommentsLabel)
         Me.Controls.Add(Me.TeamLabel)
@@ -363,8 +366,7 @@ Partial Class NewCaseForm
         Me.Controls.Add(Me.DateBox)
         Me.Controls.Add(Me.DataGridView1)
         Me.Controls.Add(Me.ResponsibleBox)
-        Me.Controls.Add(Me.TicketNumberLabel)
-        Me.Controls.Add(Me.TicketNumberBox)
+        Me.Controls.Add(Me.PriorityLabel)
         Me.Controls.Add(Me.ResponsibleLabel)
         Me.Controls.Add(Me.RequestorLabel)
         Me.Controls.Add(Me.RequestorBox)
@@ -388,8 +390,6 @@ Partial Class NewCaseForm
     Friend WithEvents RequestorBox As System.Windows.Forms.TextBox
     Friend WithEvents RequestorLabel As System.Windows.Forms.Label
     Friend WithEvents ResponsibleLabel As System.Windows.Forms.Label
-    Friend WithEvents TicketNumberBox As System.Windows.Forms.TextBox
-    Friend WithEvents TicketNumberLabel As System.Windows.Forms.Label
     Friend WithEvents ResponsibleBox As System.Windows.Forms.ComboBox
     Friend WithEvents DataGridView1 As System.Windows.Forms.DataGridView
     Friend WithEvents DateBox As System.Windows.Forms.TextBox
@@ -409,4 +409,6 @@ Partial Class NewCaseForm
     Friend WithEvents TeamLabel As System.Windows.Forms.Label
     Friend WithEvents CommentsLabel As System.Windows.Forms.Label
     Friend WithEvents CommentsBox As System.Windows.Forms.TextBox
+    Friend WithEvents PriorityLabel As System.Windows.Forms.Label
+    Friend WithEvents PriorityBox As System.Windows.Forms.ComboBox
 End Class
