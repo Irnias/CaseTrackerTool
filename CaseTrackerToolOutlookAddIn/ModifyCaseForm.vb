@@ -8,8 +8,13 @@ Public Class ModifyCaseForm
     Dim adapter As New OleDbDataAdapter
     Dim records As New DataSet
     Dim Subject As String
-    Dim Outlookitem As Outlook.MailItem
+    Dim OutlookApp As Outlook.Application
+    Dim OutlookItem As Outlook.MailItem
+    Dim NewMessage As Outlook.MailItem
     Dim command As New OleDbCommand
+
+    Dim szTeam As String = ""
+    Dim szDescription As String = ""
 
     Private Sub ModifyCaseForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         'Enable conection box
@@ -18,6 +23,11 @@ Public Class ModifyCaseForm
         'Load ConectionBox
         ConectionBox.Items.Add("Office")
         ConectionBox.Items.Add("Home")
+
+        'Parse Email
+        OutlookApp = CreateObject("Outlook.Application")
+        OutlookItem = OutlookApp.ActiveInspector.CurrentItem
+
     End Sub
 
     Private Sub ModifyCaseForm_Closed(sender As Object, e As EventArgs) Handles Me.Closed
@@ -69,20 +79,18 @@ Public Class ModifyCaseForm
 
         'Update Ticket
         If UpdateTicket("Close") Then
-
             'Change mail status 
-            'Team | Task | Mail Subject | Ticket Number| Ticket Status
-            Outlookitem.Subject = records.Tables("Tickets").Rows(0).Item("szTeam") & "|"
-            'Outlookitem.Subject = Outlookitem.Subject & records.Tables("Tickets").Rows(0).Item("szActivityCategory") & "|"
-            Outlookitem.Subject = Outlookitem.Subject & records.Tables("Tickets").Rows(0).Item("szDescription") & "|"
-            Outlookitem.Subject = Outlookitem.Subject & records.Tables("Tickets").Rows(0).Item("mnTicketNumber") & "|"
-            Outlookitem.Subject = Outlookitem.Subject & records.Tables("Tickets").Rows(0).Item("szStatus")
+            'Team | Mail Subject | Ticket Number| Ticket Status
+            OutlookItem.Subject = szTeam & " | "
+            OutlookItem.Subject = OutlookItem.Subject & szDescription & " | "
+            OutlookItem.Subject = OutlookItem.Subject & TicketNumberBox.Text & " | "
+            OutlookItem.Subject = OutlookItem.Subject & StatusBox.Text & " | "
         End If
-                  
+
         'Retrieve updated ticket information
         RetrieveTicketInformation()
 
-        Outlookitem.Save()
+        OutlookItem.Save()
         Me.Close()
     End Sub
 
@@ -106,19 +114,18 @@ Public Class ModifyCaseForm
 
         If UpdateTicket("Open") Then
             'Change mail status 
-            'Team | Task | Mail Subject | Ticket Number| Ticket Status
-            Outlookitem.Subject = records.Tables("Tickets").Rows(0).Item("szTeam") & "|"
-            'Outlookitem.Subject = Outlookitem.Subject & records.Tables("Tickets").Rows(0).Item("szActivityCategory") & "|"
-            Outlookitem.Subject = Outlookitem.Subject & records.Tables("Tickets").Rows(0).Item("szDescription") & "|"
-            Outlookitem.Subject = Outlookitem.Subject & records.Tables("Tickets").Rows(0).Item("mnTicketNumber") & "|"
-            Outlookitem.Subject = Outlookitem.Subject & records.Tables("Tickets").Rows(0).Item("szStatus")
+            'Team | Mail Subject | Ticket Number| Ticket Status
+            OutlookItem.Subject = szTeam & " | "
+            OutlookItem.Subject = OutlookItem.Subject & szDescription & " | "
+            OutlookItem.Subject = OutlookItem.Subject & TicketNumberBox.Text & " | "
+            OutlookItem.Subject = OutlookItem.Subject & StatusBox.Text & " | "
 
         End If
-                          
+
         'Retrieve updated ticket information
         RetrieveTicketInformation()
 
-        Outlookitem.Save()
+        OutlookItem.Save()
         Me.Close()
     End Sub
 
@@ -134,18 +141,38 @@ Public Class ModifyCaseForm
         'Update Ticket
         If UpdateTicket("Modify") Then
             'Change mail status 
-            'Team | Task | Mail Subject | Ticket Number| Ticket Status
-            Outlookitem.Subject = records.Tables("Tickets").Rows(0).Item("szTeam") & "|"
-            'Outlookitem.Subject = Outlookitem.Subject & records.Tables("Tickets").Rows(0).Item("szActivityCategory") & "|"
-            Outlookitem.Subject = Outlookitem.Subject & records.Tables("Tickets").Rows(0).Item("szDescription") & "|"
-            Outlookitem.Subject = Outlookitem.Subject & records.Tables("Tickets").Rows(0).Item("mnTicketNumber") & "|"
-            Outlookitem.Subject = Outlookitem.Subject & records.Tables("Tickets").Rows(0).Item("szStatus")
+            'Team | Mail Subject | Ticket Number| Ticket Status
+            OutlookItem.Subject = szTeam & " | "
+            OutlookItem.Subject = OutlookItem.Subject & szDescription & " | "
+            OutlookItem.Subject = OutlookItem.Subject & TicketNumberBox.Text & " | "
+            OutlookItem.Subject = OutlookItem.Subject & StatusBox.Text & " | "
+        End If
+
+        'Notify New Pending Source
+        If records.Tables("Tickets").Rows(0).Item("szPendingSource") <> PendingSourceBox.Text Then
+            Select Case MsgBox("¿Do you want to notify the new pending source of this change?", MsgBoxStyle.YesNo, "Change notification")
+                Case MsgBoxResult.Yes
+                    NewMessage = OutlookApp.CreateItem(Microsoft.Office.Interop.Outlook.OlItemType.olMailItem)
+                    NewMessage.To = PendingSourceBox.Text
+                    NewMessage.Body = "A change has been made in this ticket and you apear to be the new pending source"
+                    NewMessage.Body = NewMessage.Body & vbCrLf & vbCrLf
+                    NewMessage.Body = NewMessage.Body & "This Message Is for the designated recipient only And may contain restricted, highly confidential, Or confidential information."
+                    NewMessage.Body = NewMessage.Body & "If you Then have received it In Error, please notify the sender immediately And delete the original.  Any other use Of the email by you Is prohibited"
+                    NewMessage.Body = NewMessage.Body & "-----------------------------------------------------------------------------------"
+                    NewMessage.Body = NewMessage.Body & vbCrLf & vbCrLf
+                    NewMessage.Body = NewMessage.Body & OutlookItem.Body
+                    NewMessage.Subject = OutlookItem.Subject
+                    NewMessage.Display()
+                    Exit Select
+                Case MsgBoxResult.No
+                    Exit Select
+            End Select
         End If
 
         'Retrieve updated ticket information
         RetrieveTicketInformation()
 
-        Outlookitem.Save()
+        OutlookItem.Save()
         Me.Close()
     End Sub
 
@@ -213,7 +240,7 @@ Public Class ModifyCaseForm
 
         If TicketNumberBox.Text <> "" Then
             Try
-                query = "SELECT * FROM Tickets WHERE mnTicketNumber = " & TicketNumber
+                query = "SELECT TOP 1 * FROM Tickets WHERE mnTicketNumber = " & TicketNumber & " ORDER BY mnTicketNumber DESC, mnTicketLineNumber DESC"
                 adapter = New OleDbDataAdapter(query, conection)
                 adapter.Fill(records, "Tickets")
                 Rows = records.Tables("Tickets").Rows.Count
@@ -233,6 +260,7 @@ Public Class ModifyCaseForm
         DataGridView1.DataSource = records
         DataGridView1.DataMember = "Tickets"
 
+        'Retrieve Form Data
         StatusBox.Text = records.Tables("Tickets").Rows(0).Item("szStatus")
         ResponsibleBox.Text = records.Tables("Tickets").Rows(0).Item("szResponsible")
         RegionBox.Text = records.Tables("Tickets").Rows(0).Item("szBusinessUnit")
@@ -240,6 +268,11 @@ Public Class ModifyCaseForm
         RequestorBox.Text = records.Tables("Tickets").Rows(0).Item("szRequestor")
         PendingSourceBox.Text = records.Tables("Tickets").Rows(0).Item("szPendingSource")
         CommentsBox.Text = records.Tables("Tickets").Rows(0).Item("szComments")
+
+        'Retrieve New Data for Subject
+        szTeam = records.Tables("Tickets").Rows(0).Item("szTeam")
+        szDescription = records.Tables("Tickets").Rows(0).Item("szDescription")
+
     End Sub
 
     Private Function UpdateTicket(Action As String) As Boolean
@@ -269,10 +302,13 @@ Public Class ModifyCaseForm
         Select Case (Action)
             Case "Close"
                 query = query & "'" & DBNull.Value & "', "
+                Exit Select
             Case "Open"
                 query = query & "'" & PendingSourceBox.Text & "', "
+                Exit Select
             Case "Modify"
                 query = query & "'" & PendingSourceBox.Text & "', "
+                Exit Select
         End Select
         'gdOpenDate
         query = query & "'" & OpenedDateBox.Text & "', "
@@ -280,10 +316,17 @@ Public Class ModifyCaseForm
         Select Case (Action)
             Case "Close"
                 query = query & "'" & (DateTime.Now.ToString("MM/dd/yyyy")) & "', "
+                Exit Select
             Case "Open"
                 query = query & "'" & DBNull.Value & "', "
+                Exit Select
             Case "Modify"
-                query = query & "'" & OpenedDateBox.Text & "', "
+                If StatusBox.Text = "Close" Then
+                    query = query & "'" & OpenedDateBox.Text & "', "
+                Else
+                    query = query & "'" & DBNull.Value & "', "
+                End If
+                Exit Select
         End Select
         'szComments
         query = query & "'" & CommentsBox.Text & "', "
