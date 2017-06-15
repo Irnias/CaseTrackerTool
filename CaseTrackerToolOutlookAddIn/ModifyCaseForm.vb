@@ -15,6 +15,8 @@ Public Class ModifyCaseForm
 
     Dim szTeam As String = ""
     Dim szDescription As String = ""
+    Dim szPreviousPendingSrc As String = ""
+    Dim szPriority As String = ""
 
     Private Sub ModifyCaseForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         'Enable conection box
@@ -87,9 +89,6 @@ Public Class ModifyCaseForm
             OutlookItem.Subject = OutlookItem.Subject & StatusBox.Text & " | "
         End If
 
-        'Retrieve updated ticket information
-        RetrieveTicketInformation()
-
         OutlookItem.Save()
         Me.Close()
     End Sub
@@ -117,13 +116,8 @@ Public Class ModifyCaseForm
             'Team | Mail Subject | Ticket Number| Ticket Status
             OutlookItem.Subject = szTeam & " | "
             OutlookItem.Subject = OutlookItem.Subject & szDescription & " | "
-            OutlookItem.Subject = OutlookItem.Subject & TicketNumberBox.Text & " | "
-            OutlookItem.Subject = OutlookItem.Subject & StatusBox.Text & " | "
-
+            OutlookItem.Subject = OutlookItem.Subject & TicketNumberBox.Text
         End If
-
-        'Retrieve updated ticket information
-        RetrieveTicketInformation()
 
         OutlookItem.Save()
         Me.Close()
@@ -144,21 +138,19 @@ Public Class ModifyCaseForm
             'Team | Mail Subject | Ticket Number| Ticket Status
             OutlookItem.Subject = szTeam & " | "
             OutlookItem.Subject = OutlookItem.Subject & szDescription & " | "
-            OutlookItem.Subject = OutlookItem.Subject & TicketNumberBox.Text & " | "
-            OutlookItem.Subject = OutlookItem.Subject & StatusBox.Text & " | "
+            OutlookItem.Subject = OutlookItem.Subject & TicketNumberBox.Text
+            If StatusBox.Text <> "Open" Then
+                OutlookItem.Subject = OutlookItem.Subject & " | " & StatusBox.Text & " | "
+            End If
         End If
 
         'Notify New Pending Source
-        If records.Tables("Tickets").Rows(0).Item("szPendingSource") <> PendingSourceBox.Text Then
+        If szPreviousPendingSrc <> PendingSourceBox.Text Then
             Select Case MsgBox("¿Do you want to notify the new pending source of this change?", MsgBoxStyle.YesNo, "Change notification")
                 Case MsgBoxResult.Yes
                     NewMessage = OutlookApp.CreateItem(Microsoft.Office.Interop.Outlook.OlItemType.olMailItem)
                     NewMessage.To = PendingSourceBox.Text
-                    NewMessage.Body = "A change has been made in this ticket and you apear to be the new pending source"
-                    NewMessage.Body = NewMessage.Body & vbCrLf & vbCrLf
-                    NewMessage.Body = NewMessage.Body & "This Message Is for the designated recipient only And may contain restricted, highly confidential, Or confidential information."
-                    NewMessage.Body = NewMessage.Body & "If you Then have received it In Error, please notify the sender immediately And delete the original.  Any other use Of the email by you Is prohibited"
-                    NewMessage.Body = NewMessage.Body & "-----------------------------------------------------------------------------------"
+                    NewMessage.HTMLBody = "<html><body><h2>A change has been made in this ticket and you apear to be the new pending source</h2><p>This Message Is for the designated recipient only And may contain restricted, highly confidential, Or confidential information.<br>If you Then have received it In Error, please notify the sender immediately And delete the original.  Any other use Of the email by you Is prohibited.</p><hr></body>"
                     NewMessage.Body = NewMessage.Body & vbCrLf & vbCrLf
                     NewMessage.Body = NewMessage.Body & OutlookItem.Body
                     NewMessage.Subject = OutlookItem.Subject
@@ -168,9 +160,6 @@ Public Class ModifyCaseForm
                     Exit Select
             End Select
         End If
-
-        'Retrieve updated ticket information
-        RetrieveTicketInformation()
 
         OutlookItem.Save()
         Me.Close()
@@ -267,11 +256,13 @@ Public Class ModifyCaseForm
         OpenedDateBox.Text = records.Tables("Tickets").Rows(0).Item("gdOpenDate")
         RequestorBox.Text = records.Tables("Tickets").Rows(0).Item("szRequestor")
         PendingSourceBox.Text = records.Tables("Tickets").Rows(0).Item("szPendingSource")
+        szPreviousPendingSrc = PendingSourceBox.Text
         CommentsBox.Text = records.Tables("Tickets").Rows(0).Item("szComments")
 
         'Retrieve New Data for Subject
         szTeam = records.Tables("Tickets").Rows(0).Item("szTeam")
         szDescription = records.Tables("Tickets").Rows(0).Item("szDescription")
+        szPriority = records.Tables("Tickets").Rows(0).Item("szPriority")
 
     End Sub
 
@@ -280,7 +271,7 @@ Public Class ModifyCaseForm
         Dim query As String = ""
 
         'Format query
-        query = "INSERT INTO Tickets(mnTicketNumber, mnTicketLineNumber, szTeam, szActivityCategory, szResponsible, szStatus, szRequestor, szBusinessUnit, szPendingSource, gdOpenDate, gdCloseDate, szComments, szDescription, gdRequestedTime, mnOpenDays, szAuditUser, szLocation, gdCreationDate)"
+        query = "INSERT INTO Tickets(mnTicketNumber, mnTicketLineNumber, szTeam, szActivityCategory, szResponsible, szStatus, szPriority, szRequestor, szBusinessUnit, szPendingSource, gdOpenDate, gdCloseDate, szComments, szDescription, gdRequestedTime, mnOpenDays, szAuditUser, szLocation, gdCreationDate)"
         query = query & "VALUES("
         'mnTicketNumber
         query = query & TicketNumberBox.Text & ","
@@ -293,7 +284,19 @@ Public Class ModifyCaseForm
         'szResponsible
         query = query & "'" & ResponsibleBox.Text & "', "
         'szStatus
-        query = query & "'" & StatusBox.Text & "', "
+        Select Case (Action)
+            Case "Close"
+                query = query & "'" & "Closed" & "', "
+                Exit Select
+            Case "Open"
+                query = query & "'" & "Open" & "', "
+                Exit Select
+            Case "Modify"
+                query = query & "'" & StatusBox.Text & "', "
+                Exit Select
+        End Select
+        'szPriority
+        query = query & "'" & szPriority & "', "
         'szRequestor
         query = query & "'" & RequestorBox.Text & "', "
         'szBusinessUnit
@@ -311,7 +314,21 @@ Public Class ModifyCaseForm
                 Exit Select
         End Select
         'gdOpenDate
-        query = query & "'" & OpenedDateBox.Text & "', "
+        Select Case (Action)
+            Case "Close"
+                query = query & "'" & records.Tables("Tickets").Rows(0).Item("gdOpenDate") & "', "
+                Exit Select
+            Case "Open"
+                query = query & "'" & (DateTime.Now.ToString("MM/dd/yyyy")) & "', "
+                Exit Select
+            Case "Modify"
+                If StatusBox.Text = "Close" Then
+                    query = query & "'" & records.Tables("Tickets").Rows(0).Item("gdOpenDate") & "', "
+                Else
+                    query = query & "'" & (DateTime.Now.ToString("MM/dd/yyyy")) & "', "
+                End If
+                Exit Select
+        End Select
         'gdCloseDate
         Select Case (Action)
             Case "Close"
@@ -331,7 +348,7 @@ Public Class ModifyCaseForm
         'szComments
         query = query & "'" & CommentsBox.Text & "', "
         'szDescription
-        query = query & "'" & Subject & "', "
+        query = query & "'" & records.Tables("Tickets").Rows(0).Item("szDescription") & "', "
         'gdRequestedTime 
         query = query & "'" & records.Tables("Tickets").Rows(0).Item("gdRequestedTime") & "', "
         'mnOpenDays
@@ -365,6 +382,12 @@ Public Class ModifyCaseForm
         End Try
 
         conection.Close()
+
+        If Action <> "Modify" Then
+            'Retrieve updated ticket information
+            RetrieveTicketInformation()
+        End If
+
         Return result
     End Function
 End Class

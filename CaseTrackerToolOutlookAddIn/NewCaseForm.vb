@@ -45,9 +45,17 @@ Public Class NewCaseForm
         'Parse Email
         OutApp = CreateObject("Outlook.Application")
         OutItem = OutApp.ActiveInspector.CurrentItem
+
+        'Retrieve email properties
         RequestorBox.Text = OutItem.SenderName
-        Subject = OutItem.Subject
         CreationTime = OutItem.CreationTime
+        Subject = OutItem.Subject
+
+        'Parse Subject if already formated
+        If SubjectFormatted(Subject) = False Then
+            'Subject is not formated
+            Subject = OutItem.Subject
+        End If
 
     End Sub
 
@@ -89,19 +97,21 @@ Public Class NewCaseForm
             MailSubject = Subject
 
             'Change mail status 
-            'Team | Task | Mail Subject | Ticket Number| Ticket Status
+            'Team | Mail Subject | Ticket Number| Ticket Status
             Subject = TeamBox.Text & " | "
-            Subject = ActCategoryBox.Text & "|"
+            Subject = Subject & ActCategoryBox.Text & "|"
             Subject = Subject & MailSubject & " | "
             Subject = Subject & NextNumber & " | "
-            Subject = Subject & StatusBox.Text
+            If StatusBox.Text <> "Open" Then
+                Subject = Subject & " | " & StatusBox.Text
+            End If
 
             OutItem.Subject = Subject
 
-            OutItem.Save()
-            MsgBox("Ticket " & NextNumber & " created", vbExclamation, "Alert")
-        Else
-            MsgBox("Creation Failed", vbExclamation, "Alert")
+                OutItem.Save()
+                MsgBox("Ticket " & NextNumber & " created", vbExclamation, "Alert")
+            Else
+                MsgBox("Creation Failed", vbExclamation, "Alert")
         End If
 
         conection.Close()
@@ -190,8 +200,6 @@ Public Class NewCaseForm
             adapter.Fill(record, "Tickets")
             rows = record.Tables("Tickets").Rows.Count
             If rows <> 0 Then
-                DataGridView1.DataSource = record
-                DataGridView1.DataMember = "Tickets"
                 result = CLng(record.Tables("Tickets").Rows(0).Item("mnTicketNumber")) + 1
             Else
                 result = 1
@@ -213,7 +221,7 @@ Public Class NewCaseForm
         If NextNumber <> 0 Then
 
             'Format query
-            query = "INSERT INTO Tickets(mnTicketNumber, mnTicketLineNumber, szTeam, szActivityCategory, szResponsible, szStatus, szRequestor, szBusinessUnit, szPendingSource, gdOpenDate, gdCloseDate, szComments, szDescription, gdRequestedTime, mnOpenDays, szAuditUser, szLocation, gdCreationDate)"
+            query = "INSERT INTO Tickets(mnTicketNumber, mnTicketLineNumber, szTeam, szActivityCategory, szResponsible, szStatus, szPriority,szRequestor, szBusinessUnit, szPendingSource, gdOpenDate, gdCloseDate, szComments, szDescription, gdRequestedTime, mnOpenDays, szAuditUser, szLocation, gdCreationDate)"
             query = query & "VALUES("
             'mnTicketNumber
             query = query & NextNumber & ","
@@ -227,6 +235,8 @@ Public Class NewCaseForm
             query = query & "'" & ResponsibleBox.Text & "',"
             'szStatus
             query = query & "'" & StatusBox.Text & "',"
+            'szPriority
+            query = query & "'" & PriorityBox.Text & "',"
             'szRequestor
             query = query & "'" & RequestorBox.Text & "',"
             'szBusinessUnit
@@ -275,20 +285,16 @@ Public Class NewCaseForm
     Private Sub LoadTeamBox()
         Dim query As String = ""
         Dim rows As Integer
-        Dim items As Object
 
         Try
-            query = ("SELECT * FROM SubTeams ORDER BY ID DESC")
+            query = ("SELECT * FROM Teams ORDER BY ID DESC")
             adapter = New OleDbDataAdapter(query, conection)
             record = New DataSet
-            adapter.Fill(record, "SubTeams")
-            rows = record.Tables("SubTeams").Rows.Count
+            adapter.Fill(record, "Teams")
+            rows = record.Tables("Teams").Rows.Count
             If rows <> 0 Then
-                DataGridView1.DataSource = record
-                DataGridView1.DataMember = "SubTeams"
-                items = (record.Tables("SubTeams").Rows(0).Item("ID"))
-                For x = 0 To items - 1
-                    TeamBox.Items.Add(record.Tables("SubTeams").Rows(x).Item("Team"))
+                For x = 0 To rows - 1
+                    TeamBox.Items.Add(record.Tables("Teams").Rows(x).Item("szTeam"))
                 Next
             End If
         Catch ex As Exception
@@ -299,19 +305,14 @@ Public Class NewCaseForm
     Private Sub LoadTeamActivitiesBox()
         Dim query As String = ""
         Dim rows As Integer
-        Dim items As Object
 
         Try
-            query = ("SELECT * FROM TeamsActivities WHERE SubTeam = '" & TeamBox.Text & " ' ORDER BY ID DESC")
+            query = ("SELECT * FROM TeamsActivities WHERE SubTeam = '" & TeamBox.Text & "' ORDER BY ID DESC")
             adapter = New OleDbDataAdapter(query, conection)
             record = New DataSet
             adapter.Fill(record, "TeamsActivities")
             rows = record.Tables("TeamsActivities").Rows.Count
             If rows <> 0 Then
-                DataGridView1.DataSource = record
-                DataGridView1.DataMember = "TeamsActivities"
-                items = (record.Tables("TeamsActivities").Rows(0).Item("ID"))
-
                 For x = 0 To rows - 1
                     ActCategoryBox.Items.Add(record.Tables("TeamsActivities").Rows(x).Item("Activity"))
                 Next
@@ -322,27 +323,82 @@ Public Class NewCaseForm
     End Sub
 
     Private Sub LoadResponsibleBox()
-        Dim query As String = ""
+        Dim query As String = "SELECT TeamResourses.szTeam, TeamResourses.mnResourseID, Resourses.szName FROM Resourses INNER JOIN TeamResourses ON Resourses.ID = TeamResourses.mnResourseID "
         Dim rows As Integer
-        Dim items As Object
 
         Try
-            query = ("SELECT * FROM TeamMembers ORDER BY ID DESC")
+            query = query & "WHERE TeamResourses.szTeam = '" & TeamBox.Text.ToString & "' ORDER BY 1 ASC, 2 ASC, 3 ASC"
             adapter = New OleDbDataAdapter(query, conection)
             record = New DataSet
-            adapter.Fill(record, "TeamMembers")
-            rows = record.Tables("TeamMembers").Rows.Count
+            adapter.Fill(record, "TeamResourses")
+            rows = record.Tables("TeamResourses").Rows.Count
             If rows <> 0 Then
-                DataGridView1.DataSource = record
-                DataGridView1.DataMember = "TeamMembers"
-                items = (record.Tables("TeamMembers").Rows(0).Item("ID"))
-
-                For x = 0 To items - 1
-                    ResponsibleBox.Items.Add(record.Tables("TeamMembers").Rows(x).Item("MemberEnterpriceID"))
+                For x = 0 To rows - 1
+                    ResponsibleBox.Items.Add(record.Tables("TeamResourses").Rows(x).Item("szName"))
                 Next
             End If
+
         Catch ex As Exception
             MsgBox(ex.Message)
         End Try
+    End Sub
+
+    Private Function SubjectFormatted(ByVal Subject As String) As Boolean
+
+        Dim result As Boolean = False
+        Dim auxSubject As String = Subject
+        Dim pipeCount As Integer = 0
+
+        While auxSubject.Contains("|") And pipeCount <> 4
+            pipeCount = pipeCount + 1
+
+            'Team | Mail Subject | Ticket Number| Ticket Status
+            Select Case pipeCount
+                Case 1
+                    TeamBox.Text = Microsoft.VisualBasic.Left(auxSubject, auxSubject.IndexOf("|"))
+                    Exit Select
+                Case 2
+                    Subject = Microsoft.VisualBasic.Left(auxSubject, auxSubject.IndexOf("|"))
+                    Exit Select
+                Case 4
+                    StatusBox.Text = Microsoft.VisualBasic.Left(auxSubject, auxSubject.IndexOf("|"))
+                    Exit Select
+            End Select
+
+            auxSubject = Microsoft.VisualBasic.Right(auxSubject, auxSubject.IndexOf("|") + 1)
+
+        End While
+
+        If pipeCount = 4 Then
+            result = True
+        Else
+            TeamBox.Text = ""
+            Subject = OutItem.Subject
+            StatusBox.Text = ""
+        End If
+
+        Return result
+    End Function
+
+    Private Sub RequestorBox_TextChanged(sender As Object, e As EventArgs) Handles RequestorBox.TextChanged
+        Dim query As String = ""
+        Dim rows As Integer
+
+        If ConectionBox.Text.Length > 0 Then
+
+            Try
+                query = ("SELECT TOP 1 * FROM Resourses WHERE szName like '%" & RequestorBox.Text & "%'")
+                adapter = New OleDbDataAdapter(query, conection)
+                record = New DataSet
+                adapter.Fill(record, "Resourses")
+                rows = record.Tables("Resourses").Rows.Count
+                If rows <> 0 Then
+                    RegionBox.Text = record.Tables("Resourses").Rows(0).Item("szRegion")
+                End If
+            Catch ex As Exception
+                MsgBox(ex.Message)
+            End Try
+        End If
+
     End Sub
 End Class
