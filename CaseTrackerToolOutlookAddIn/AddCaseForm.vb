@@ -3,16 +3,22 @@ Imports System.Data.OleDb
 Imports System.Windows.Forms
 Imports System.ComponentModel
 
-Public Class NewCaseForm
+Public Class AddCaseForm
     Dim OutApp As Outlook.Application
     Dim OutItem As Outlook.MailItem
     Dim myInspector As Outlook.Inspector
-    Dim Subject As String
-    Dim CreationTime As Date
+
     Dim conection As New OleDbConnection
     Dim comands As New OleDbCommand
     Dim adapter As New OleDbDataAdapter
     Dim record As New DataSet
+
+    Dim activitiesVisualAssistForm As New ActivitiesVisualAssistForm
+
+    Dim szActCategoryDescription As String = ""
+    Dim szSubject As String
+    Dim gdCreationTime As Date
+    Dim mnHomePrefix As Integer = 0
 
     Public Sub NewCaseForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         ConectionBox.Enabled = True
@@ -30,11 +36,11 @@ Public Class NewCaseForm
         CommentsBox.Clear()
 
         'Load ConectionBox
-        ConectionBox.Items.Add("Office")
-        ConectionBox.Items.Add("Home")
+        ConectionBox.Items.Add("ACN")
+        ConectionBox.Items.Add("Home - Office")
 
         'Load StatusBox
-        StatusBox.Items.Add("Closed")
+        StatusBox.Items.Add("Close")
         StatusBox.Items.Add("Open")
 
         'Load PriorityBox
@@ -43,25 +49,16 @@ Public Class NewCaseForm
         PriorityBox.Items.Add("Low")
 
         'Parse Email
-        OutApp = CreateObject("Outlook.Application")
-        OutItem = OutApp.ActiveInspector.CurrentItem
+        ParseEmail()
 
-        'Retrieve email properties
-        RequestorBox.Text = OutItem.SenderName
-        CreationTime = OutItem.CreationTime
-        Subject = OutItem.Subject
-
-        'Parse Subject if already formated
-        If SubjectFormatted(Subject) = False Then
-            'Subject is not formated
-            Subject = OutItem.Subject
-        End If
+        'Set default value
+        DateBox.Text = (DateTime.Now.ToString("MM/dd/yyyy"))
 
     End Sub
 
     Private Sub NewCaseForm_Closed(sender As Object, e As EventArgs) Handles Me.Closed
         conection.Close()
-        Me.Close()
+        Me.Finalize()
     End Sub
 
     Public Sub NewCaseForm_KeyDown(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles MyBase.KeyDown
@@ -72,7 +69,6 @@ Public Class NewCaseForm
 
     Private Sub CreateCaseButton_Click(sender As Object, e As EventArgs) Handles CreateCaseButton.Click
         Dim NextNumber As Long = 0
-        Dim MailSubject As String = ""
 
         'Validate required fields
         If ActCategoryBox.Text = "" Then
@@ -92,29 +88,20 @@ Public Class NewCaseForm
 
         'Perform Insert
         If InsertTicket(NextNumber) Then
-
-            'Save previous subject
-            MailSubject = Subject
-
             'Change mail status 
-            'Team | Mail Subject | Ticket Number| Ticket Status
-            Subject = TeamBox.Text & " | "
-            Subject = Subject & ActCategoryBox.Text & "|"
-            Subject = Subject & MailSubject & " | "
-            Subject = Subject & NextNumber & " | "
+            'Mail szSubject | Ticket Number| Ticket Status
+            szSubject = szSubject & " | TK"
+            szSubject = szSubject & Convert.ToString(NextNumber).PadLeft(10, "0")
             If StatusBox.Text <> "Open" Then
-                Subject = Subject & " | " & StatusBox.Text
+                szSubject = szSubject & " | " & StatusBox.Text
             End If
 
-            OutItem.Subject = Subject
-
-                OutItem.Save()
-                MsgBox("Ticket " & NextNumber & " created", vbExclamation, "Alert")
-            Else
-                MsgBox("Creation Failed", vbExclamation, "Alert")
+            OutItem.Subject = szSubject
+            OutItem.Save()
+            MsgBox("Ticket " & NextNumber & " created", vbExclamation, "Alert")
+        Else
+            MsgBox("Creation Failed", vbExclamation, "Alert")
         End If
-
-        conection.Close()
         Me.Close()
     End Sub
 
@@ -131,14 +118,14 @@ Public Class NewCaseForm
 
         'Start new conection
         Try
-            If ConectionBox.Text = "Office" Then
+            If ConectionBox.Text = "ACN" Then
                 conection.ConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source = \\10.21.144.6\GBS Accenture Data\RTR\GA\MIS\Test1.accdb"
-                conection.Open()
+                mnHomePrefix = 0
             Else
                 conection.ConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source = \\ramxilss002-f04.bp.com\ACNOPs\BA\Mariner\Mariner\RTR\MIS\Test1.accdb"
-                conection.Open()
+                mnHomePrefix = 1000000000
             End If
-        Catch ex As Exception
+        Catch ex As System.Exception
             MsgBox(ex.Message)
         End Try
 
@@ -154,8 +141,9 @@ Public Class NewCaseForm
 
         'Reload and enable Activities Box
         ActCategoryBox.Items.Clear()
-        LoadTeamActivitiesBox()
         ActCategoryBox.Enabled = True
+        LoadCategoryBox()
+        ActivitiesVisualAssistButton.Enabled = True
     End Sub
 
     Private Sub ActCategoryBox_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ActCategoryBox.SelectedIndexChanged
@@ -176,9 +164,6 @@ Public Class NewCaseForm
         PendingSrcBox.Enabled = True
         DateBox.Enabled = True
         CommentsBox.Enabled = True
-
-        'Set default value
-        DateBox.Text = (DateTime.Now.ToString("MM/dd/yyyy"))
     End Sub
 
     Private Sub DateBox_TextChanged(sender As Object, e As EventArgs) Handles DateBox.LostFocus
@@ -186,7 +171,6 @@ Public Class NewCaseForm
             DateBox.Text = ""
             MsgBox("Date format not allowed", vbExclamation, "Alert")
         End If
-
     End Sub
 
     Private Function getNextTicketNumber() As Long
@@ -195,19 +179,22 @@ Public Class NewCaseForm
         Dim rows As Integer
 
         Try
+            conection.Open()
             query = ("SELECT TOP 1 mnTicketNumber, mnTicketLineNumber FROM Tickets ORDER BY 1 DESC, 2 DESC")
             adapter = New OleDbDataAdapter(query, conection)
+
             adapter.Fill(record, "Tickets")
             rows = record.Tables("Tickets").Rows.Count
             If rows <> 0 Then
                 result = CLng(record.Tables("Tickets").Rows(0).Item("mnTicketNumber")) + 1
             Else
-                result = 1
+                result = mnHomePrefix + 1
             End If
         Catch ex As Exception
             MsgBox(ex.Message)
         End Try
 
+        conection.Close()
         Return result
     End Function
 
@@ -219,7 +206,7 @@ Public Class NewCaseForm
 
         'Error
         If NextNumber <> 0 Then
-
+            conection.Open()
             'Format query
             query = "INSERT INTO Tickets(mnTicketNumber, mnTicketLineNumber, szTeam, szActivityCategory, szResponsible, szStatus, szPriority,szRequestor, szBusinessUnit, szPendingSource, gdOpenDate, gdCloseDate, szComments, szDescription, gdRequestedTime, mnOpenDays, szAuditUser, szLocation, gdCreationDate)"
             query = query & "VALUES("
@@ -242,11 +229,15 @@ Public Class NewCaseForm
             'szBusinessUnit
             query = query & "'" & RegionBox.Text & "',"
             'szPendingSource
-            query = query & "'" & PendingSrcBox.Text & "',"
+            If StatusBox.Text <> "Close" Then
+                query = query & "'" & PendingSrcBox.Text & "',"
+            Else
+                query = query & "'',"
+            End If
             'gdOpenDate
             query = query & "'" & DateBox.Text & "',"
             'gdCloseDate
-            If StatusBox.Text = "Closed" Then
+            If StatusBox.Text = "Close" Then
                 query = query & "'" & DateBox.Text & "',"
             Else
                 query = query & "'" & DBNull.Value & "',"
@@ -254,9 +245,9 @@ Public Class NewCaseForm
             'szComments
             query = query & "'" & CommentsBox.Text & "',"
             'szDescription
-            query = query & "'" & Subject & "',"
+            query = query & "'" & szSubject & "',"
             'gdRequestedTime 
-            query = query & "'" & CreationTime.ToString("MM/dd/yyyy") & "',"
+            query = query & "'" & gdCreationTime.ToString("MM/dd/yyyy") & "',"
             'mnOpenDays
             query = query & 0 & ","
             'szAuditUser
@@ -277,9 +268,7 @@ Public Class NewCaseForm
         End If
 
         conection.Close()
-
         Return result
-
     End Function
 
     Private Sub LoadTeamBox()
@@ -287,7 +276,8 @@ Public Class NewCaseForm
         Dim rows As Integer
 
         Try
-            query = ("SELECT * FROM Teams ORDER BY ID DESC")
+            conection.Open()
+            query = ("SELECT * FROM Teams ORDER BY szTeam DESC")
             adapter = New OleDbDataAdapter(query, conection)
             record = New DataSet
             adapter.Fill(record, "Teams")
@@ -300,26 +290,29 @@ Public Class NewCaseForm
         Catch ex As Exception
             MsgBox(ex.Message)
         End Try
+
+        conection.Close()
     End Sub
 
-    Private Sub LoadTeamActivitiesBox()
+    Private Sub LoadCategoryBox()
         Dim query As String = ""
         Dim rows As Integer
-
         Try
-            query = ("SELECT * FROM TeamsActivities WHERE SubTeam = '" & TeamBox.Text & "' ORDER BY ID DESC")
+            conection.Open()
+            query = "SELECT szActivityCode, szActivity FROM TeamsActivities WHERE SubTeam = '" & TeamBox.Text & "' ORDER BY 2 ASC, 1 ASC"
             adapter = New OleDbDataAdapter(query, conection)
-            record = New DataSet
             adapter.Fill(record, "TeamsActivities")
             rows = record.Tables("TeamsActivities").Rows.Count
             If rows <> 0 Then
                 For x = 0 To rows - 1
-                    ActCategoryBox.Items.Add(record.Tables("TeamsActivities").Rows(x).Item("Activity"))
+                    ActCategoryBox.Items.Add(record.Tables("TeamsActivities").Rows(x).Item("szActivity"))
                 Next
             End If
         Catch ex As Exception
             MsgBox(ex.Message)
         End Try
+
+        conection.Close()
     End Sub
 
     Private Sub LoadResponsibleBox()
@@ -327,7 +320,8 @@ Public Class NewCaseForm
         Dim rows As Integer
 
         Try
-            query = query & "WHERE TeamResourses.szTeam = '" & TeamBox.Text.ToString & "' ORDER BY 1 ASC, 2 ASC, 3 ASC"
+            conection.Open()
+            query = query & "WHERE TeamResourses.szTeam = '" & TeamBox.Text.ToString & "' ORDER BY 1 ASC, 3 ASC, 2 ASC"
             adapter = New OleDbDataAdapter(query, conection)
             record = New DataSet
             adapter.Fill(record, "TeamResourses")
@@ -337,57 +331,22 @@ Public Class NewCaseForm
                     ResponsibleBox.Items.Add(record.Tables("TeamResourses").Rows(x).Item("szName"))
                 Next
             End If
-
         Catch ex As Exception
             MsgBox(ex.Message)
         End Try
+
+        conection.Close()
     End Sub
 
-    Private Function SubjectFormatted(ByVal Subject As String) As Boolean
-
-        Dim result As Boolean = False
-        Dim auxSubject As String = Subject
-        Dim pipeCount As Integer = 0
-
-        While auxSubject.Contains("|") And pipeCount <> 4
-            pipeCount = pipeCount + 1
-
-            'Team | Mail Subject | Ticket Number| Ticket Status
-            Select Case pipeCount
-                Case 1
-                    TeamBox.Text = Microsoft.VisualBasic.Left(auxSubject, auxSubject.IndexOf("|"))
-                    Exit Select
-                Case 2
-                    Subject = Microsoft.VisualBasic.Left(auxSubject, auxSubject.IndexOf("|"))
-                    Exit Select
-                Case 4
-                    StatusBox.Text = Microsoft.VisualBasic.Left(auxSubject, auxSubject.IndexOf("|"))
-                    Exit Select
-            End Select
-
-            auxSubject = Microsoft.VisualBasic.Right(auxSubject, auxSubject.IndexOf("|") + 1)
-
-        End While
-
-        If pipeCount = 4 Then
-            result = True
-        Else
-            TeamBox.Text = ""
-            Subject = OutItem.Subject
-            StatusBox.Text = ""
-        End If
-
-        Return result
-    End Function
-
-    Private Sub RequestorBox_TextChanged(sender As Object, e As EventArgs) Handles RequestorBox.TextChanged
+    Private Sub RequestorBox_TextChanged(sender As Object, e As EventArgs) Handles RequestorBox.LostFocus
         Dim query As String = ""
         Dim rows As Integer
 
         If ConectionBox.Text.Length > 0 Then
 
             Try
-                query = ("SELECT TOP 1 * FROM Resourses WHERE szName like '%" & RequestorBox.Text & "%'")
+                conection.Open()
+                query = ("SELECT TOP 1 * FROM Resourses WHERE szName = '" & RequestorBox.Text & "'")
                 adapter = New OleDbDataAdapter(query, conection)
                 record = New DataSet
                 adapter.Fill(record, "Resourses")
@@ -400,5 +359,114 @@ Public Class NewCaseForm
             End Try
         End If
 
+        conection.Close()
+    End Sub
+
+    Private Sub ActivitiesVisualAssistButton_Click(sender As Object, e As EventArgs) Handles ActivitiesVisualAssistButton.Click
+        activitiesVisualAssistForm.SetActivitiesTeam(TeamBox.Text)
+        activitiesVisualAssistForm.ShowDialog(Me)
+        ActCategoryBox.Text = activitiesVisualAssistForm.GetSelectedActivity()
+    End Sub
+
+    Private Sub ParseEmail()
+        Dim objectType As Object
+
+        OutApp = CreateObject("Outlook.Application")
+
+        'Retrieve active item
+        'returns reference to current item, either the one selected (Explorer), or the one currently open (Inspector)
+        Select Case True
+            Case TypeName(OutApp.ActiveWindow) = "Explorer"
+                objectType = OutApp.ActiveExplorer.Selection.Item(1)
+                Exit Select
+            Case TypeName(OutApp.ActiveWindow) = "Inspector"
+                objectType = OutApp.ActiveInspector.CurrentItem
+                Exit Select
+            Case Else
+                objectType = vbObject
+        End Select
+
+        'Parse retrieved email
+        If TypeName(objectType) = "MailItem" Then
+            OutItem = objectType
+
+            'Retrieve default properties
+            ResponsibleBox.Text = OutItem.Session.CurrentUser.Name
+            RequestorBox.Text = OutItem.SenderName
+            gdCreationTime = OutItem.CreationTime
+            szSubject = OutItem.Subject
+
+            ''Parse szSubject if already formated
+            SubjectFormatted(szSubject)
+
+            'If SubjectFormatted(szSubject) = False Then
+            '    'szSubject is not formated
+            '    szSubject = OutItem.szSubject
+            'End If
+        End If
+    End Sub
+
+    Private Function SubjectFormatted(ByVal Subject As String) As Boolean
+        Dim result As Boolean = False
+        Dim auxSubject As String = Subject
+        Dim pipeCount As Integer = 0
+        Dim mnTicketNumber As Integer = 0
+
+        'Count how many pipes has the subject
+        pipeCount = (From character In auxSubject Where character = "|" Select character).Count()
+
+        'If, pipe count is valid
+        If 0 < pipeCount < 3 Then
+            Try
+                'Process Subject Format
+                pipeCount = 0
+                While (auxSubject.Contains("|") And pipeCount < 3) Or auxSubject.Contains("TK")
+                    'Mail szSubject | Ticket Number| Ticket Status
+                    Select Case pipeCount
+                        Case 0
+                            Subject = Microsoft.VisualBasic.Left(auxSubject, auxSubject.IndexOf("|"))
+                            auxSubject = auxSubject.Substring(Microsoft.VisualBasic.InStr(auxSubject, " | ") + 3)
+                            Exit Select
+                        Case 1
+                            mnTicketNumber = Convert.ToDouble(auxSubject.Substring(Microsoft.VisualBasic.InStr(auxSubject, "TK") + 1, 10))
+                            auxSubject = auxSubject.Substring(Microsoft.VisualBasic.InStr(auxSubject, "TK") + 11)
+                            Exit Select
+                        Case 2
+                            StatusBox.Text = Microsoft.VisualBasic.Right(auxSubject, auxSubject.IndexOf("|"))
+                            auxSubject = auxSubject.Substring(Microsoft.VisualBasic.InStr(auxSubject, " | ") + 3)
+                            Exit Select
+                    End Select
+
+                    pipeCount = pipeCount + 1
+                End While
+
+                If pipeCount = 2 Then
+                    result = True
+                Else
+                    TeamBox.Text = ""
+                    Subject = OutItem.Subject
+                    StatusBox.Text = ""
+                End If
+
+            Catch ex As Exception
+                TeamBox.Text = ""
+                Subject = OutItem.Subject
+                StatusBox.Text = ""
+            End Try
+        End If
+
+        Return result
+    End Function
+
+    Private Sub PriorityBox_SelectedIndexChanged(sender As Object, e As EventArgs) Handles PriorityBox.SelectedIndexChanged
+        If PriorityBox.Text <> "" Then
+            If PriorityBox.Text = "High" Then
+                OutItem.Importance = Microsoft.Office.Interop.Outlook.OlImportance.olImportanceHigh
+            ElseIf PriorityBox.Text = "Medium" Then
+                OutItem.Importance = Microsoft.Office.Interop.Outlook.OlImportance.olImportanceNormal
+            ElseIf PriorityBox.Text = "Medium" Then
+                OutItem.Importance = Microsoft.Office.Interop.Outlook.OlImportance.olImportanceLow
+            End If
+        End If
     End Sub
 End Class

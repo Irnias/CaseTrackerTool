@@ -1,5 +1,5 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
-Partial Class NewCaseForm
+Partial Class AddCaseForm
     Inherits System.Windows.Forms.Form
 
     'Form reemplaza a Dispose para limpiar la lista de componentes.
@@ -22,7 +22,6 @@ Partial Class NewCaseForm
     'No lo modifique con el editor de código.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
-        Me.CreateCaseButton = New System.Windows.Forms.Button()
         Me.TrakingID = New System.Windows.Forms.Label()
         Me.RequestorBox = New System.Windows.Forms.TextBox()
         Me.RequestorLabel = New System.Windows.Forms.Label()
@@ -42,25 +41,16 @@ Partial Class NewCaseForm
         Me.ActCategoryBox = New System.Windows.Forms.ComboBox()
         Me.ActCategoryLabel = New System.Windows.Forms.Label()
         Me.TextBox6 = New System.Windows.Forms.TextBox()
-        Me.TeamBox = New System.Windows.Forms.ComboBox()
         Me.TeamLabel = New System.Windows.Forms.Label()
         Me.CommentsLabel = New System.Windows.Forms.Label()
         Me.CommentsBox = New System.Windows.Forms.TextBox()
         Me.PriorityLabel = New System.Windows.Forms.Label()
         Me.PriorityBox = New System.Windows.Forms.ComboBox()
+        Me.TeamBox = New System.Windows.Forms.ComboBox()
+        Me.ActivitiesVisualAssistButton = New System.Windows.Forms.Button()
+        Me.CreateCaseButton = New System.Windows.Forms.Button()
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
-        '
-        'CreateCaseButton
-        '
-        Me.CreateCaseButton.FlatAppearance.BorderSize = 0
-        Me.CreateCaseButton.Font = New System.Drawing.Font("Segoe UI", 8.0!)
-        Me.CreateCaseButton.Location = New System.Drawing.Point(188, 321)
-        Me.CreateCaseButton.Name = "CreateCaseButton"
-        Me.CreateCaseButton.Size = New System.Drawing.Size(55, 32)
-        Me.CreateCaseButton.TabIndex = 12
-        Me.CreateCaseButton.Text = "Create"
-        Me.CreateCaseButton.UseVisualStyleBackColor = True
         '
         'TrakingID
         '
@@ -81,10 +71,10 @@ Partial Class NewCaseForm
         Me.RequestorBox.AllowDrop = True
         Me.RequestorBox.Enabled = False
         Me.RequestorBox.Font = New System.Drawing.Font("Segoe UI", 10.0!)
-        Me.RequestorBox.Location = New System.Drawing.Point(117, 181)
+        Me.RequestorBox.Location = New System.Drawing.Point(117, 179)
         Me.RequestorBox.Name = "RequestorBox"
         Me.RequestorBox.Size = New System.Drawing.Size(126, 25)
-        Me.RequestorBox.TabIndex = 7
+        Me.RequestorBox.TabIndex = 8
         '
         'RequestorLabel
         '
@@ -112,13 +102,14 @@ Partial Class NewCaseForm
         '
         Me.ResponsibleBox.AllowDrop = True
         Me.ResponsibleBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.ResponsibleBox.DropDownWidth = 400
         Me.ResponsibleBox.Enabled = False
         Me.ResponsibleBox.Font = New System.Drawing.Font("Segoe UI", 10.0!)
         Me.ResponsibleBox.FormattingEnabled = True
-        Me.ResponsibleBox.Location = New System.Drawing.Point(117, 96)
+        Me.ResponsibleBox.Location = New System.Drawing.Point(117, 95)
         Me.ResponsibleBox.Name = "ResponsibleBox"
         Me.ResponsibleBox.Size = New System.Drawing.Size(126, 25)
-        Me.ResponsibleBox.TabIndex = 4
+        Me.ResponsibleBox.TabIndex = 5
         '
         'DataGridView1
         '
@@ -134,10 +125,10 @@ Partial Class NewCaseForm
         Me.DateBox.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.DateBox.Enabled = False
         Me.DateBox.Font = New System.Drawing.Font("Segoe UI", 10.0!)
-        Me.DateBox.Location = New System.Drawing.Point(117, 265)
+        Me.DateBox.Location = New System.Drawing.Point(117, 263)
         Me.DateBox.Name = "DateBox"
         Me.DateBox.Size = New System.Drawing.Size(126, 25)
-        Me.DateBox.TabIndex = 10
+        Me.DateBox.TabIndex = 11
         '
         'StatusLabel
         '
@@ -155,10 +146,10 @@ Partial Class NewCaseForm
         Me.RegionBox.AllowDrop = True
         Me.RegionBox.Enabled = False
         Me.RegionBox.Font = New System.Drawing.Font("Segoe UI", 10.0!)
-        Me.RegionBox.Location = New System.Drawing.Point(117, 209)
+        Me.RegionBox.Location = New System.Drawing.Point(117, 207)
         Me.RegionBox.Name = "RegionBox"
         Me.RegionBox.Size = New System.Drawing.Size(126, 25)
-        Me.RegionBox.TabIndex = 8
+        Me.RegionBox.TabIndex = 9
         '
         'RegionLabel
         '
@@ -176,10 +167,10 @@ Partial Class NewCaseForm
         Me.PendingSrcBox.AllowDrop = True
         Me.PendingSrcBox.Enabled = False
         Me.PendingSrcBox.Font = New System.Drawing.Font("Segoe UI", 10.0!)
-        Me.PendingSrcBox.Location = New System.Drawing.Point(117, 237)
+        Me.PendingSrcBox.Location = New System.Drawing.Point(117, 235)
         Me.PendingSrcBox.Name = "PendingSrcBox"
         Me.PendingSrcBox.Size = New System.Drawing.Size(126, 25)
-        Me.PendingSrcBox.TabIndex = 9
+        Me.PendingSrcBox.TabIndex = 10
         '
         'PendingSrcLabel
         '
@@ -207,6 +198,7 @@ Partial Class NewCaseForm
         '
         Me.ConectionBox.AllowDrop = True
         Me.ConectionBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.ConectionBox.DropDownWidth = 126
         Me.ConectionBox.Enabled = False
         Me.ConectionBox.Font = New System.Drawing.Font("Segoe UI", 10.0!)
         Me.ConectionBox.FormattingEnabled = True
@@ -233,21 +225,23 @@ Partial Class NewCaseForm
         Me.StatusBox.Enabled = False
         Me.StatusBox.Font = New System.Drawing.Font("Segoe UI", 10.0!)
         Me.StatusBox.FormattingEnabled = True
-        Me.StatusBox.Location = New System.Drawing.Point(117, 125)
+        Me.StatusBox.Location = New System.Drawing.Point(117, 123)
         Me.StatusBox.Name = "StatusBox"
         Me.StatusBox.Size = New System.Drawing.Size(126, 25)
-        Me.StatusBox.TabIndex = 5
+        Me.StatusBox.TabIndex = 6
         '
         'ActCategoryBox
         '
         Me.ActCategoryBox.AllowDrop = True
         Me.ActCategoryBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.ActCategoryBox.DropDownWidth = 400
         Me.ActCategoryBox.Enabled = False
         Me.ActCategoryBox.Font = New System.Drawing.Font("Segoe UI", 10.0!)
         Me.ActCategoryBox.FormattingEnabled = True
+        Me.ActCategoryBox.ImeMode = System.Windows.Forms.ImeMode.Disable
         Me.ActCategoryBox.Location = New System.Drawing.Point(117, 67)
         Me.ActCategoryBox.Name = "ActCategoryBox"
-        Me.ActCategoryBox.Size = New System.Drawing.Size(126, 25)
+        Me.ActCategoryBox.Size = New System.Drawing.Size(95, 25)
         Me.ActCategoryBox.TabIndex = 3
         '
         'ActCategoryLabel
@@ -269,18 +263,6 @@ Partial Class NewCaseForm
         Me.TextBox6.Size = New System.Drawing.Size(14, 24)
         Me.TextBox6.TabIndex = 33
         Me.TextBox6.Visible = False
-        '
-        'TeamBox
-        '
-        Me.TeamBox.AllowDrop = True
-        Me.TeamBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.TeamBox.Enabled = False
-        Me.TeamBox.Font = New System.Drawing.Font("Segoe UI", 10.0!)
-        Me.TeamBox.ImeMode = System.Windows.Forms.ImeMode.Disable
-        Me.TeamBox.Location = New System.Drawing.Point(117, 39)
-        Me.TeamBox.Name = "TeamBox"
-        Me.TeamBox.Size = New System.Drawing.Size(126, 25)
-        Me.TeamBox.TabIndex = 2
         '
         'TeamLabel
         '
@@ -309,10 +291,11 @@ Partial Class NewCaseForm
         Me.CommentsBox.AllowDrop = True
         Me.CommentsBox.Enabled = False
         Me.CommentsBox.Font = New System.Drawing.Font("Segoe UI", 10.0!)
-        Me.CommentsBox.Location = New System.Drawing.Point(117, 293)
+        Me.CommentsBox.Location = New System.Drawing.Point(117, 291)
+        Me.CommentsBox.Multiline = True
         Me.CommentsBox.Name = "CommentsBox"
-        Me.CommentsBox.Size = New System.Drawing.Size(126, 25)
-        Me.CommentsBox.TabIndex = 11
+        Me.CommentsBox.Size = New System.Drawing.Size(126, 55)
+        Me.CommentsBox.TabIndex = 12
         '
         'PriorityLabel
         '
@@ -332,20 +315,55 @@ Partial Class NewCaseForm
         Me.PriorityBox.Enabled = False
         Me.PriorityBox.Font = New System.Drawing.Font("Segoe UI", 10.0!)
         Me.PriorityBox.FormattingEnabled = True
-        Me.PriorityBox.Location = New System.Drawing.Point(117, 153)
+        Me.PriorityBox.Location = New System.Drawing.Point(117, 151)
         Me.PriorityBox.Name = "PriorityBox"
         Me.PriorityBox.Size = New System.Drawing.Size(126, 25)
-        Me.PriorityBox.TabIndex = 37
+        Me.PriorityBox.TabIndex = 7
         '
-        'NewCaseForm
+        'TeamBox
         '
-        Me.AcceptButton = Me.CreateCaseButton
+        Me.TeamBox.AllowDrop = True
+        Me.TeamBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.TeamBox.DropDownWidth = 126
+        Me.TeamBox.Enabled = False
+        Me.TeamBox.Font = New System.Drawing.Font("Segoe UI", 10.0!)
+        Me.TeamBox.ImeMode = System.Windows.Forms.ImeMode.Disable
+        Me.TeamBox.Location = New System.Drawing.Point(117, 39)
+        Me.TeamBox.Name = "TeamBox"
+        Me.TeamBox.Size = New System.Drawing.Size(126, 25)
+        Me.TeamBox.TabIndex = 2
+        '
+        'ActivitiesVisualAssistButton
+        '
+        Me.ActivitiesVisualAssistButton.Enabled = False
+        Me.ActivitiesVisualAssistButton.Location = New System.Drawing.Point(215, 66)
+        Me.ActivitiesVisualAssistButton.Name = "ActivitiesVisualAssistButton"
+        Me.ActivitiesVisualAssistButton.Size = New System.Drawing.Size(28, 27)
+        Me.ActivitiesVisualAssistButton.TabIndex = 4
+        Me.ActivitiesVisualAssistButton.Text = "..."
+        Me.ActivitiesVisualAssistButton.UseVisualStyleBackColor = True
+        '
+        'CreateCaseButton
+        '
+        Me.CreateCaseButton.FlatAppearance.BorderSize = 0
+        Me.CreateCaseButton.Font = New System.Drawing.Font("Segoe UI", 8.0!)
+        Me.CreateCaseButton.Location = New System.Drawing.Point(188, 349)
+        Me.CreateCaseButton.Name = "CreateCaseButton"
+        Me.CreateCaseButton.Size = New System.Drawing.Size(55, 32)
+        Me.CreateCaseButton.TabIndex = 42
+        Me.CreateCaseButton.Text = "Create"
+        Me.CreateCaseButton.UseVisualStyleBackColor = True
+        '
+        'AddCaseForm
+        '
         Me.AllowDrop = True
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.ActiveCaptionText
         Me.CausesValidation = False
-        Me.ClientSize = New System.Drawing.Size(248, 408)
+        Me.ClientSize = New System.Drawing.Size(248, 411)
+        Me.Controls.Add(Me.CreateCaseButton)
+        Me.Controls.Add(Me.ActivitiesVisualAssistButton)
         Me.Controls.Add(Me.PriorityBox)
         Me.Controls.Add(Me.CommentsBox)
         Me.Controls.Add(Me.CommentsLabel)
@@ -371,21 +389,16 @@ Partial Class NewCaseForm
         Me.Controls.Add(Me.RequestorLabel)
         Me.Controls.Add(Me.RequestorBox)
         Me.Controls.Add(Me.TrakingID)
-        Me.Controls.Add(Me.CreateCaseButton)
         Me.ImeMode = System.Windows.Forms.ImeMode.Close
-        Me.KeyPreview = True
-        Me.MaximumSize = New System.Drawing.Size(264, 447)
-        Me.MinimumSize = New System.Drawing.Size(264, 447)
-        Me.Name = "NewCaseForm"
+        Me.Name = "AddCaseForm"
         Me.ShowIcon = False
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "New Case"
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
     End Sub
-
-    Friend WithEvents CreateCaseButton As System.Windows.Forms.Button
     Friend WithEvents TrakingID As System.Windows.Forms.Label
     Friend WithEvents RequestorBox As System.Windows.Forms.TextBox
     Friend WithEvents RequestorLabel As System.Windows.Forms.Label
@@ -405,10 +418,12 @@ Partial Class NewCaseForm
     Friend WithEvents ActCategoryBox As System.Windows.Forms.ComboBox
     Friend WithEvents ActCategoryLabel As System.Windows.Forms.Label
     Friend WithEvents TextBox6 As System.Windows.Forms.TextBox
-    Friend WithEvents TeamBox As System.Windows.Forms.ComboBox
     Friend WithEvents TeamLabel As System.Windows.Forms.Label
     Friend WithEvents CommentsLabel As System.Windows.Forms.Label
     Friend WithEvents CommentsBox As System.Windows.Forms.TextBox
     Friend WithEvents PriorityLabel As System.Windows.Forms.Label
     Friend WithEvents PriorityBox As System.Windows.Forms.ComboBox
+    Friend WithEvents TeamBox As System.Windows.Forms.ComboBox
+    Friend WithEvents ActivitiesVisualAssistButton As System.Windows.Forms.Button
+    Friend WithEvents CreateCaseButton As System.Windows.Forms.Button
 End Class

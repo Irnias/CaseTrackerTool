@@ -35,7 +35,7 @@
     <PublishUrl>C:\Users\camila.ibar\Desktop\</PublishUrl>
     <InstallUrl />
     <TargetCulture>es</TargetCulture>
-    <ApplicationVersion>1.0.0.186</ApplicationVersion>
+    <ApplicationVersion>1.0.0.197</ApplicationVersion>
     <AutoIncrementApplicationRevision>true</AutoIncrementApplicationRevision>
     <UpdateEnabled>true</UpdateEnabled>
     <UpdateInterval>7</UpdateInterval>
@@ -204,10 +204,22 @@
   -->
   <ItemGroup>
     <AppDesigner Include="My Project\" />
-    <Compile Include="NewCaseForm.Designer.vb">
-      <DependentUpon>NewCaseForm.vb</DependentUpon>
+    <Compile Include="ActivitiesVisualAssistForm.Designer.vb">
+      <DependentUpon>ActivitiesVisualAssistForm.vb</DependentUpon>
     </Compile>
-    <Compile Include="NewCaseForm.vb">
+    <Compile Include="ActivitiesVisualAssistForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CloseCaseForm.Designer.vb">
+      <DependentUpon>CloseCaseForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="CloseCaseForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AddCaseForm.Designer.vb">
+      <DependentUpon>AddCaseForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="AddCaseForm.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="ModifyCaseForm.Designer.vb">
@@ -222,17 +234,32 @@
     <Compile Include="CaseTrakerToolRibbon.vb">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="SearchCaseForm.Designer.vb">
+      <DependentUpon>SearchCaseForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="SearchCaseForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="ThisAddIn.vb">
       <SubType>Code</SubType>
     </Compile>
-    <EmbeddedResource Include="NewCaseForm.resx">
-      <DependentUpon>NewCaseForm.vb</DependentUpon>
+    <EmbeddedResource Include="ActivitiesVisualAssistForm.resx">
+      <DependentUpon>ActivitiesVisualAssistForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AddCaseForm.resx">
+      <DependentUpon>AddCaseForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CloseCaseForm.resx">
+      <DependentUpon>CloseCaseForm.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ModifyCaseForm.resx">
       <DependentUpon>ModifyCaseForm.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="CaseTrakerToolRibbon.resx">
       <DependentUpon>CaseTrakerToolRibbon.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SearchCaseForm.resx">
+      <DependentUpon>SearchCaseForm.vb</DependentUpon>
     </EmbeddedResource>
     <None Include="CaseTrakerToolAddIn_TemporaryKey.pfx" />
     <None Include="ThisAddIn.Designer.xml">

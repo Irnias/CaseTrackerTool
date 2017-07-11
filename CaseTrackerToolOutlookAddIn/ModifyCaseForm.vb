@@ -2,20 +2,23 @@
 Imports System.Data
 Imports System.Data.OleDb
 Imports System.Windows.Forms
+Imports Microsoft.Office.Interop.Outlook
 
 Public Class ModifyCaseForm
     Dim conection As New OleDbConnection
     Dim adapter As New OleDbDataAdapter
     Dim records As New DataSet
-    Dim Subject As String
+    Dim command As New OleDbCommand
+
     Dim OutlookApp As Outlook.Application
     Dim OutlookItem As Outlook.MailItem
     Dim NewMessage As Outlook.MailItem
-    Dim command As New OleDbCommand
 
+    Dim szSubject As String
     Dim szTeam As String = ""
     Dim szDescription As String = ""
     Dim szPreviousPendingSrc As String = ""
+    Dim szPreviousResponsible As String = ""
     Dim szPriority As String = ""
 
     Private Sub ModifyCaseForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -23,22 +26,13 @@ Public Class ModifyCaseForm
         ConectionBox.Enabled = True
 
         'Load ConectionBox
-        ConectionBox.Items.Add("Office")
-        ConectionBox.Items.Add("Home")
-
-        'Parse Email
-        OutlookApp = CreateObject("Outlook.Application")
-        OutlookItem = OutlookApp.ActiveInspector.CurrentItem
-
+        ConectionBox.Items.Add("ACN")
+        ConectionBox.Items.Add("Home - Office")
     End Sub
 
     Private Sub ModifyCaseForm_Closed(sender As Object, e As EventArgs) Handles Me.Closed
         conection.Close()
-        Me.Close()
-    End Sub
-
-    Private Sub ModifyCaseForm_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
-        conection.Close()
+        Me.Finalize()
     End Sub
 
     Private Sub ModifyCaseForm_KeyDown(ByVal sender As System.Object, ByVal e As KeyEventArgs) Handles MyBase.KeyDown
@@ -47,121 +41,67 @@ Public Class ModifyCaseForm
         End If
     End Sub
 
-    Private Sub SearchButton_Click(sender As Object, e As EventArgs) Handles SearchButton.Click
+    Private Sub ReopenButton_Click(sender As Object, e As EventArgs) Handles ReopenButton.Click
         'Validate ticket existence
-        If SearchTicket(TicketNumberBox.Text) Then
-
-            'Retrieve ticket information
-            RetrieveTicketInformation()
-        Else
-            MsgBox("No ticket was find", vbExclamation, "Alert")
+        If Not SearchTicket(TicketNumberBox.Text) Then
+            'Ticket does not exist
+            MsgBox("Ticket does not exist", vbExclamation, "Alert")
             TicketNumberBox.Clear()
-            DataGridView1.Columns.Clear()
             TicketNumberBox.Focus()
-        End If
-    End Sub
-
-    Private Sub CloseButton_Click(sender As Object, e As EventArgs) Handles CloseButton.Click
-
-        'Validate ticket existence
-        If Not SearchTicket(TicketNumberBox.Text) Then
-            'Ticket does not exist
-            MsgBox("No ticket was find", vbExclamation, "Alert")
             Exit Sub
-        Else
-            'Retrieve ticket information
-            RetrieveTicketInformation()
-        End If
-
-        'Ticket must be open
-        If StatusBox.Text = "Closed" Then
-            MsgBox("Ticket already closed", vbExclamation, "Alert")
-            Exit Sub
-        End If
-
-        'Update Ticket
-        If UpdateTicket("Close") Then
-            'Change mail status 
-            'Team | Mail Subject | Ticket Number| Ticket Status
-            OutlookItem.Subject = szTeam & " | "
-            OutlookItem.Subject = OutlookItem.Subject & szDescription & " | "
-            OutlookItem.Subject = OutlookItem.Subject & TicketNumberBox.Text & " | "
-            OutlookItem.Subject = OutlookItem.Subject & StatusBox.Text & " | "
-        End If
-
-        OutlookItem.Save()
-        Me.Close()
-    End Sub
-
-    Private Sub OpenButton_Click(sender As Object, e As EventArgs) Handles OpenButton.Click
-
-        'Validate ticket existence
-        If Not SearchTicket(TicketNumberBox.Text) Then
-            'Ticket does not exist
-            MsgBox("No ticket was find", vbExclamation, "Alert")
-            Exit Sub
-        Else
-            'Retrieve ticket information
-            RetrieveTicketInformation()
         End If
 
         'Ticket must be closed
-        If StatusBox.Text = "Opened" Then
+        If StatusBox.Text <> "Close" Then
             MsgBox("Ticket already open", vbExclamation, "Alert")
             Exit Sub
         End If
 
-        If UpdateTicket("Open") Then
+        If UpdateTicket("Reopen") Then
             'Change mail status 
-            'Team | Mail Subject | Ticket Number| Ticket Status
-            OutlookItem.Subject = szTeam & " | "
-            OutlookItem.Subject = OutlookItem.Subject & szDescription & " | "
-            OutlookItem.Subject = OutlookItem.Subject & TicketNumberBox.Text
+            'Mail szSubject | Ticket Number| Ticket Status
+            OutlookItem.Subject = szDescription & " | "
+            OutlookItem.Subject = OutlookItem.Subject & "TK" & TicketNumberBox.Text
+            OutlookItem.Subject = OutlookItem.Subject & " | Reopen"
+
+            OutlookItem.Save()
         End If
 
-        OutlookItem.Save()
         Me.Close()
     End Sub
 
     Private Sub ModifyCaseButton_Click(sender As Object, e As EventArgs) Handles ModifyCaseButton.Click
-
-        'Validate ticket existence
-        If Not SearchTicket(TicketNumberBox.Text) Then
+        'Cant perform changes on a close case
+        If "Close" = records.Tables("Tickets").Rows(0).Item("szStatus") Then
             'Ticket does not exist
-            MsgBox("No ticket was find", vbExclamation, "Alert")
+            MsgBox("Cannot perform changes on a close case", vbExclamation, "Alert")
+            Exit Sub
+        End If
+
+        'Check if there was a modification perfomed
+        If ResponsibleBox.Text = records.Tables("Tickets").Rows(0).Item("szResponsible") And PendingSourceBox.Text = records.Tables("Tickets").Rows(0).Item("szPendingSource") And CommentsBox.Text = records.Tables("Tickets").Rows(0).Item("szComments") Then
+            'Ticket did not change
+            MsgBox("Ticket did not change", vbExclamation, "Alert")
             Exit Sub
         End If
 
         'Update Ticket
         If UpdateTicket("Modify") Then
             'Change mail status 
-            'Team | Mail Subject | Ticket Number| Ticket Status
-            OutlookItem.Subject = szTeam & " | "
-            OutlookItem.Subject = OutlookItem.Subject & szDescription & " | "
-            OutlookItem.Subject = OutlookItem.Subject & TicketNumberBox.Text
-            If StatusBox.Text <> "Open" Then
-                OutlookItem.Subject = OutlookItem.Subject & " | " & StatusBox.Text & " | "
+            'Mail szSubject | Ticket Number| Ticket Status
+            OutlookItem.Subject = szDescription & " | TK"
+            OutlookItem.Subject = OutlookItem.Subject & TicketNumberBox.Text.PadLeft(10, "0")
+            OutlookItem.Save()
+
+            If ResponsibleBox.Text <> records.Tables("Tickets").Rows(0).Item("szResponsible") Then
+                NotifyNewResponsible()
+            End If
+
+            If PendingSourceBox.Text <> records.Tables("Tickets").Rows(0).Item("szPendingSource") Then
+                NotifyNewPendingSource()
             End If
         End If
 
-        'Notify New Pending Source
-        If szPreviousPendingSrc <> PendingSourceBox.Text Then
-            Select Case MsgBox("¿Do you want to notify the new pending source of this change?", MsgBoxStyle.YesNo, "Change notification")
-                Case MsgBoxResult.Yes
-                    NewMessage = OutlookApp.CreateItem(Microsoft.Office.Interop.Outlook.OlItemType.olMailItem)
-                    NewMessage.To = PendingSourceBox.Text
-                    NewMessage.HTMLBody = "<html><body><h2>A change has been made in this ticket and you apear to be the new pending source</h2><p>This Message Is for the designated recipient only And may contain restricted, highly confidential, Or confidential information.<br>If you Then have received it In Error, please notify the sender immediately And delete the original.  Any other use Of the email by you Is prohibited.</p><hr></body>"
-                    NewMessage.Body = NewMessage.Body & vbCrLf & vbCrLf
-                    NewMessage.Body = NewMessage.Body & OutlookItem.Body
-                    NewMessage.Subject = OutlookItem.Subject
-                    NewMessage.Display()
-                    Exit Select
-                Case MsgBoxResult.No
-                    Exit Select
-            End Select
-        End If
-
-        OutlookItem.Save()
         Me.Close()
     End Sub
 
@@ -173,53 +113,68 @@ Public Class ModifyCaseForm
 
         'Start new conection
         Try
-            If ConectionBox.Text = "Office" Then
+            If ConectionBox.Text = "ACN" Then
                 conection.ConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source = \\10.21.144.6\GBS Accenture Data\RTR\GA\MIS\Test1.accdb"
-                conection.Open()
             Else
                 conection.ConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source = \\ramxilss002-f04.bp.com\ACNOPs\BA\Mariner\Mariner\RTR\MIS\Test1.accdb"
-                conection.Open()
             End If
-        Catch ex As Exception
+        Catch ex As system.Exception
             MsgBox(ex.Message)
         End Try
 
         'Enable and set focus over Ticket Number Box
+        TicketNumberBox.Text = ""
         TicketNumberBox.Enabled = True
         TicketNumberBox.Focus()
+
+        'Retrieve data from email
+        ParseEmail()
     End Sub
 
-    Private Sub ModifyCaseCheckBox_CheckedChanged(sender As Object, e As EventArgs) Handles ModifyCaseCheckBox.CheckedChanged
+    Private Sub TicketNumberBox_TextChanged(sender As Object, e As EventArgs) Handles TicketNumberBox.LostFocus
+        If TicketNumberBox.Text.Trim <> "" Then
+            'Validate ticket existence
+            If Not SearchTicket(TicketNumberBox.Text) Then
+                'Ticket does not exist
+                MsgBox("Ticket does not exist", vbExclamation, "Alert")
+                Exit Sub
+            End If
+        End If
+    End Sub
 
+    Private Sub EnableChangesCheckBox_CheckedChanged_1(sender As Object, e As EventArgs) Handles EnableChangesCheckBox.CheckedChanged
         'Validate ticket existence
         If Not SearchTicket(TicketNumberBox.Text) Then
             'Ticket does not exist
-            MsgBox("No ticket was find", vbExclamation, "Alert")
+            MsgBox("Ticket does not exist", vbExclamation, "Alert")
+            EnableChangesCheckBox.Checked = False
             Exit Sub
-        Else
-            'Retrieve updated ticket information
-            RetrieveTicketInformation()
         End If
 
-        'Enable Modification fields
-        If ModifyCaseCheckBox.Checked Then
+        If EnableChangesCheckBox.CheckState = CheckState.Checked Then
+            'Enable buttons
+            ReopenButton.Enabled = True
+            ModifyCaseButton.Enabled = True
+
+            'Enable field 
             ResponsibleBox.Enabled = True
-            RegionBox.Enabled = True
-            OpenedDateBox.Enabled = True
-            RequestorBox.Enabled = True
             PendingSourceBox.Enabled = True
-            StatusBox.Enabled = True
             CommentsBox.Enabled = True
+            CommentsBox.Text = ""
         Else
-            'Disable Modification fields
+            'Disable and clean fields
+            'Enable buttons
+            ReopenButton.Enabled = False
+            ModifyCaseButton.Enabled = False
+
+            'Enable field 
             ResponsibleBox.Enabled = False
-            RegionBox.Enabled = False
-            OpenedDateBox.Enabled = False
-            RequestorBox.Enabled = False
             PendingSourceBox.Enabled = False
-            StatusBox.Enabled = False
             CommentsBox.Enabled = False
+
+            SearchTicket(TicketNumberBox.Text)
         End If
+
     End Sub
 
     Private Function SearchTicket(TicketNumber As String) As Boolean
@@ -229,42 +184,38 @@ Public Class ModifyCaseForm
 
         If TicketNumberBox.Text <> "" Then
             Try
+                conection.Open()
                 query = "SELECT TOP 1 * FROM Tickets WHERE mnTicketNumber = " & TicketNumber & " ORDER BY mnTicketNumber DESC, mnTicketLineNumber DESC"
                 adapter = New OleDbDataAdapter(query, conection)
                 adapter.Fill(records, "Tickets")
                 Rows = records.Tables("Tickets").Rows.Count
 
                 If Rows <> 0 Then
+                    'Change function status
                     result = True
+
+                    'Retrieve Form Data
+                    StatusBox.Text = records.Tables("Tickets").Rows(0).Item("szStatus")
+                    ResponsibleBox.Text = records.Tables("Tickets").Rows(0).Item("szResponsible")
+                    RequestorBox.Text = records.Tables("Tickets").Rows(0).Item("szRequestor")
+                    RegionBox.Text = records.Tables("Tickets").Rows(0).Item("szBusinessUnit")
+                    DateBox.Text = records.Tables("Tickets").Rows(0).Item("gdOpenDate")
+                    PendingSourceBox.Text = records.Tables("Tickets").Rows(0).Item("szPendingSource")
+                    CommentsBox.Text = records.Tables("Tickets").Rows(0).Item("szComments")
+
+                    'Retrieve Extra Data
+                    szPriority = records.Tables("Tickets").Rows(0).Item("szPriority")
+                    szPreviousPendingSrc = PendingSourceBox.Text
+                    szPreviousResponsible = ResponsibleBox.Text
+                    szDescription = records.Tables("Tickets").Rows(0).Item("szDescription")
                 End If
-            Catch ex As Exception
+            Catch ex As system.Exception
                 MsgBox(ex.Message)
             End Try
+            conection.Close()
         End If
-
         Return result
     End Function
-
-    Private Sub RetrieveTicketInformation()
-        DataGridView1.DataSource = records
-        DataGridView1.DataMember = "Tickets"
-
-        'Retrieve Form Data
-        StatusBox.Text = records.Tables("Tickets").Rows(0).Item("szStatus")
-        ResponsibleBox.Text = records.Tables("Tickets").Rows(0).Item("szResponsible")
-        RegionBox.Text = records.Tables("Tickets").Rows(0).Item("szBusinessUnit")
-        OpenedDateBox.Text = records.Tables("Tickets").Rows(0).Item("gdOpenDate")
-        RequestorBox.Text = records.Tables("Tickets").Rows(0).Item("szRequestor")
-        PendingSourceBox.Text = records.Tables("Tickets").Rows(0).Item("szPendingSource")
-        szPreviousPendingSrc = PendingSourceBox.Text
-        CommentsBox.Text = records.Tables("Tickets").Rows(0).Item("szComments")
-
-        'Retrieve New Data for Subject
-        szTeam = records.Tables("Tickets").Rows(0).Item("szTeam")
-        szDescription = records.Tables("Tickets").Rows(0).Item("szDescription")
-        szPriority = records.Tables("Tickets").Rows(0).Item("szPriority")
-
-    End Sub
 
     Private Function UpdateTicket(Action As String) As Boolean
         Dim result As Boolean = False
@@ -285,14 +236,11 @@ Public Class ModifyCaseForm
         query = query & "'" & ResponsibleBox.Text & "', "
         'szStatus
         Select Case (Action)
-            Case "Close"
-                query = query & "'" & "Closed" & "', "
-                Exit Select
-            Case "Open"
-                query = query & "'" & "Open" & "', "
+            Case "Reopen"
+                query = query & "'" & "Reopen" & "', "
                 Exit Select
             Case "Modify"
-                query = query & "'" & StatusBox.Text & "', "
+                query = query & "'" & "Open" & "', "
                 Exit Select
         End Select
         'szPriority
@@ -303,10 +251,7 @@ Public Class ModifyCaseForm
         query = query & "'" & RegionBox.Text & "', "
         'szPendingSource
         Select Case (Action)
-            Case "Close"
-                query = query & "'" & DBNull.Value & "', "
-                Exit Select
-            Case "Open"
+            Case "Reopen"
                 query = query & "'" & PendingSourceBox.Text & "', "
                 Exit Select
             Case "Modify"
@@ -314,39 +259,18 @@ Public Class ModifyCaseForm
                 Exit Select
         End Select
         'gdOpenDate
-        Select Case (Action)
-            Case "Close"
-                query = query & "'" & records.Tables("Tickets").Rows(0).Item("gdOpenDate") & "', "
-                Exit Select
-            Case "Open"
-                query = query & "'" & (DateTime.Now.ToString("MM/dd/yyyy")) & "', "
-                Exit Select
-            Case "Modify"
-                If StatusBox.Text = "Close" Then
-                    query = query & "'" & records.Tables("Tickets").Rows(0).Item("gdOpenDate") & "', "
-                Else
-                    query = query & "'" & (DateTime.Now.ToString("MM/dd/yyyy")) & "', "
-                End If
-                Exit Select
-        End Select
+        query = query & "'" & (DateTime.Now.ToString("mm/dd/yyyy")) & "', "
         'gdCloseDate
+        query = query & "'" & DBNull.Value & "', "
+        'szComments
         Select Case (Action)
-            Case "Close"
-                query = query & "'" & (DateTime.Now.ToString("MM/dd/yyyy")) & "', "
-                Exit Select
-            Case "Open"
-                query = query & "'" & DBNull.Value & "', "
+            Case "Reopen"
+                query = query & "' ', "
                 Exit Select
             Case "Modify"
-                If StatusBox.Text = "Close" Then
-                    query = query & "'" & OpenedDateBox.Text & "', "
-                Else
-                    query = query & "'" & DBNull.Value & "', "
-                End If
+                query = query & "'" & CommentsBox.Text & "', "
                 Exit Select
         End Select
-        'szComments
-        query = query & "'" & CommentsBox.Text & "', "
         'szDescription
         query = query & "'" & records.Tables("Tickets").Rows(0).Item("szDescription") & "', "
         'gdRequestedTime 
@@ -358,36 +282,141 @@ Public Class ModifyCaseForm
         'szLocation
         query = query & "'" & ConectionBox.Text & "', "
         'gdCreationDate
-        query = query & "'" & DateTime.Now.ToString("MM/dd/yyyy") & "')"
+        query = query & "'" & DateTime.Now.ToString("mm/dd/yyyy") & "')"
 
         Try
             'Perform query
+            conection.Open()
             command = New OleDbCommand(query, conection)
             command.ExecuteNonQuery()
 
             'Notify transaction status
             Select Case (Action)
-                Case "Close"
-                    MsgBox("Ticket closed", vbExclamation, "Alert")
-                Case "Open"
-                    MsgBox("Ticket opened", vbExclamation, "Alert")
+                Case "Reopen"
+                    MsgBox("Ticket reopened", vbExclamation, "Alert")
                 Case "Modify"
                     MsgBox("Ticket modified", vbExclamation, "Alert")
             End Select
 
             result = True
 
-        Catch ex As Exception
+        Catch ex As System.Exception
             MsgBox(ex.Message)
         End Try
 
         conection.Close()
+        Return result
+    End Function
 
-        If Action <> "Modify" Then
-            'Retrieve updated ticket information
-            RetrieveTicketInformation()
+    Private Sub NotifyNewPendingSource()
+        'Notify New Pending Source+
+        OutlookApp = CreateObject("Outlook.Application")
+        NewMessage = OutlookApp.CreateItem(OlItemType.olMailItem)
+        NewMessage.To = PendingSourceBox.Text
+        NewMessage.HTMLBody = "<html><body><h2>A change has been made in this ticket and you apear to be the new pending source</h2><p>This Message Is for the designated recipient only And may contain restricted, highly confidential, Or confidential information.<br>If you Then have received it In Error, please notify the sender immediately And delete the original.  Any other use Of the email by you Is prohibited.</p><hr></body>"
+        NewMessage.Body = NewMessage.Body & vbCrLf & vbCrLf
+        NewMessage.Body = NewMessage.Body & OutlookItem.Body
+        NewMessage.Subject = OutlookItem.Subject
+        NewMessage.Importance = Microsoft.Office.Interop.Outlook.OlImportance.olImportanceHigh
+
+        Select Case MsgBox("¿Do you want edit the new pending source notification of this change?", MsgBoxStyle.YesNo, "Change notification")
+            Case MsgBoxResult.Yes
+                NewMessage.Display()
+                Exit Select
+            Case MsgBoxResult.No
+                NewMessage.Send()
+                Exit Select
+        End Select
+    End Sub
+
+    Private Sub NotifyNewResponsible()
+        'Notify New Responsible
+        OutlookApp = CreateObject("Outlook.Application")
+        NewMessage = OutlookApp.CreateItem(OlItemType.olMailItem)
+        NewMessage.To = ResponsibleBox.Text
+        NewMessage.HTMLBody = "<html><body><h2>A change has been made in this ticket and you apear to be the new responsible</h2><p>This Message Is for the designated recipient only And may contain restricted, highly confidential, Or confidential information.<br>If you Then have received it In Error, please notify the sender immediately And delete the original.  Any other use Of the email by you Is prohibited.</p><hr></body>"
+        NewMessage.Body = NewMessage.Body & vbCrLf & vbCrLf
+        NewMessage.Body = NewMessage.Body & OutlookItem.Body
+        NewMessage.Subject = OutlookItem.Subject
+        NewMessage.Importance = Microsoft.Office.Interop.Outlook.OlImportance.olImportanceHigh
+
+        Select Case MsgBox("¿Do you want edit the new responsible notification of this change?", MsgBoxStyle.YesNo, "Change notification")
+            Case MsgBoxResult.Yes
+                NewMessage.Display()
+                Exit Select
+            Case MsgBoxResult.No
+                NewMessage.Send()
+                Exit Select
+        End Select
+    End Sub
+
+    Private Sub ParseEmail()
+        Dim objectType As Object
+
+        OutlookApp = CreateObject("Outlook.Application")
+
+        'Retrieve active item
+        'returns reference to current item, either the one selected (Explorer), or the one currently open (Inspector)
+        Select Case True
+            Case TypeName(OutlookApp.ActiveWindow) = "Explorer"
+                objectType = OutlookApp.ActiveExplorer.Selection.Item(1)
+                Exit Select
+            Case TypeName(OutlookApp.ActiveWindow) = "Inspector"
+                objectType = OutlookApp.ActiveInspector.CurrentItem
+                Exit Select
+            Case Else
+                objectType = vbObject
+        End Select
+
+        'Parse retrieved email
+        If TypeName(objectType) = "MailItem" Then
+            OutlookItem = objectType
+
+            'Retrieve from subject
+            TicketNumberBox.Focus()
+            If SubjectFormatted(OutlookItem.Subject) = True Then
+                'Loose focus on field to trigger lost focus event
+                TicketNumberLabel.Focus()
+            Else
+                TicketNumberBox.Text = ""
+            End If
+        End If
+    End Sub
+
+    Private Function SubjectFormatted(ByVal Subject As String) As Boolean
+        Dim result As Boolean = False
+        Dim auxSubject As String = Subject
+        Dim pipeCount As Integer = 0
+
+        'Count how many pipes has the subject
+        pipeCount = (From character In auxSubject Where character = "|" Select character).Count()
+
+        'If, pipe count is valid
+        If 0 < pipeCount < 3 Then
+            Try
+                'Process Subject Format
+                pipeCount = 0
+                While (auxSubject.Contains("|") And pipeCount < 2) Or auxSubject.Contains("TK")
+                    'Mail szSubject | Ticket Number| Ticket Status
+                    If pipeCount = 1 Then
+                        TicketNumberBox.Text = Convert.ToDouble(auxSubject.Substring(Microsoft.VisualBasic.InStr(auxSubject, "TK") + 1, 10))
+                        auxSubject = auxSubject.Substring(Microsoft.VisualBasic.InStr(auxSubject, "TK") + 11)
+                    End If
+                    pipeCount = pipeCount + 1
+                End While
+
+                If pipeCount = 2 Then
+                    result = True
+                Else
+                    TicketNumberBox.Text = ""
+                End If
+
+            Catch ex As system.Exception
+                TicketNumberBox.Text = ""
+            End Try
         End If
 
         Return result
     End Function
+
 End Class
