@@ -9,17 +9,17 @@ Imports System.Security
 
 ' Review the values of the assembly attributes
 
-<Assembly: AssemblyTitle("OutlookAddIn1")> 
-<Assembly: AssemblyDescription("")> 
-<Assembly: AssemblyCompany("Accenture")> 
-<Assembly: AssemblyProduct("OutlookAddIn1")> 
+<Assembly: AssemblyTitle("PerformanceTrackingTool")>
+<Assembly: AssemblyDescription("Accenture Performance Tracking Tool")>
+<Assembly: AssemblyCompany("Accenture")>
+<Assembly: AssemblyProduct("PerformanceTrackingTool")>
 <Assembly: AssemblyCopyright("Copyright © Accenture 2016")> 
-<Assembly: AssemblyTrademark("")> 
+<Assembly: AssemblyTrademark("")>
 
 ' Setting ComVisible to false makes the types in this assembly not visible 
 ' to COM components.  If you need to access a type in this assembly from 
 ' COM, set the ComVisible attribute to true on that type.
-<Assembly: ComVisible(False)>
+<Assembly: ComVisible(True)>
 
 'The following GUID is for the ID of the typelib if this project is exposed to COM
 <Assembly: Guid("00ca82e5-b685-4eae-bebb-aa0c494b3aa8")> 

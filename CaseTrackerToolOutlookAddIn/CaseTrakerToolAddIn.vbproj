@@ -32,18 +32,18 @@
     </StartupObject>
     <IsWebBootstrapper>False</IsWebBootstrapper>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <PublishUrl>C:\Users\camila.ibar\Desktop\</PublishUrl>
+    <PublishUrl>C:\camila.ibar\desktop\</PublishUrl>
     <InstallUrl />
-    <TargetCulture>es</TargetCulture>
-    <ApplicationVersion>1.0.0.197</ApplicationVersion>
+    <TargetCulture>en</TargetCulture>
+    <ApplicationVersion>1.0.0.516</ApplicationVersion>
     <AutoIncrementApplicationRevision>true</AutoIncrementApplicationRevision>
     <UpdateEnabled>true</UpdateEnabled>
-    <UpdateInterval>7</UpdateInterval>
+    <UpdateInterval>1</UpdateInterval>
     <UpdateIntervalUnits>days</UpdateIntervalUnits>
-    <ProductName>OutlookAddIn1</ProductName>
-    <PublisherName />
+    <ProductName>PerformanceTrackingTool</ProductName>
+    <PublisherName>Accenture</PublisherName>
     <SupportUrl />
-    <FriendlyName>OutlookAddIn1</FriendlyName>
+    <FriendlyName>PerformanceTrackingTool</FriendlyName>
     <OfficeApplicationDescription />
     <LoadBehavior>3</LoadBehavior>
   </PropertyGroup>
@@ -106,7 +106,8 @@
     <DocumentationFile>CaseTrakerToolAddIn.xml</DocumentationFile>
     <RegisterForComInterop>false</RegisterForComInterop>
     <RemoveIntegerChecks>false</RemoveIntegerChecks>
-    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
+    <WarningLevel>1</WarningLevel>
   </PropertyGroup>
   <!--
     This section defines properties that are set when the "Release" configuration is selected.
@@ -135,7 +136,8 @@
     <DocumentationFile>CaseTrakerToolAddIn.xml</DocumentationFile>
     <RegisterForComInterop>false</RegisterForComInterop>
     <RemoveIntegerChecks>false</RemoveIntegerChecks>
-    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
+    <WarningLevel>1</WarningLevel>
   </PropertyGroup>
   <!--
     This section specifies references for the project.
@@ -143,8 +145,10 @@
   <ItemGroup>
     <Reference Include="Accessibility" />
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
@@ -310,10 +314,14 @@
     <ManifestKeyFile>CaseTrakerToolAddIn_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>D66993226AA9A7B16682946689B055B6C5E2C982</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>740D063CAB6360A026BE44E8299C649BE44D0EDD</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <!-- Include the build rules for a Visual Basic project. -->
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />

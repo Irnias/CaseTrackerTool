@@ -16,7 +16,8 @@ Public Class AddCaseForm
     Dim activitiesVisualAssistForm As New ActivitiesVisualAssistForm
 
     Dim szActCategoryDescription As String = ""
-    Dim szSubject As String
+    Dim szRequestor As String = ""
+    Dim szSubject As String = ""
     Dim gdCreationTime As Date
     Dim mnHomePrefix As Integer = 0
 
@@ -29,10 +30,9 @@ Public Class AddCaseForm
         ResponsibleBox.Items.Clear()
         StatusBox.Items.Clear()
         PriorityBox.Items.Clear()
-        RequestorBox.Clear()
+        RequestorBox.Items.Clear()
         RegionBox.Clear()
         PendingSrcBox.Clear()
-        DateBox.Clear()
         CommentsBox.Clear()
 
         'Load ConectionBox
@@ -51,9 +51,36 @@ Public Class AddCaseForm
         'Parse Email
         ParseEmail()
 
-        'Set default value
-        DateBox.Text = (DateTime.Now.ToString("MM/dd/yyyy"))
+        'Set default values
+        Dim iSelectionIndex As Integer
 
+        'Status 
+        iSelectionIndex = StatusBox.FindString("Open")
+        StatusBox.SelectedIndex = iSelectionIndex
+
+        'Priority
+        iSelectionIndex = PriorityBox.FindString("Medium")
+        PriorityBox.SelectedIndex = iSelectionIndex
+
+        'Date
+        DateTimePicker.Enabled = False
+        DateTimePicker.Value = Today.Date
+
+        'Quantity
+        QuantityBox.Value = 1
+
+        'Disable Fields
+        TeamBox.Enabled = False
+        ActCategoryBox.Enabled = False
+        ResponsibleBox.Enabled = False
+        StatusBox.Enabled = False
+        PriorityBox.Enabled = False
+        RequestorBox.Enabled = False
+        RegionBox.Enabled = False
+        PendingSrcBox.Enabled = False
+        DateTimePicker.Enabled = False
+        QuantityBox.Enabled = False
+        CommentsBox.Enabled = False
     End Sub
 
     Private Sub NewCaseForm_Closed(sender As Object, e As EventArgs) Handles Me.Closed
@@ -106,11 +133,6 @@ Public Class AddCaseForm
     End Sub
 
     Public Sub ConectionBox_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ConectionBox.SelectedIndexChanged
-        'Clear Options
-        TeamBox.Items.Clear()
-        ActCategoryBox.Items.Clear()
-        ResponsibleBox.Items.Clear()
-
         'Restart conection if open
         If conection.State = ConnectionState.Open Then
             conection.Close()
@@ -130,46 +152,39 @@ Public Class AddCaseForm
         End Try
 
         'Reaload and enable Teambox
-        TeamBox.Items.Clear()
         LoadTeamBox()
         TeamBox.Enabled = True
     End Sub
 
     Private Sub TeamBox_SelectedIndexChanged(sender As Object, e As EventArgs) Handles TeamBox.SelectedIndexChanged
-        'Clear Options
-        ResponsibleBox.Items.Clear()
-
         'Reload and enable Activities Box
-        ActCategoryBox.Items.Clear()
-        ActCategoryBox.Enabled = True
         LoadCategoryBox()
+        ActCategoryBox.Enabled = True
         ActivitiesVisualAssistButton.Enabled = True
     End Sub
 
     Private Sub ActCategoryBox_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ActCategoryBox.SelectedIndexChanged
-
         'Reload and enable Responsible Box
-        ResponsibleBox.Items.Clear()
         LoadResponsibleBox()
         ResponsibleBox.Enabled = True
     End Sub
 
     Private Sub ResponsibleBox_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ResponsibleBox.SelectedIndexChanged
-
         'Enable fields
         StatusBox.Enabled = True
         PriorityBox.Enabled = True
         RequestorBox.Enabled = True
         RegionBox.Enabled = True
         PendingSrcBox.Enabled = True
-        DateBox.Enabled = True
+        DateTimePicker.Enabled = True
+        QuantityBox.Enabled = True
         CommentsBox.Enabled = True
     End Sub
 
-    Private Sub DateBox_TextChanged(sender As Object, e As EventArgs) Handles DateBox.LostFocus
-        If IsDate(DateBox.Text) = False Then
-            DateBox.Text = ""
-            MsgBox("Date format not allowed", vbExclamation, "Alert")
+    Private Sub DateTimePicker_ValueChanged(sender As Object, e As EventArgs) Handles DateTimePicker.ValueChanged
+        If DateTimePicker.Value > Today.Date Then
+            DateTimePicker.Value = Today.Date
+            MsgBox("Cannot select a future date", vbExclamation, "Alert")
         End If
     End Sub
 
@@ -208,54 +223,56 @@ Public Class AddCaseForm
         If NextNumber <> 0 Then
             conection.Open()
             'Format query
-            query = "INSERT INTO Tickets(mnTicketNumber, mnTicketLineNumber, szTeam, szActivityCategory, szResponsible, szStatus, szPriority,szRequestor, szBusinessUnit, szPendingSource, gdOpenDate, gdCloseDate, szComments, szDescription, gdRequestedTime, mnOpenDays, szAuditUser, szLocation, gdCreationDate)"
+            query = "INSERT INTO Tickets(mnTicketNumber, mnTicketLineNumber, szTeam, szActivityCategory, szResponsible, szStatus, szPriority,szRequestor, szBusinessUnit, szPendingSource, gdOpenDate, gdCloseDate, szComments, szDescription, gdRequestedTime, mnOpenDays, szAuditUser, szLocation, gdCreationDate, mnQuantity)"
             query = query & "VALUES("
             'mnTicketNumber
             query = query & NextNumber & ","
             'mnTicketLineNumber (First line start with 0)
             query = query & 0 & ","
             'szTeam
-            query = query & "'" & TeamBox.Text & "',"
+            query = query & "'" & ReplaceApostrophesInString(TeamBox.Text) & "',"
             'szActivityCategory
-            query = query & "'" & ActCategoryBox.Text & "',"
+            query = query & "'" & ReplaceApostrophesInString(ActCategoryBox.Text) & "',"
             'szResponsible
-            query = query & "'" & ResponsibleBox.Text & "',"
+            query = query & "'" & ReplaceApostrophesInString(ResponsibleBox.Text) & "',"
             'szStatus
-            query = query & "'" & StatusBox.Text & "',"
+            query = query & "'" & ReplaceApostrophesInString(StatusBox.Text) & "',"
             'szPriority
-            query = query & "'" & PriorityBox.Text & "',"
+            query = query & "'" & ReplaceApostrophesInString(PriorityBox.Text) & "',"
             'szRequestor
-            query = query & "'" & RequestorBox.Text & "',"
+            query = query & "'" & ReplaceApostrophesInString(RequestorBox.Text) & "',"
             'szBusinessUnit
-            query = query & "'" & RegionBox.Text & "',"
+            query = query & "'" & ReplaceApostrophesInString(RegionBox.Text) & "',"
             'szPendingSource
             If StatusBox.Text <> "Close" Then
-                query = query & "'" & PendingSrcBox.Text & "',"
+                query = query & "'" & ReplaceApostrophesInString(PendingSrcBox.Text) & "',"
             Else
                 query = query & "'',"
             End If
             'gdOpenDate
-            query = query & "'" & DateBox.Text & "',"
+            query = query & "'" & Convert.ToString(DateTimePicker.Value) & "',"
             'gdCloseDate
             If StatusBox.Text = "Close" Then
-                query = query & "'" & DateBox.Text & "',"
+                query = query & "'" & Convert.ToString(DateTimePicker.Value) & "',"
             Else
                 query = query & "'" & DBNull.Value & "',"
             End If
             'szComments
-            query = query & "'" & CommentsBox.Text & "',"
+            query = query & "'" & ReplaceApostrophesInString(CommentsBox.Text) & "',"
             'szDescription
-            query = query & "'" & szSubject & "',"
+            query = query & "'" & ReplaceApostrophesInString(szSubject) & "',"
             'gdRequestedTime 
-            query = query & "'" & gdCreationTime.ToString("MM/dd/yyyy") & "',"
+            query = query & "'" & gdCreationTime.ToString("MM/DD/YYYY") & "',"
             'mnOpenDays
             query = query & 0 & ","
             'szAuditUser
-            query = query & "'" & Environment.UserName & "',"
+            query = query & "'" & ReplaceApostrophesInString(Environment.UserName) & "',"
             'szLocation
-            query = query & "'" & ConectionBox.Text & "',"
+            query = query & "'" & ReplaceApostrophesInString(ConectionBox.Text) & "',"
             'gdCreationDate
-            query = query & "'" & DateTime.Now.ToString("MM/dd/yyyy") & "')"
+            query = query & "'" & DateTime.Now.ToString("MM/DD/YYYY") & "',"
+            'mnQuantity
+            query = query & QuantityBox.Value & ")"
 
             Try
                 comands = New OleDbCommand(query, conection)
@@ -264,7 +281,6 @@ Public Class AddCaseForm
             Catch ex As Exception
                 MsgBox(ex.Message)
             End Try
-
         End If
 
         conection.Close()
@@ -273,8 +289,19 @@ Public Class AddCaseForm
 
     Private Sub LoadTeamBox()
         Dim query As String = ""
-        Dim rows As Integer
+        Dim rows As Integer = 0
+        Dim szPreviousTeam As String = ""
+        Dim iSelectionIndex As Integer = 0
 
+        'Save Previous Selection
+        If (TeamBox.Text.Trim).Length > 0 Then
+            szPreviousTeam = TeamBox.Text
+        Else
+            szPreviousTeam = ""
+        End If
+
+        'Clear Teambox
+        TeamBox.Items.Clear()
         Try
             conection.Open()
             query = ("SELECT * FROM Teams ORDER BY szTeam DESC")
@@ -292,11 +319,31 @@ Public Class AddCaseForm
         End Try
 
         conection.Close()
+
+        'Reselect Previous Value
+        If (szPreviousTeam.Trim).Length > 0 Then
+            iSelectionIndex = StatusBox.FindString(szPreviousTeam)
+        Else
+            iSelectionIndex = -1
+        End If
+        TeamBox.SelectedIndex = iSelectionIndex
     End Sub
 
     Private Sub LoadCategoryBox()
         Dim query As String = ""
         Dim rows As Integer
+        Dim szPreviousCategory As String = ""
+        Dim iSelectionIndex As Integer = 0
+
+        'Save Previous Selection
+        If (ActCategoryBox.Text.Trim).Length > 0 Then
+            szPreviousCategory = ActCategoryBox.Text
+        Else
+            szPreviousCategory = ""
+        End If
+
+        'Clear CategoryBox
+        ActCategoryBox.Items.Clear()
         Try
             conection.Open()
             query = "SELECT szActivityCode, szActivity FROM TeamsActivities WHERE SubTeam = '" & TeamBox.Text & "' ORDER BY 2 ASC, 1 ASC"
@@ -313,12 +360,31 @@ Public Class AddCaseForm
         End Try
 
         conection.Close()
+
+        'Reselect Previous Value
+        If (szPreviousCategory.Trim).Length > 0 Then
+            iSelectionIndex = ActCategoryBox.FindString(szPreviousCategory)
+        Else
+            iSelectionIndex = -1
+        End If
+        ActCategoryBox.SelectedIndex = iSelectionIndex
     End Sub
 
     Private Sub LoadResponsibleBox()
         Dim query As String = "SELECT TeamResourses.szTeam, TeamResourses.mnResourseID, Resourses.szName FROM Resourses INNER JOIN TeamResourses ON Resourses.ID = TeamResourses.mnResourseID "
         Dim rows As Integer
+        Dim szPreviousResponsible As String = ""
+        Dim iSelectionIndex As Integer = 0
 
+        'Save Previous Selection
+        If (ResponsibleBox.Text.Trim).Length > 0 Then
+            szPreviousResponsible = ResponsibleBox.Text
+        Else
+            szPreviousResponsible = ""
+        End If
+
+        'Clear Responsible
+        ResponsibleBox.Items.Clear()
         Try
             conection.Open()
             query = query & "WHERE TeamResourses.szTeam = '" & TeamBox.Text.ToString & "' ORDER BY 1 ASC, 3 ASC, 2 ASC"
@@ -336,6 +402,63 @@ Public Class AddCaseForm
         End Try
 
         conection.Close()
+
+        'Reselect Previous Value
+        If (szPreviousResponsible.Trim).Length > 0 Then
+            iSelectionIndex = ResponsibleBox.FindString(szPreviousResponsible)
+        Else
+            iSelectionIndex = -1
+        End If
+        ResponsibleBox.SelectedIndex = iSelectionIndex
+    End Sub
+
+    Private Sub LoadRequestorBox()
+        Dim szParsingString As String = ""
+        RequestorBox.Items.Clear()
+
+        'Retrieve "From" text and set as default
+        Try
+            Dim iSelectionIndex As Integer
+
+            If (OutItem.SendUsingAccount.UserName.Trim).Length > 0 Then
+                RequestorBox.Items.Add(OutItem.SendUsingAccount.UserName)
+                iSelectionIndex = ResponsibleBox.FindString(OutItem.SendUsingAccount.UserName)
+            Else
+                iSelectionIndex = -1
+            End If
+            RequestorBox.SelectedIndex = iSelectionIndex
+        Catch
+            'No "From" information
+        End Try
+
+        'Retrieve "To"
+        Try
+            szParsingString = OutItem.To.Trim
+            If szParsingString.Length > 1 Then
+                szParsingString = szParsingString & ";"
+                While (szParsingString.Contains(";"))
+                    RequestorBox.Items.Add(szParsingString.Substring(0, Microsoft.VisualBasic.InStr(szParsingString, ";") - 1))
+                    szParsingString = (szParsingString.Substring(Microsoft.VisualBasic.InStr(szParsingString, ";"))).Trim
+                End While
+            End If
+        Catch
+            'No "To" information
+        End Try
+
+        'Retrieve "CC"
+        Try
+            szParsingString = OutItem.CC.Trim
+            If szParsingString.Length > 1 Then
+                szParsingString = szParsingString & ";"
+                While (szParsingString.Contains(";"))
+                    RequestorBox.Items.Add(szParsingString.Substring(0, Microsoft.VisualBasic.InStr(szParsingString, ";") - 1))
+                    szParsingString = (szParsingString.Substring(Microsoft.VisualBasic.InStr(szParsingString, ";"))).Trim
+                End While
+            End If
+        Catch
+            'No "CC information
+        End Try
+
     End Sub
 
     Private Sub RequestorBox_TextChanged(sender As Object, e As EventArgs) Handles RequestorBox.LostFocus
@@ -343,7 +466,6 @@ Public Class AddCaseForm
         Dim rows As Integer
 
         If ConectionBox.Text.Length > 0 Then
-
             Try
                 conection.Open()
                 query = ("SELECT TOP 1 * FROM Resourses WHERE szName = '" & RequestorBox.Text & "'")
@@ -391,18 +513,23 @@ Public Class AddCaseForm
             OutItem = objectType
 
             'Retrieve default properties
-            ResponsibleBox.Text = OutItem.Session.CurrentUser.Name
-            RequestorBox.Text = OutItem.SenderName
             gdCreationTime = OutItem.CreationTime
             szSubject = OutItem.Subject
 
-            ''Parse szSubject if already formated
-            SubjectFormatted(szSubject)
+            'Retrieve responsible
+            Dim iSelectionIndex As Integer
+            ResponsibleBox.Items.Add(OutItem.Session.CurrentUser.Name)
+            iSelectionIndex = ResponsibleBox.FindString(OutItem.Session.CurrentUser.Name)
+            ResponsibleBox.SelectedIndex = iSelectionIndex
 
-            'If SubjectFormatted(szSubject) = False Then
-            '    'szSubject is not formated
-            '    szSubject = OutItem.szSubject
-            'End If
+            'Load Requestor with "From", "To", "CC"
+            LoadRequestorBox()
+
+            'Parse szSubject if already formated
+            If SubjectFormatted(szSubject) = False Then
+                'szSubject is not formated
+                szSubject = OutItem.Subject
+            End If
         End If
     End Sub
 
@@ -413,7 +540,11 @@ Public Class AddCaseForm
         Dim mnTicketNumber As Integer = 0
 
         'Count how many pipes has the subject
-        pipeCount = (From character In auxSubject Where character = "|" Select character).Count()
+        Try
+            pipeCount = (From character In auxSubject Where character = "|" Select character).Count()
+        Catch ex As Exception
+            pipeCount = 0
+        End Try
 
         'If, pipe count is valid
         If 0 < pipeCount < 3 Then
@@ -467,6 +598,19 @@ Public Class AddCaseForm
             ElseIf PriorityBox.Text = "Medium" Then
                 OutItem.Importance = Microsoft.Office.Interop.Outlook.OlImportance.olImportanceLow
             End If
+        End If
+    End Sub
+
+    Private Function ReplaceApostrophesInString(szString As String) As String
+        Dim cSpecialCharacter As String = "'"
+        Dim cNewCharacter As String = " "
+        Return szString.Replace(cSpecialCharacter, cNewCharacter)
+    End Function
+
+    Private Sub QuantityBox_ValueChanged(sender As Object, e As EventArgs) Handles QuantityBox.ValueChanged
+        If QuantityBox.Value <= 0 Then
+            QuantityBox.Value = 1
+            MsgBox("Cannot select negative quantity", vbExclamation, "Alert")
         End If
     End Sub
 End Class

@@ -143,19 +143,19 @@ Public Class CloseCaseForm
             'mnTicketLineNumber (First line start with 0)
             query = query & records.Tables("Tickets").Rows(0).Item("mnTicketLineNumber") + 1 & ", "
             'szTeam, 
-            query = query & "'" & records.Tables("Tickets").Rows(0).Item("szTeam") & "', "
+            query = query & "'" & ReplaceApostrophesInString(records.Tables("Tickets").Rows(0).Item("szTeam")) & "', "
             'szActivityCategory
-            query = query & "'" & records.Tables("Tickets").Rows(0).Item("szActivityCategory") & "', "
+            query = query & "'" & ReplaceApostrophesInString(records.Tables("Tickets").Rows(0).Item("szActivityCategory")) & "', "
             'szResponsible
-            query = query & "'" & records.Tables("Tickets").Rows(0).Item("szResponsible") & "', "
+            query = query & "'" & ReplaceApostrophesInString(records.Tables("Tickets").Rows(0).Item("szResponsible")) & "', "
             'szStatus
             query = query & "'" & "Close" & "', "
             'szPriority
-            query = query & "'" & records.Tables("Tickets").Rows(0).Item("szPriority") & "', "
+            query = query & "'" & ReplaceApostrophesInString(records.Tables("Tickets").Rows(0).Item("szPriority")) & "', "
             'szRequestor
-            query = query & "'" & records.Tables("Tickets").Rows(0).Item("szRequestor") & "', "
+            query = query & "'" & ReplaceApostrophesInString(records.Tables("Tickets").Rows(0).Item("szRequestor")) & "', "
             'szBusinessUnit
-            query = query & "'" & records.Tables("Tickets").Rows(0).Item("szBusinessUnit") & "', "
+            query = query & "'" & ReplaceApostrophesInString(records.Tables("Tickets").Rows(0).Item("szBusinessUnit")) & "', "
             'szPendingSource
             query = query & "'" & DBNull.Value & "', "
             'gdOpenDate
@@ -163,17 +163,17 @@ Public Class CloseCaseForm
             'gdCloseDate
             query = query & "'" & (DateTime.Now.ToString("MM/dd/yyyy")) & "', "
             'szComments
-            query = query & "'" & CommentsBox.Text & "', "
+            query = query & "'" & ReplaceApostrophesInString(CommentsBox.Text) & "', "
             'szDescription
-            query = query & "'" & records.Tables("Tickets").Rows(0).Item("szDescription") & "', "
+            query = query & "'" & ReplaceApostrophesInString(records.Tables("Tickets").Rows(0).Item("szDescription")) & "', "
             'gdRequestedTime 
-            query = query & "'" & records.Tables("Tickets").Rows(0).Item("gdRequestedTime") & "', "
+            query = query & "'" & ReplaceApostrophesInString(records.Tables("Tickets").Rows(0).Item("gdRequestedTime")) & "', "
             'mnOpenDays
             query = query & 0 & ", "
             'szAuditUser
-            query = query & "'" & Environment.UserName & "', "
+            query = query & "'" & ReplaceApostrophesInString(Environment.UserName) & "', "
             'szLocation
-            query = query & "'" & ConectionBox.Text & "', "
+            query = query & "'" & ReplaceApostrophesInString(ConectionBox.Text) & "', "
             'gdCreationDate
             query = query & "'" & DateTime.Now.ToString("MM/dd/yyyy") & "')"
 
@@ -265,5 +265,11 @@ Public Class CloseCaseForm
         End If
 
         Return result
+    End Function
+
+    Private Function ReplaceApostrophesInString(szString As String) As String
+        Dim cSpecialCharacter As String = "'"
+        Dim cNewCharacter As String = " "
+        Return szString.Replace(cSpecialCharacter, cNewCharacter)
     End Function
 End Class

@@ -229,11 +229,11 @@ Public Class ModifyCaseForm
         'mnTicketLineNumber (First line start with 0)
         query = query & records.Tables("Tickets").Rows(0).Item("mnTicketLineNumber") + 1 & ", "
         'szTeam, 
-        query = query & "'" & records.Tables("Tickets").Rows(0).Item("szTeam") & "', "
+        query = query & "'" & ReplaceApostrophesInString(records.Tables("Tickets").Rows(0).Item("szTeam")) & "', "
         'szActivityCategory
-        query = query & "'" & records.Tables("Tickets").Rows(0).Item("szActivityCategory") & "', "
+        query = query & "'" & ReplaceApostrophesInString(records.Tables("Tickets").Rows(0).Item("szActivityCategory")) & "', "
         'szResponsible
-        query = query & "'" & ResponsibleBox.Text & "', "
+        query = query & "'" & ReplaceApostrophesInString(ResponsibleBox.Text) & "', "
         'szStatus
         Select Case (Action)
             Case "Reopen"
@@ -244,20 +244,13 @@ Public Class ModifyCaseForm
                 Exit Select
         End Select
         'szPriority
-        query = query & "'" & szPriority & "', "
+        query = query & "'" & ReplaceApostrophesInString(szPriority) & "', "
         'szRequestor
-        query = query & "'" & RequestorBox.Text & "', "
+        query = query & "'" & ReplaceApostrophesInString(RequestorBox.Text) & "', "
         'szBusinessUnit
-        query = query & "'" & RegionBox.Text & "', "
+        query = query & "'" & ReplaceApostrophesInString(RegionBox.Text) & "', "
         'szPendingSource
-        Select Case (Action)
-            Case "Reopen"
-                query = query & "'" & PendingSourceBox.Text & "', "
-                Exit Select
-            Case "Modify"
-                query = query & "'" & PendingSourceBox.Text & "', "
-                Exit Select
-        End Select
+        query = query & "'" & ReplaceApostrophesInString(PendingSourceBox.Text) & "', "
         'gdOpenDate
         query = query & "'" & (DateTime.Now.ToString("mm/dd/yyyy")) & "', "
         'gdCloseDate
@@ -265,22 +258,22 @@ Public Class ModifyCaseForm
         'szComments
         Select Case (Action)
             Case "Reopen"
-                query = query & "' ', "
+                query = query & "'Reopen Ticket', "
                 Exit Select
             Case "Modify"
-                query = query & "'" & CommentsBox.Text & "', "
+                query = query & "'" & ReplaceApostrophesInString(CommentsBox.Text) & "', "
                 Exit Select
         End Select
         'szDescription
-        query = query & "'" & records.Tables("Tickets").Rows(0).Item("szDescription") & "', "
+        query = query & "'" & ReplaceApostrophesInString(records.Tables("Tickets").Rows(0).Item("szDescription")) & "', "
         'gdRequestedTime 
-        query = query & "'" & records.Tables("Tickets").Rows(0).Item("gdRequestedTime") & "', "
+        query = query & "'" & ReplaceApostrophesInString(records.Tables("Tickets").Rows(0).Item("gdRequestedTime")) & "', "
         'mnOpenDays
         query = query & 0 & ", "
         'szAuditUser
-        query = query & "'" & Environment.UserName & "', "
+        query = query & "'" & ReplaceApostrophesInString(Environment.UserName) & "', "
         'szLocation
-        query = query & "'" & ConectionBox.Text & "', "
+        query = query & "'" & ReplaceApostrophesInString(ConectionBox.Text) & "', "
         'gdCreationDate
         query = query & "'" & DateTime.Now.ToString("mm/dd/yyyy") & "')"
 
@@ -419,4 +412,9 @@ Public Class ModifyCaseForm
         Return result
     End Function
 
+    Private Function ReplaceApostrophesInString(szString As String) As String
+        Dim cSpecialCharacter As String = "'"
+        Dim cNewCharacter As String = " "
+        Return szString.Replace(cSpecialCharacter, cNewCharacter)
+    End Function
 End Class
