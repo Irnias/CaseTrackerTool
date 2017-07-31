@@ -1,6 +1,7 @@
 ﻿Imports System.ComponentModel
 Imports System.Data
 Imports System.Data.OleDb
+Imports System.IO
 Imports System.Windows.Forms
 Imports Microsoft.Office.Interop.Outlook
 
@@ -28,6 +29,11 @@ Public Class ModifyCaseForm
         'Load ConectionBox
         ConectionBox.Items.Add("ACN")
         ConectionBox.Items.Add("Home - Office")
+
+        'Date
+        DateTimePicker.Enabled = False
+        DateTimePicker.Value = Today.Date
+
     End Sub
 
     Private Sub ModifyCaseForm_Closed(sender As Object, e As EventArgs) Handles Me.Closed
@@ -106,6 +112,46 @@ Public Class ModifyCaseForm
     End Sub
 
     Private Sub ConectionBox_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ConectionBox.SelectedIndexChanged
+        Dim szIniFilePath As String = "C:\Users\" & Environment.UserName & "\PTT\PTTConfig.ini"
+        Dim szHomeConection As String = ""
+        Dim szOfficeConection As String = ""
+
+        'Search for INI
+        If (File.Exists(szIniFilePath) <> True) Then
+            MsgBox("Ini File does not exist", vbExclamation, "Alert")
+            Exit Sub
+        End If
+
+        'Get Conection Information
+        Try
+            'Read File
+            Dim FileReader As New StreamReader(szIniFilePath)
+            Dim szLine As String = ""
+
+            'For each line i find 
+            Do
+                szLine = FileReader.ReadLine()
+                If (Not szLine Is Nothing) Then
+                    'Check Provider
+                    If szLine.Trim.Contains("OfficeProvider") Then
+                        szOfficeConection = "Provider=" & szLine.Substring(Microsoft.VisualBasic.InStr(szLine, "=")).Trim & ";"
+                    ElseIf szLine.Trim.Contains("HomeProvider") Then
+                        szHomeConection = "Provider=" & szLine.Substring(Microsoft.VisualBasic.InStr(szLine, "=")).Trim & ";"
+
+                        'Check DataSource
+                    ElseIf szLine.Trim.Contains("DataBasePath") Then
+                        szOfficeConection = szOfficeConection & "Data Source = " & szLine.Substring(Microsoft.VisualBasic.InStr(szLine, "=")).Trim
+                    ElseIf szLine.Trim.Contains("DataBaseHomePath") Then
+                        szHomeConection = szHomeConection & "Data Source = " & szLine.Substring(Microsoft.VisualBasic.InStr(szLine, "=")).Trim
+                    End If
+                End If
+            Loop Until szLine Is Nothing
+            FileReader.Close()
+
+        Catch ex As System.Exception
+            MsgBox(ex.Message)
+        End Try
+
         'Restart conection if open
         If conection.State = ConnectionState.Open Then
             conection.Close()
@@ -114,11 +160,11 @@ Public Class ModifyCaseForm
         'Start new conection
         Try
             If ConectionBox.Text = "ACN" Then
-                conection.ConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source = \\10.21.144.6\GBS Accenture Data\RTR\GA\MIS\Test1.accdb"
+                conection.ConnectionString = szOfficeConection
             Else
-                conection.ConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source = \\ramxilss002-f04.bp.com\ACNOPs\BA\Mariner\Mariner\RTR\MIS\Test1.accdb"
+                conection.ConnectionString = szHomeConection
             End If
-        Catch ex As system.Exception
+        Catch ex As System.Exception
             MsgBox(ex.Message)
         End Try
 
@@ -142,16 +188,26 @@ Public Class ModifyCaseForm
         End If
     End Sub
 
-    Private Sub EnableChangesCheckBox_CheckedChanged_1(sender As Object, e As EventArgs) Handles EnableChangesCheckBox.CheckedChanged
+    Private Sub SearchButton_Click(sender As Object, e As EventArgs) Handles SearchButton.Click
         'Validate ticket existence
         If Not SearchTicket(TicketNumberBox.Text) Then
             'Ticket does not exist
             MsgBox("Ticket does not exist", vbExclamation, "Alert")
-            EnableChangesCheckBox.Checked = False
-            Exit Sub
-        End If
 
-        If EnableChangesCheckBox.CheckState = CheckState.Checked Then
+            'Disable and clean fields
+            'Disable buttons
+            ReopenButton.Enabled = False
+            ModifyCaseButton.Enabled = False
+
+            'Disable field 
+            ResponsibleBox.Enabled = False
+            PendingSourceBox.Enabled = False
+            DateTimePicker.Enabled = False
+            CommentsBox.Enabled = False
+
+            SearchTicket(TicketNumberBox.Text)
+            Exit Sub
+        Else
             'Enable buttons
             ReopenButton.Enabled = True
             ModifyCaseButton.Enabled = True
@@ -159,22 +215,17 @@ Public Class ModifyCaseForm
             'Enable field 
             ResponsibleBox.Enabled = True
             PendingSourceBox.Enabled = True
+            DateTimePicker.Enabled = True
             CommentsBox.Enabled = True
             CommentsBox.Text = ""
-        Else
-            'Disable and clean fields
-            'Enable buttons
-            ReopenButton.Enabled = False
-            ModifyCaseButton.Enabled = False
-
-            'Enable field 
-            ResponsibleBox.Enabled = False
-            PendingSourceBox.Enabled = False
-            CommentsBox.Enabled = False
-
-            SearchTicket(TicketNumberBox.Text)
         End If
+    End Sub
 
+    Private Sub DateTimePicker_ValueChanged(sender As Object, e As EventArgs) Handles DateTimePicker.ValueChanged
+        If DateTimePicker.Value > Today.Date Then
+            DateTimePicker.Value = Today.Date
+            MsgBox("Cannot select a future date", vbExclamation, "Alert")
+        End If
     End Sub
 
     Private Function SearchTicket(TicketNumber As String) As Boolean
@@ -199,7 +250,7 @@ Public Class ModifyCaseForm
                     ResponsibleBox.Text = records.Tables("Tickets").Rows(0).Item("szResponsible")
                     RequestorBox.Text = records.Tables("Tickets").Rows(0).Item("szRequestor")
                     RegionBox.Text = records.Tables("Tickets").Rows(0).Item("szBusinessUnit")
-                    DateBox.Text = records.Tables("Tickets").Rows(0).Item("gdOpenDate")
+                    DateTimePicker.Value = Convert.ToDateTime(records.Tables("Tickets").Rows(0).Item("gdOpenDate"))
                     PendingSourceBox.Text = records.Tables("Tickets").Rows(0).Item("szPendingSource")
                     CommentsBox.Text = records.Tables("Tickets").Rows(0).Item("szComments")
 
@@ -209,7 +260,7 @@ Public Class ModifyCaseForm
                     szPreviousResponsible = ResponsibleBox.Text
                     szDescription = records.Tables("Tickets").Rows(0).Item("szDescription")
                 End If
-            Catch ex As system.Exception
+            Catch ex As System.Exception
                 MsgBox(ex.Message)
             End Try
             conection.Close()
@@ -222,7 +273,7 @@ Public Class ModifyCaseForm
         Dim query As String = ""
 
         'Format query
-        query = "INSERT INTO Tickets(mnTicketNumber, mnTicketLineNumber, szTeam, szActivityCategory, szResponsible, szStatus, szPriority, szRequestor, szBusinessUnit, szPendingSource, gdOpenDate, gdCloseDate, szComments, szDescription, gdRequestedTime, mnOpenDays, szAuditUser, szLocation, gdCreationDate)"
+        query = "INSERT INTO Tickets(mnTicketNumber, mnTicketLineNumber, szTeam, szActivityCategory, szResponsible, szStatus, szPriority, szRequestor, szBusinessUnit, szPendingSource, gdOpenDate, gdCloseDate, szComments, szDescription, gdRequestedTime, mnOpenDays, szAuditUser, szLocation, gdCreationDate, mnQuantity)"
         query = query & "VALUES("
         'mnTicketNumber
         query = query & TicketNumberBox.Text & ","
@@ -275,7 +326,9 @@ Public Class ModifyCaseForm
         'szLocation
         query = query & "'" & ReplaceApostrophesInString(ConectionBox.Text) & "', "
         'gdCreationDate
-        query = query & "'" & DateTime.Now.ToString("mm/dd/yyyy") & "')"
+        query = query & "'" & DateTime.Now.ToString("mm/dd/yyyy") & "',"
+        'mnQuantity
+        query = query & records.Tables("Tickets").Rows(0).Item("mnQuantity") & ") "
 
         Try
             'Perform query
@@ -404,7 +457,7 @@ Public Class ModifyCaseForm
                     TicketNumberBox.Text = ""
                 End If
 
-            Catch ex As system.Exception
+            Catch ex As System.Exception
                 TicketNumberBox.Text = ""
             End Try
         End If
@@ -417,4 +470,5 @@ Public Class ModifyCaseForm
         Dim cNewCharacter As String = " "
         Return szString.Replace(cSpecialCharacter, cNewCharacter)
     End Function
+
 End Class

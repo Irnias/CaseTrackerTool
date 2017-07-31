@@ -1,5 +1,6 @@
 ﻿Imports System.Data
 Imports System.Data.OleDb
+Imports System.IO
 Imports System.Windows.Forms
 
 Public Class CloseCaseForm
@@ -34,6 +35,46 @@ Public Class CloseCaseForm
     End Sub
 
     Private Sub ConectionBox_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ConectionBox.SelectedIndexChanged
+        Dim szIniFilePath As String = "C:\Users\" & Environment.UserName & "\PTT\PTTConfig.ini"
+        Dim szHomeConection As String = ""
+        Dim szOfficeConection As String = ""
+
+        'Search for INI
+        If (File.Exists(szIniFilePath) <> True) Then
+            MsgBox("Ini File does not exist", vbExclamation, "Alert")
+            Exit Sub
+        End If
+
+        'Get Conection Information
+        Try
+            'Read File
+            Dim FileReader As New StreamReader(szIniFilePath)
+            Dim szLine As String = ""
+
+            'For each line i find 
+            Do
+                szLine = FileReader.ReadLine()
+                If (Not szLine Is Nothing) Then
+                    'Check Provider
+                    If szLine.Trim.Contains("OfficeProvider") Then
+                        szOfficeConection = "Provider=" & szLine.Substring(Microsoft.VisualBasic.InStr(szLine, "=")).Trim & ";"
+                    ElseIf szLine.Trim.Contains("HomeProvider") Then
+                        szHomeConection = "Provider=" & szLine.Substring(Microsoft.VisualBasic.InStr(szLine, "=")).Trim & ";"
+
+                        'Check DataSource
+                    ElseIf szLine.Trim.Contains("DataBasePath") Then
+                        szOfficeConection = szOfficeConection & "Data Source = " & szLine.Substring(Microsoft.VisualBasic.InStr(szLine, "=")).Trim
+                    ElseIf szLine.Trim.Contains("DataBaseHomePath") Then
+                        szHomeConection = szHomeConection & "Data Source = " & szLine.Substring(Microsoft.VisualBasic.InStr(szLine, "=")).Trim
+                    End If
+                End If
+            Loop Until szLine Is Nothing
+            FileReader.Close()
+
+        Catch ex As System.Exception
+            MsgBox(ex.Message)
+        End Try
+
         'Restart conection if open
         If conection.State = ConnectionState.Open Then
             conection.Close()
@@ -42,11 +83,11 @@ Public Class CloseCaseForm
         'Start new conection
         Try
             If ConectionBox.Text = "ACN" Then
-                conection.ConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source = \\10.21.144.6\GBS Accenture Data\RTR\GA\MIS\Test1.accdb"
+                conection.ConnectionString = szOfficeConection
             Else
-                conection.ConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source = \\ramxilss002-f04.bp.com\ACNOPs\BA\Mariner\Mariner\RTR\MIS\Test1.accdb"
+                conection.ConnectionString = szHomeConection
             End If
-        Catch ex As system.Exception
+        Catch ex As System.Exception
             MsgBox(ex.Message)
         End Try
 
@@ -61,7 +102,7 @@ Public Class CloseCaseForm
 
     End Sub
 
-    Private Sub TicketNumberBox_LostFocus(sender As Object, e As EventArgs) Handles TicketNumberBox.LostFocus
+    Private Sub SearchButton_Click(sender As Object, e As EventArgs) Handles SearchButton.Click
         If TicketNumberBox.Text.Trim <> "" Then
             If SearchTicketNumber(TicketNumberBox.Text) = True Then
                 CommentsBox.Enabled = True
@@ -75,6 +116,7 @@ Public Class CloseCaseForm
 
                 'Ticket does not exist
                 MsgBox("Ticket does not exist", vbExclamation, "Alert")
+                TicketNumberBox.Focus()
             End If
         End If
     End Sub
@@ -272,4 +314,5 @@ Public Class CloseCaseForm
         Dim cNewCharacter As String = " "
         Return szString.Replace(cSpecialCharacter, cNewCharacter)
     End Function
+
 End Class

@@ -2,11 +2,14 @@
 Imports System.Data.OleDb
 Imports System.Windows.Forms
 Imports System.ComponentModel
+Imports System.IO
+Imports System.Collections
 
 Public Class AddCaseForm
     Dim OutApp As Outlook.Application
     Dim OutItem As Outlook.MailItem
     Dim myInspector As Outlook.Inspector
+    Dim bIsEmail As Boolean = False
 
     Dim conection As New OleDbConnection
     Dim comands As New OleDbCommand
@@ -133,6 +136,48 @@ Public Class AddCaseForm
     End Sub
 
     Public Sub ConectionBox_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ConectionBox.SelectedIndexChanged
+        Dim szIniFilePath As String = "C:\Users\" & Environment.UserName & "\PTT\PTTConfig.ini"
+        Dim szHomeConection As String = ""
+        Dim szOfficeConection As String = ""
+
+        'Search for INI
+        If (File.Exists(szIniFilePath) <> True) Then
+            MsgBox("Ini File does not exist", vbExclamation, "Alert")
+            Exit Sub
+        End If
+
+        'Get Conection Information
+        Try
+            'Read File
+            Dim FileReader As New StreamReader(szIniFilePath)
+            Dim szLine As String = ""
+
+            'For each line i find 
+            Do
+                szLine = FileReader.ReadLine()
+                If (Not szLine Is Nothing) Then
+                    'Check Provider
+                    If szLine.Trim.Contains("OfficeProvider") Then
+                        szOfficeConection = "Provider=" & szLine.Substring(Microsoft.VisualBasic.InStr(szLine, "=")).Trim & ";"
+                    ElseIf szLine.Trim.Contains("HomeProvider") Then
+                        szHomeConection = "Provider=" & szLine.Substring(Microsoft.VisualBasic.InStr(szLine, "=")).Trim & ";"
+
+                        'Check DataSource
+                    ElseIf szLine.Trim.Contains("DataBasePath") Then
+                        szOfficeConection = szOfficeConection & "Data Source = " & szLine.Substring(Microsoft.VisualBasic.InStr(szLine, "=")).Trim
+                    ElseIf szLine.Trim.Contains("DataBaseHomePath") Then
+                        szHomeConection = szHomeConection & "Data Source = " & szLine.Substring(Microsoft.VisualBasic.InStr(szLine, "=")).Trim
+                    ElseIf szLine.Trim.Contains("HomePrefix") Then
+                        mnHomePrefix = szLine.Substring(Microsoft.VisualBasic.InStr(szLine, "=")).Trim
+                    End If
+                End If
+            Loop Until szLine Is Nothing
+            FileReader.Close()
+
+        Catch ex As System.Exception
+            MsgBox(ex.Message)
+        End Try
+
         'Restart conection if open
         If conection.State = ConnectionState.Open Then
             conection.Close()
@@ -141,11 +186,9 @@ Public Class AddCaseForm
         'Start new conection
         Try
             If ConectionBox.Text = "ACN" Then
-                conection.ConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source = \\10.21.144.6\GBS Accenture Data\RTR\GA\MIS\Test1.accdb"
-                mnHomePrefix = 0
+                conection.ConnectionString = szOfficeConection
             Else
-                conection.ConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source = \\ramxilss002-f04.bp.com\ACNOPs\BA\Mariner\Mariner\RTR\MIS\Test1.accdb"
-                mnHomePrefix = 1000000000
+                conection.ConnectionString = szHomeConection
             End If
         Catch ex As System.Exception
             MsgBox(ex.Message)
@@ -297,7 +340,10 @@ Public Class AddCaseForm
         If (TeamBox.Text.Trim).Length > 0 Then
             szPreviousTeam = TeamBox.Text
         Else
-            szPreviousTeam = ""
+            'Not override on default value
+            If Not String.IsNullOrEmpty(ConectionBox.Text) Then
+                szPreviousTeam = ""
+            End If
         End If
 
         'Clear Teambox
@@ -339,7 +385,10 @@ Public Class AddCaseForm
         If (ActCategoryBox.Text.Trim).Length > 0 Then
             szPreviousCategory = ActCategoryBox.Text
         Else
-            szPreviousCategory = ""
+            'Not override on default value
+            If Not String.IsNullOrEmpty(ConectionBox.Text) Then
+                szPreviousCategory = ""
+            End If
         End If
 
         'Clear CategoryBox
@@ -380,7 +429,10 @@ Public Class AddCaseForm
         If (ResponsibleBox.Text.Trim).Length > 0 Then
             szPreviousResponsible = ResponsibleBox.Text
         Else
-            szPreviousResponsible = ""
+            'Not override on default value
+            If Not String.IsNullOrEmpty(ConectionBox.Text) Then
+                szPreviousResponsible = ""
+            End If
         End If
 
         'Clear Responsible
@@ -414,19 +466,40 @@ Public Class AddCaseForm
 
     Private Sub LoadRequestorBox()
         Dim szParsingString As String = ""
+        Dim szPreviousRequestor As String = ""
+        Dim iSelectionIndex As Integer = -1
+
+        'Save Previous Selection
+        If (RequestorBox.Text.Trim).Length > 0 Then
+            szPreviousRequestor = RequestorBox.Text
+        Else
+            'Not override on default value
+            If Not String.IsNullOrEmpty(ConectionBox.Text) Then
+                szPreviousRequestor = ""
+            End If
+        End If
+
         RequestorBox.Items.Clear()
 
         'Retrieve "From" text and set as default
         Try
-            Dim iSelectionIndex As Integer
-
-            If (OutItem.SendUsingAccount.UserName.Trim).Length > 0 Then
-                RequestorBox.Items.Add(OutItem.SendUsingAccount.UserName)
-                iSelectionIndex = ResponsibleBox.FindString(OutItem.SendUsingAccount.UserName)
+            If (OutItem.SentOnBehalfOfName.Trim).Length > 0 Then
+                RequestorBox.Items.Add(OutItem.SentOnBehalfOfName.Trim)
+                iSelectionIndex = RequestorBox.FindString(OutItem.SentOnBehalfOfName.Trim)
             Else
-                iSelectionIndex = -1
+                If (OutItem.SendUsingAccount.UserName.Trim).Length > 0 Then
+                    RequestorBox.Items.Add(OutItem.SendUsingAccount.UserName)
+                    iSelectionIndex = RequestorBox.FindString(OutItem.SendUsingAccount.UserName)
+                Else
+                    iSelectionIndex = -1
+                End If
             End If
-            RequestorBox.SelectedIndex = iSelectionIndex
+
+            'Not override on default value
+            If String.IsNullOrEmpty(szPreviousRequestor) Then
+                RequestorBox.SelectedIndex = iSelectionIndex
+            End If
+
         Catch
             'No "From" information
         End Try
@@ -458,6 +531,12 @@ Public Class AddCaseForm
         Catch
             'No "CC information
         End Try
+
+        'Reselect Previous Value
+        If (szPreviousRequestor.Trim).Length > 0 Then
+            iSelectionIndex = RequestorBox.FindString(szPreviousRequestor)
+        End If
+        RequestorBox.SelectedIndex = iSelectionIndex
 
     End Sub
 

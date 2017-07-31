@@ -26,7 +26,6 @@ Partial Class AddCaseForm
         Me.RequestorLabel = New System.Windows.Forms.Label()
         Me.ResponsibleLabel = New System.Windows.Forms.Label()
         Me.ResponsibleBox = New System.Windows.Forms.ComboBox()
-        Me.DataGridView1 = New System.Windows.Forms.DataGridView()
         Me.StatusLabel = New System.Windows.Forms.Label()
         Me.RegionBox = New System.Windows.Forms.TextBox()
         Me.RegionLabel = New System.Windows.Forms.Label()
@@ -51,7 +50,6 @@ Partial Class AddCaseForm
         Me.DateTimePicker = New System.Windows.Forms.DateTimePicker()
         Me.QuantityBox = New System.Windows.Forms.NumericUpDown()
         Me.Label1 = New System.Windows.Forms.Label()
-        CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.QuantityBox, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -103,14 +101,6 @@ Partial Class AddCaseForm
         Me.ResponsibleBox.Name = "ResponsibleBox"
         Me.ResponsibleBox.Size = New System.Drawing.Size(126, 25)
         Me.ResponsibleBox.TabIndex = 5
-        '
-        'DataGridView1
-        '
-        Me.DataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.DataGridView1.Location = New System.Drawing.Point(218, 410)
-        Me.DataGridView1.Name = "DataGridView1"
-        Me.DataGridView1.Size = New System.Drawing.Size(10, 10)
-        Me.DataGridView1.TabIndex = 16
         '
         'StatusLabel
         '
@@ -390,7 +380,7 @@ Partial Class AddCaseForm
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.ActiveCaptionText
         Me.CausesValidation = False
-        Me.ClientSize = New System.Drawing.Size(248, 411)
+        Me.ClientSize = New System.Drawing.Size(248, 431)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.QuantityBox)
         Me.Controls.Add(Me.DateTimePicker)
@@ -414,7 +404,6 @@ Partial Class AddCaseForm
         Me.Controls.Add(Me.RegionLabel)
         Me.Controls.Add(Me.RegionBox)
         Me.Controls.Add(Me.StatusLabel)
-        Me.Controls.Add(Me.DataGridView1)
         Me.Controls.Add(Me.ResponsibleBox)
         Me.Controls.Add(Me.PriorityLabel)
         Me.Controls.Add(Me.ResponsibleLabel)
@@ -424,8 +413,7 @@ Partial Class AddCaseForm
         Me.Name = "AddCaseForm"
         Me.ShowIcon = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Quantity"
-        CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.Text = "Add Case"
         CType(Me.QuantityBox, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
@@ -435,7 +423,6 @@ Partial Class AddCaseForm
     Friend WithEvents RequestorLabel As System.Windows.Forms.Label
     Friend WithEvents ResponsibleLabel As System.Windows.Forms.Label
     Friend WithEvents ResponsibleBox As System.Windows.Forms.ComboBox
-    Friend WithEvents DataGridView1 As System.Windows.Forms.DataGridView
     Friend WithEvents StatusLabel As System.Windows.Forms.Label
     Friend WithEvents RegionBox As System.Windows.Forms.TextBox
     Friend WithEvents RegionLabel As System.Windows.Forms.Label

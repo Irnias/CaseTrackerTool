@@ -43,7 +43,7 @@
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(CaseTrackerTool))
-        Me.CaseTrackerToolTab = Me.Factory.CreateRibbonTab
+        Me.PerformanceTrackingToolTab = Me.Factory.CreateRibbonTab
         Me.OptionsGroup = Me.Factory.CreateRibbonGroup
         Me.AddCaseButton = Me.Factory.CreateRibbonButton
         Me.ModifyCaseButton = Me.Factory.CreateRibbonButton
@@ -52,19 +52,19 @@
         Me.IssuesGroup = Me.Factory.CreateRibbonGroup
         Me.NotifyIssueButton = Me.Factory.CreateRibbonButton
         Me.NotifyIcon1 = New System.Windows.Forms.NotifyIcon(Me.components)
-        Me.CaseTrackerToolTab.SuspendLayout()
+        Me.PerformanceTrackingToolTab.SuspendLayout()
         Me.OptionsGroup.SuspendLayout()
         Me.IssuesGroup.SuspendLayout()
         Me.SuspendLayout()
         '
-        'CaseTrackerToolTab
+        'PerformanceTrackingToolTab
         '
-        Me.CaseTrackerToolTab.ControlId.ControlIdType = Microsoft.Office.Tools.Ribbon.RibbonControlIdType.Office
-        Me.CaseTrackerToolTab.Groups.Add(Me.OptionsGroup)
-        Me.CaseTrackerToolTab.Groups.Add(Me.IssuesGroup)
-        Me.CaseTrackerToolTab.KeyTip = "C"
-        Me.CaseTrackerToolTab.Label = "Case Tracker Tool"
-        Me.CaseTrackerToolTab.Name = "CaseTrackerToolTab"
+        Me.PerformanceTrackingToolTab.ControlId.ControlIdType = Microsoft.Office.Tools.Ribbon.RibbonControlIdType.Office
+        Me.PerformanceTrackingToolTab.Groups.Add(Me.OptionsGroup)
+        Me.PerformanceTrackingToolTab.Groups.Add(Me.IssuesGroup)
+        Me.PerformanceTrackingToolTab.KeyTip = "C"
+        Me.PerformanceTrackingToolTab.Label = "Performance Tracking Tool"
+        Me.PerformanceTrackingToolTab.Name = "PerformanceTrackingToolTab"
         '
         'OptionsGroup
         '
@@ -135,9 +135,9 @@
         '
         Me.Name = "CaseTrackerTool"
         Me.RibbonType = resources.GetString("$this.RibbonType")
-        Me.Tabs.Add(Me.CaseTrackerToolTab)
-        Me.CaseTrackerToolTab.ResumeLayout(False)
-        Me.CaseTrackerToolTab.PerformLayout()
+        Me.Tabs.Add(Me.PerformanceTrackingToolTab)
+        Me.PerformanceTrackingToolTab.ResumeLayout(False)
+        Me.PerformanceTrackingToolTab.PerformLayout()
         Me.OptionsGroup.ResumeLayout(False)
         Me.OptionsGroup.PerformLayout()
         Me.IssuesGroup.ResumeLayout(False)
@@ -146,7 +146,7 @@
 
     End Sub
 
-    Friend WithEvents CaseTrackerToolTab As Microsoft.Office.Tools.Ribbon.RibbonTab
+    Friend WithEvents PerformanceTrackingToolTab As Microsoft.Office.Tools.Ribbon.RibbonTab
     Friend WithEvents AddCaseButton As Microsoft.Office.Tools.Ribbon.RibbonButton
     Friend WithEvents OptionsGroup As Microsoft.Office.Tools.Ribbon.RibbonGroup
     Friend WithEvents NotifyIcon1 As System.Windows.Forms.NotifyIcon

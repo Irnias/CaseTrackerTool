@@ -25,17 +25,17 @@
     <ProjectGuid>{69DE3C72-DBB6-4B6D-8EB8-92D7A2A4A6C4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>OutlookAddIn1</RootNamespace>
-    <AssemblyName>CaseTrakerToolAddIn</AssemblyName>
+    <AssemblyName>PerformanceTrackingToolAddIn</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <DefineConstants>VSTO40</DefineConstants>
     <StartupObject>
     </StartupObject>
     <IsWebBootstrapper>False</IsWebBootstrapper>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <PublishUrl>C:\camila.ibar\desktop\</PublishUrl>
+    <PublishUrl>C:\Users\camila.ibar\Desktop\</PublishUrl>
     <InstallUrl />
     <TargetCulture>en</TargetCulture>
-    <ApplicationVersion>1.0.0.516</ApplicationVersion>
+    <ApplicationVersion>1.0.0.523</ApplicationVersion>
     <AutoIncrementApplicationRevision>true</AutoIncrementApplicationRevision>
     <UpdateEnabled>true</UpdateEnabled>
     <UpdateInterval>1</UpdateInterval>
@@ -103,7 +103,7 @@
     <DebugSymbols>true</DebugSymbols>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DocumentationFile>CaseTrakerToolAddIn.xml</DocumentationFile>
+    <DocumentationFile>PerformanceTrackingToolAddIn.xml</DocumentationFile>
     <RegisterForComInterop>false</RegisterForComInterop>
     <RemoveIntegerChecks>false</RemoveIntegerChecks>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
@@ -133,7 +133,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DocumentationFile>CaseTrakerToolAddIn.xml</DocumentationFile>
+    <DocumentationFile>PerformanceTrackingToolAddIn.xml</DocumentationFile>
     <RegisterForComInterop>false</RegisterForComInterop>
     <RemoveIntegerChecks>false</RemoveIntegerChecks>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
@@ -232,10 +232,10 @@
     <Compile Include="ModifyCaseForm.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="CaseTrakerToolRibbon.Designer.vb">
-      <DependentUpon>CaseTrakerToolRibbon.vb</DependentUpon>
+    <Compile Include="PerformanceTrackingToolRibbon.Designer.vb">
+      <DependentUpon>PerformanceTrackingToolRibbon.vb</DependentUpon>
     </Compile>
-    <Compile Include="CaseTrakerToolRibbon.vb">
+    <Compile Include="PerformanceTrackingToolRibbon.vb">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="SearchCaseForm.Designer.vb">
@@ -253,19 +253,21 @@
     <EmbeddedResource Include="AddCaseForm.resx">
       <DependentUpon>AddCaseForm.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="CloseCaseForm.aa.resx">
+      <DependentUpon>CloseCaseForm.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="CloseCaseForm.resx">
       <DependentUpon>CloseCaseForm.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ModifyCaseForm.resx">
       <DependentUpon>ModifyCaseForm.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="CaseTrakerToolRibbon.resx">
-      <DependentUpon>CaseTrakerToolRibbon.vb</DependentUpon>
+    <EmbeddedResource Include="PerformanceTrackingToolRibbon.resx">
+      <DependentUpon>PerformanceTrackingToolRibbon.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SearchCaseForm.resx">
       <DependentUpon>SearchCaseForm.vb</DependentUpon>
     </EmbeddedResource>
-    <None Include="CaseTrakerToolAddIn_TemporaryKey.pfx" />
     <None Include="ThisAddIn.Designer.xml">
       <DependentUpon>ThisAddIn.vb</DependentUpon>
     </None>

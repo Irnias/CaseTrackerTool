@@ -32,7 +32,7 @@ Public Class CaseTrackerTool
         OutlookAppli = CreateObject("Outlook.Application")
         NewMessage = OutlookAppli.CreateItem(OlItemType.olMailItem)
         NewMessage.To = "CaseTrackingToolSupport@accenture.com"
-        NewMessage.Subject = "Case Tracker Tool - Issue Notification"
+        NewMessage.Subject = "Performance Tracking Tool - Issue Notification"
         NewMessage.Display()
     End Sub
 

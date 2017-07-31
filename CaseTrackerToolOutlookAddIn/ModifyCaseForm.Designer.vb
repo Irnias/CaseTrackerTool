@@ -36,14 +36,14 @@ Partial Class ModifyCaseForm
         Me.ResponsibleBox = New System.Windows.Forms.TextBox()
         Me.ModifyCaseButton = New System.Windows.Forms.Button()
         Me.RequestorBox = New System.Windows.Forms.TextBox()
-        Me.DateBox = New System.Windows.Forms.TextBox()
         Me.RegionBox = New System.Windows.Forms.TextBox()
         Me.ResponsibleLabel = New System.Windows.Forms.Label()
         Me.TicketNumberLabel = New System.Windows.Forms.Label()
         Me.ConectionLabel = New System.Windows.Forms.Label()
         Me.CommentsBox = New System.Windows.Forms.TextBox()
-        Me.EnableChangesCheckBox = New System.Windows.Forms.CheckBox()
         Me.StatusBox = New System.Windows.Forms.TextBox()
+        Me.DateTimePicker = New System.Windows.Forms.DateTimePicker()
+        Me.SearchButton = New System.Windows.Forms.Button()
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -78,7 +78,6 @@ Partial Class ModifyCaseForm
         'ConectionBox
         '
         Me.ConectionBox.AllowDrop = True
-        Me.ConectionBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.ConectionBox.Enabled = False
         Me.ConectionBox.Font = New System.Drawing.Font("Segoe UI", 10.0!)
         Me.ConectionBox.FormattingEnabled = True
@@ -199,16 +198,6 @@ Partial Class ModifyCaseForm
         Me.RequestorBox.Size = New System.Drawing.Size(126, 25)
         Me.RequestorBox.TabIndex = 5
         '
-        'DateBox
-        '
-        Me.DateBox.Enabled = False
-        Me.DateBox.Font = New System.Drawing.Font("Segoe UI", 10.0!)
-        Me.DateBox.ImeMode = System.Windows.Forms.ImeMode.NoControl
-        Me.DateBox.Location = New System.Drawing.Point(114, 174)
-        Me.DateBox.Name = "DateBox"
-        Me.DateBox.Size = New System.Drawing.Size(126, 25)
-        Me.DateBox.TabIndex = 7
-        '
         'RegionBox
         '
         Me.RegionBox.Enabled = False
@@ -265,18 +254,6 @@ Partial Class ModifyCaseForm
         Me.CommentsBox.Size = New System.Drawing.Size(126, 55)
         Me.CommentsBox.TabIndex = 64
         '
-        'EnableChangesCheckBox
-        '
-        Me.EnableChangesCheckBox.AccessibleDescription = ""
-        Me.EnableChangesCheckBox.AutoSize = True
-        Me.EnableChangesCheckBox.ForeColor = System.Drawing.SystemColors.Control
-        Me.EnableChangesCheckBox.Location = New System.Drawing.Point(16, 298)
-        Me.EnableChangesCheckBox.Name = "EnableChangesCheckBox"
-        Me.EnableChangesCheckBox.Size = New System.Drawing.Size(89, 17)
-        Me.EnableChangesCheckBox.TabIndex = 65
-        Me.EnableChangesCheckBox.Text = "Enable Fields"
-        Me.EnableChangesCheckBox.UseVisualStyleBackColor = True
-        '
         'StatusBox
         '
         Me.StatusBox.BackColor = System.Drawing.Color.White
@@ -290,14 +267,36 @@ Partial Class ModifyCaseForm
         Me.StatusBox.Size = New System.Drawing.Size(126, 25)
         Me.StatusBox.TabIndex = 0
         '
+        'DateTimePicker
+        '
+        Me.DateTimePicker.Enabled = False
+        Me.DateTimePicker.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.DateTimePicker.Format = System.Windows.Forms.DateTimePickerFormat.[Short]
+        Me.DateTimePicker.Location = New System.Drawing.Point(114, 174)
+        Me.DateTimePicker.Name = "DateTimePicker"
+        Me.DateTimePicker.RightToLeft = System.Windows.Forms.RightToLeft.Yes
+        Me.DateTimePicker.Size = New System.Drawing.Size(126, 25)
+        Me.DateTimePicker.TabIndex = 66
+        '
+        'SearchButton
+        '
+        Me.SearchButton.Font = New System.Drawing.Font("Segoe UI", 8.0!)
+        Me.SearchButton.Location = New System.Drawing.Point(62, 289)
+        Me.SearchButton.Name = "SearchButton"
+        Me.SearchButton.Size = New System.Drawing.Size(55, 32)
+        Me.SearchButton.TabIndex = 67
+        Me.SearchButton.Text = "Search"
+        Me.SearchButton.UseVisualStyleBackColor = True
+        '
         'ModifyCaseForm
         '
         Me.AllowDrop = True
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.ActiveCaptionText
-        Me.ClientSize = New System.Drawing.Size(248, 411)
-        Me.Controls.Add(Me.EnableChangesCheckBox)
+        Me.ClientSize = New System.Drawing.Size(248, 431)
+        Me.Controls.Add(Me.SearchButton)
+        Me.Controls.Add(Me.DateTimePicker)
         Me.Controls.Add(Me.CommentsBox)
         Me.Controls.Add(Me.ConectionLabel)
         Me.Controls.Add(Me.TicketNumberLabel)
@@ -312,7 +311,6 @@ Partial Class ModifyCaseForm
         Me.Controls.Add(Me.ResponsibleBox)
         Me.Controls.Add(Me.ModifyCaseButton)
         Me.Controls.Add(Me.RequestorBox)
-        Me.Controls.Add(Me.DateBox)
         Me.Controls.Add(Me.RegionBox)
         Me.Controls.Add(Me.ResponsibleLabel)
         Me.Controls.Add(Me.ConectionBox)
@@ -344,12 +342,12 @@ Partial Class ModifyCaseForm
     Friend WithEvents ResponsibleBox As System.Windows.Forms.TextBox
     Friend WithEvents ModifyCaseButton As System.Windows.Forms.Button
     Friend WithEvents RequestorBox As System.Windows.Forms.TextBox
-    Friend WithEvents DateBox As System.Windows.Forms.TextBox
     Friend WithEvents RegionBox As System.Windows.Forms.TextBox
     Friend WithEvents ResponsibleLabel As System.Windows.Forms.Label
     Friend WithEvents TicketNumberLabel As System.Windows.Forms.Label
     Friend WithEvents ConectionLabel As System.Windows.Forms.Label
     Friend WithEvents CommentsBox As System.Windows.Forms.TextBox
-    Friend WithEvents EnableChangesCheckBox As System.Windows.Forms.CheckBox
     Friend WithEvents StatusBox As System.Windows.Forms.TextBox
+    Friend WithEvents DateTimePicker As System.Windows.Forms.DateTimePicker
+    Friend WithEvents SearchButton As System.Windows.Forms.Button
 End Class

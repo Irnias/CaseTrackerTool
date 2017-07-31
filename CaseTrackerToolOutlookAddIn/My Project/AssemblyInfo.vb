@@ -13,7 +13,7 @@ Imports System.Security
 <Assembly: AssemblyDescription("Accenture Performance Tracking Tool")>
 <Assembly: AssemblyCompany("Accenture")>
 <Assembly: AssemblyProduct("PerformanceTrackingTool")>
-<Assembly: AssemblyCopyright("Copyright © Accenture 2016")> 
+<Assembly: AssemblyCopyright("Copyright © Accenture 2017")>
 <Assembly: AssemblyTrademark("")>
 
 ' Setting ComVisible to false makes the types in this assembly not visible 
