@@ -101,17 +101,17 @@ Public Class AddCaseForm
         Dim NextNumber As Long = 0
 
         'Validate required fields
-        If ActCategoryBox.Text = "" Then
+        If ActCategoryBox.Text.Trim = "" Then
             MsgBox("Must complete action category", vbExclamation, "Alert")
             Exit Sub
         End If
 
-        If StatusBox.Text = "" Then
+        If StatusBox.Text.Trim = "" Then
             MsgBox("Must complete status box", vbExclamation, "Alert")
             Exit Sub
         End If
 
-        If PendingSrcBox.Text = "" And StatusBox.Text = "Opened" Then
+        If PendingSrcBox.Text.Trim = "" And StatusBox.Text = "Open" Then
             MsgBox("Must complete pending source", vbExclamation, "Alert")
             Exit Sub
         End If
