@@ -277,6 +277,7 @@ Partial Class ModifyCaseForm
         Me.DateTimePicker.RightToLeft = System.Windows.Forms.RightToLeft.Yes
         Me.DateTimePicker.Size = New System.Drawing.Size(126, 25)
         Me.DateTimePicker.TabIndex = 66
+        Me.DateTimePicker.Value = New Date(2017, 8, 8, 0, 0, 0, 0)
         '
         'SearchButton
         '

@@ -1,4 +1,5 @@
-﻿Imports Microsoft.Office.Interop.Outlook
+﻿Imports System.Windows.Forms
+Imports Microsoft.Office.Interop.Outlook
 Imports Microsoft.Office.Tools.Ribbon
 
 Public Class CaseTrackerTool
@@ -26,6 +27,7 @@ Public Class CaseTrackerTool
         Dim SearchCaseForm As New SearchCaseForm
         SearchCaseForm.ShowDialog()
     End Sub
+
     Private Sub NotifyIssueButton_Click(sender As Object, e As RibbonControlEventArgs) Handles NotifyIssueButton.Click
         Dim NewMessage As Outlook.MailItem
         Dim OutlookAppli As Outlook.Application
@@ -35,5 +37,4 @@ Public Class CaseTrackerTool
         NewMessage.Subject = "Performance Tracking Tool - Issue Notification"
         NewMessage.Display()
     End Sub
-
 End Class

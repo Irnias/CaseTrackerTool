@@ -332,6 +332,7 @@ Partial Class AddCaseForm
         'RequestorBox
         '
         Me.RequestorBox.AllowDrop = True
+        Me.RequestorBox.DropDownWidth = 400
         Me.RequestorBox.Enabled = False
         Me.RequestorBox.Font = New System.Drawing.Font("Segoe UI", 10.0!)
         Me.RequestorBox.FormattingEnabled = True
@@ -343,6 +344,7 @@ Partial Class AddCaseForm
         '
         'DateTimePicker
         '
+        Me.DateTimePicker.CustomFormat = "MM/dd/yyyy"
         Me.DateTimePicker.Enabled = False
         Me.DateTimePicker.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.DateTimePicker.Format = System.Windows.Forms.DateTimePickerFormat.[Short]
@@ -351,6 +353,7 @@ Partial Class AddCaseForm
         Me.DateTimePicker.RightToLeft = System.Windows.Forms.RightToLeft.Yes
         Me.DateTimePicker.Size = New System.Drawing.Size(126, 25)
         Me.DateTimePicker.TabIndex = 11
+        Me.DateTimePicker.Value = New Date(2017, 8, 8, 11, 46, 43, 0)
         '
         'QuantityBox
         '

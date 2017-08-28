@@ -35,7 +35,7 @@
     <PublishUrl>C:\Users\camila.ibar\Desktop\</PublishUrl>
     <InstallUrl />
     <TargetCulture>en</TargetCulture>
-    <ApplicationVersion>1.0.0.525</ApplicationVersion>
+    <ApplicationVersion>1.0.0.530</ApplicationVersion>
     <AutoIncrementApplicationRevision>true</AutoIncrementApplicationRevision>
     <UpdateEnabled>true</UpdateEnabled>
     <UpdateInterval>1</UpdateInterval>
@@ -238,6 +238,12 @@
     <Compile Include="PerformanceTrackingToolRibbon.vb">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="ProgressForm.Designer.vb">
+      <DependentUpon>ProgressForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ProgressForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="SearchCaseForm.Designer.vb">
       <DependentUpon>SearchCaseForm.vb</DependentUpon>
     </Compile>
@@ -264,6 +270,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="PerformanceTrackingToolRibbon.resx">
       <DependentUpon>PerformanceTrackingToolRibbon.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProgressForm.resx">
+      <DependentUpon>ProgressForm.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SearchCaseForm.resx">
       <DependentUpon>SearchCaseForm.vb</DependentUpon>
