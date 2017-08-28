@@ -109,7 +109,7 @@ Public Class CloseCaseForm
         End If
 
         'Ticket cannot be closed
-        If CurrentStatusBox.Text <> "Close" Then
+        If CurrentStatusBox.Text = "Close" Then
             MsgBox("Ticket already Closed", vbExclamation, "Alert")
             Exit Sub
         End If
@@ -135,7 +135,7 @@ Public Class CloseCaseForm
     End Sub
 
     'Field Validation
-    Private Sub ConectionBox_Validating(sender As Object, e As EventArgs) Handles ConectionBox.Validating
+    Private Sub ConectionBox_Validating(sender As Object, e As EventArgs) Handles ConectionBox.SelectedIndexChanged
         Dim szIniFilePath As String = "C:\Users\" & Environment.UserName & "\PTT\PTTConfig.ini"
         Dim szHomeConection As String = ""
         Dim szOfficeConection As String = ""
