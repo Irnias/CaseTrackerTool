@@ -47,10 +47,10 @@
         Me.IssuesGroup = Me.Factory.CreateRibbonGroup
         Me.NotifyIssueButton = Me.Factory.CreateRibbonButton
         Me.OptionsGroup = Me.Factory.CreateRibbonGroup
-        Me.SearchCaseButton = Me.Factory.CreateRibbonButton
-        Me.CloseCaseButton = Me.Factory.CreateRibbonButton
-        Me.ModifyCaseButton = Me.Factory.CreateRibbonButton
         Me.AddCaseButton = Me.Factory.CreateRibbonButton
+        Me.ModifyCaseButton = Me.Factory.CreateRibbonButton
+        Me.CloseCaseButton = Me.Factory.CreateRibbonButton
+        Me.SearchCaseButton = Me.Factory.CreateRibbonButton
         Me.PerformanceTrackingToolTab = Me.Factory.CreateRibbonTab
         Me.VersionID = Me.Factory.CreateRibbonGroup
         Me.VersionLabel = Me.Factory.CreateRibbonLabel
@@ -89,23 +89,14 @@
         Me.OptionsGroup.Label = "Options"
         Me.OptionsGroup.Name = "OptionsGroup"
         '
-        'SearchCaseButton
+        'AddCaseButton
         '
-        Me.SearchCaseButton.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge
-        Me.SearchCaseButton.Image = CType(resources.GetObject("SearchCaseButton.Image"), System.Drawing.Image)
-        Me.SearchCaseButton.KeyTip = "S"
-        Me.SearchCaseButton.Label = "Search Case"
-        Me.SearchCaseButton.Name = "SearchCaseButton"
-        Me.SearchCaseButton.ShowImage = True
-        '
-        'CloseCaseButton
-        '
-        Me.CloseCaseButton.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge
-        Me.CloseCaseButton.Image = CType(resources.GetObject("CloseCaseButton.Image"), System.Drawing.Image)
-        Me.CloseCaseButton.KeyTip = "C"
-        Me.CloseCaseButton.Label = "Close Case"
-        Me.CloseCaseButton.Name = "CloseCaseButton"
-        Me.CloseCaseButton.ShowImage = True
+        Me.AddCaseButton.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge
+        Me.AddCaseButton.Image = CType(resources.GetObject("AddCaseButton.Image"), System.Drawing.Image)
+        Me.AddCaseButton.KeyTip = "A"
+        Me.AddCaseButton.Label = "Add Case"
+        Me.AddCaseButton.Name = "AddCaseButton"
+        Me.AddCaseButton.ShowImage = True
         '
         'ModifyCaseButton
         '
@@ -116,14 +107,23 @@
         Me.ModifyCaseButton.Name = "ModifyCaseButton"
         Me.ModifyCaseButton.ShowImage = True
         '
-        'AddCaseButton
+        'CloseCaseButton
         '
-        Me.AddCaseButton.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge
-        Me.AddCaseButton.Image = CType(resources.GetObject("AddCaseButton.Image"), System.Drawing.Image)
-        Me.AddCaseButton.KeyTip = "A"
-        Me.AddCaseButton.Label = "Add Case"
-        Me.AddCaseButton.Name = "AddCaseButton"
-        Me.AddCaseButton.ShowImage = True
+        Me.CloseCaseButton.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge
+        Me.CloseCaseButton.Image = CType(resources.GetObject("CloseCaseButton.Image"), System.Drawing.Image)
+        Me.CloseCaseButton.KeyTip = "C"
+        Me.CloseCaseButton.Label = "Close Case"
+        Me.CloseCaseButton.Name = "CloseCaseButton"
+        Me.CloseCaseButton.ShowImage = True
+        '
+        'SearchCaseButton
+        '
+        Me.SearchCaseButton.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge
+        Me.SearchCaseButton.Image = CType(resources.GetObject("SearchCaseButton.Image"), System.Drawing.Image)
+        Me.SearchCaseButton.KeyTip = "S"
+        Me.SearchCaseButton.Label = "Search Case"
+        Me.SearchCaseButton.Name = "SearchCaseButton"
+        Me.SearchCaseButton.ShowImage = True
         '
         'PerformanceTrackingToolTab
         '
@@ -143,7 +143,7 @@
         '
         'VersionLabel
         '
-        Me.VersionLabel.Label = "Version 6.0"
+        Me.VersionLabel.Label = "Version 6.2"
         Me.VersionLabel.Name = "VersionLabel"
         '
         'CaseTrackerTool
