@@ -53,7 +53,7 @@ Public Class AddCaseForm
         '****************************
         'ConectionBox
         ConectionBox.Items.Add("ACN")
-        ConectionBox.Items.Add("Home - Office")
+        'ConectionBox.Items.Add("Home - Office")
         'StatusBox
         StatusBox.Items.Add("Close")
         StatusBox.Items.Add("Open")
