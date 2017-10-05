@@ -44,8 +44,8 @@
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(CaseTrackerTool))
         Me.NotifyIcon1 = New System.Windows.Forms.NotifyIcon(Me.components)
-        Me.IssuesGroup = Me.Factory.CreateRibbonGroup
-        Me.NotifyIssueButton = Me.Factory.CreateRibbonButton
+        Me.ContactUsGroup = Me.Factory.CreateRibbonGroup
+        Me.ContactAdministratorsButton = Me.Factory.CreateRibbonButton
         Me.OptionsGroup = Me.Factory.CreateRibbonGroup
         Me.AddCaseButton = Me.Factory.CreateRibbonButton
         Me.ModifyCaseButton = Me.Factory.CreateRibbonButton
@@ -54,7 +54,8 @@
         Me.PerformanceTrackingToolTab = Me.Factory.CreateRibbonTab
         Me.VersionID = Me.Factory.CreateRibbonGroup
         Me.VersionLabel = Me.Factory.CreateRibbonLabel
-        Me.IssuesGroup.SuspendLayout()
+        Me.SendLocalDataBaseButton = Me.Factory.CreateRibbonButton
+        Me.ContactUsGroup.SuspendLayout()
         Me.OptionsGroup.SuspendLayout()
         Me.PerformanceTrackingToolTab.SuspendLayout()
         Me.VersionID.SuspendLayout()
@@ -65,20 +66,21 @@
         Me.NotifyIcon1.Text = "NotifyIcon1"
         Me.NotifyIcon1.Visible = True
         '
-        'IssuesGroup
+        'ContactUsGroup
         '
-        Me.IssuesGroup.Items.Add(Me.NotifyIssueButton)
-        Me.IssuesGroup.Label = "Issues"
-        Me.IssuesGroup.Name = "IssuesGroup"
+        Me.ContactUsGroup.Items.Add(Me.SendLocalDataBaseButton)
+        Me.ContactUsGroup.Items.Add(Me.ContactAdministratorsButton)
+        Me.ContactUsGroup.Label = "Contact Us"
+        Me.ContactUsGroup.Name = "ContactUsGroup"
         '
-        'NotifyIssueButton
+        'ContactAdministratorsButton
         '
-        Me.NotifyIssueButton.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge
-        Me.NotifyIssueButton.Image = CType(resources.GetObject("NotifyIssueButton.Image"), System.Drawing.Image)
-        Me.NotifyIssueButton.KeyTip = "N"
-        Me.NotifyIssueButton.Label = "Notify Issue"
-        Me.NotifyIssueButton.Name = "NotifyIssueButton"
-        Me.NotifyIssueButton.ShowImage = True
+        Me.ContactAdministratorsButton.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge
+        Me.ContactAdministratorsButton.Image = CType(resources.GetObject("ContactAdministratorsButton.Image"), System.Drawing.Image)
+        Me.ContactAdministratorsButton.KeyTip = "N"
+        Me.ContactAdministratorsButton.Label = "Contact Administrators"
+        Me.ContactAdministratorsButton.Name = "ContactAdministratorsButton"
+        Me.ContactAdministratorsButton.ShowImage = True
         '
         'OptionsGroup
         '
@@ -129,7 +131,7 @@
         '
         Me.PerformanceTrackingToolTab.ControlId.ControlIdType = Microsoft.Office.Tools.Ribbon.RibbonControlIdType.Office
         Me.PerformanceTrackingToolTab.Groups.Add(Me.OptionsGroup)
-        Me.PerformanceTrackingToolTab.Groups.Add(Me.IssuesGroup)
+        Me.PerformanceTrackingToolTab.Groups.Add(Me.ContactUsGroup)
         Me.PerformanceTrackingToolTab.Groups.Add(Me.VersionID)
         Me.PerformanceTrackingToolTab.KeyTip = "C"
         Me.PerformanceTrackingToolTab.Label = "Performance Tracking Tool"
@@ -143,16 +145,25 @@
         '
         'VersionLabel
         '
-        Me.VersionLabel.Label = "Version 6.2"
+        Me.VersionLabel.Label = "Version 7.0"
         Me.VersionLabel.Name = "VersionLabel"
+        '
+        'SendLocalDataBaseButton
+        '
+        Me.SendLocalDataBaseButton.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge
+        Me.SendLocalDataBaseButton.Image = CType(resources.GetObject("SendLocalDataBaseButton.Image"), System.Drawing.Image)
+        Me.SendLocalDataBaseButton.KeyTip = "N"
+        Me.SendLocalDataBaseButton.Label = "Send Local DataBase"
+        Me.SendLocalDataBaseButton.Name = "SendLocalDataBaseButton"
+        Me.SendLocalDataBaseButton.ShowImage = True
         '
         'CaseTrackerTool
         '
         Me.Name = "CaseTrackerTool"
         Me.RibbonType = resources.GetString("$this.RibbonType")
         Me.Tabs.Add(Me.PerformanceTrackingToolTab)
-        Me.IssuesGroup.ResumeLayout(False)
-        Me.IssuesGroup.PerformLayout()
+        Me.ContactUsGroup.ResumeLayout(False)
+        Me.ContactUsGroup.PerformLayout()
         Me.OptionsGroup.ResumeLayout(False)
         Me.OptionsGroup.PerformLayout()
         Me.PerformanceTrackingToolTab.ResumeLayout(False)
@@ -163,8 +174,8 @@
 
     End Sub
     Friend WithEvents NotifyIcon1 As System.Windows.Forms.NotifyIcon
-    Friend WithEvents IssuesGroup As RibbonGroup
-    Friend WithEvents NotifyIssueButton As RibbonButton
+    Friend WithEvents ContactUsGroup As RibbonGroup
+    Friend WithEvents ContactAdministratorsButton As RibbonButton
     Friend WithEvents OptionsGroup As RibbonGroup
     Friend WithEvents AddCaseButton As RibbonButton
     Friend WithEvents ModifyCaseButton As RibbonButton
@@ -173,6 +184,7 @@
     Friend WithEvents PerformanceTrackingToolTab As RibbonTab
     Friend WithEvents VersionID As RibbonGroup
     Friend WithEvents VersionLabel As RibbonLabel
+    Friend WithEvents SendLocalDataBaseButton As RibbonButton
 End Class
 
 Partial Class ThisRibbonCollection

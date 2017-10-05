@@ -17,12 +17,14 @@ Public Class ModifyCaseForm
     Dim bAssociatedEmail As Boolean = False
 
     Dim szConversationID As String = ""
-    Dim szSubject As String
+    Dim szSubject As String = ""
     Dim szTeam As String = ""
     Dim szDescription As String = ""
     Dim szPreviousPendingSrc As String = ""
     Dim szPreviousResponsible As String = ""
     Dim szPriority As String = ""
+
+    Dim szDateTimeFormat As String = ""
 
     'Form Activities
     Private Sub ModifyCaseForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -43,7 +45,6 @@ Public Class ModifyCaseForm
         ResponsibleBox.Clear()
         RequestorBox.Clear()
         RegionBox.Clear()
-        DateTimePicker.Value = Date.Today
         PendingSourceBox.Clear()
         CommentsBox.Clear()
 
@@ -58,7 +59,7 @@ Public Class ModifyCaseForm
         'Set default values
         '****************************
         'Date
-        DateTimePicker.Value = Today.Date
+        DateTimePicker.Value = DateTime.Today
 
         '****************************
         'Disable Fields and Buttons
@@ -128,7 +129,7 @@ Public Class ModifyCaseForm
             RegionBox.Clear()
 
             DateTimePicker.Enabled = False
-            DateTimePicker.Value = Date.Today
+            DateTimePicker.Value = DateTime.Today
 
             PendingSourceBox.Enabled = False
             PendingSourceBox.Clear()
@@ -279,7 +280,7 @@ Public Class ModifyCaseForm
             'Set default values
             '****************************
             'Date
-            DateTimePicker.Value = Date.Today
+            DateTimePicker.Value = DateTime.Today
 
             '****************************
             'Disable Fields/Buttons
@@ -312,23 +313,36 @@ Public Class ModifyCaseForm
             Dim szLine As String = ""
 
             'Process every line in INI file
-            Do
-                szLine = FileReader.ReadLine()
-                If (Not szLine Is Nothing) Then
-                    'Check Provider
-                    If szLine.Trim.Contains("OfficeProvider") Then
-                        szOfficeConection = "Provider=" & szLine.Substring(Microsoft.VisualBasic.InStr(szLine, "=")).Trim & ";"
-                    ElseIf szLine.Trim.Contains("HomeProvider") Then
-                        szHomeConection = "Provider=" & szLine.Substring(Microsoft.VisualBasic.InStr(szLine, "=")).Trim & ";"
-
-                        'Check DataSource
-                    ElseIf szLine.Trim.Contains("DataBasePath") Then
-                        szOfficeConection = szOfficeConection & "Data Source = " & szLine.Substring(Microsoft.VisualBasic.InStr(szLine, "=")).Trim
-                    ElseIf szLine.Trim.Contains("DataBaseHomePath") Then
-                        szHomeConection = szHomeConection & "Data Source = " & szLine.Substring(Microsoft.VisualBasic.InStr(szLine, "=")).Trim
-                    End If
+            szLine = FileReader.ReadLine()
+            'Line must have value
+            While Not szLine Is Nothing
+                'Dismiss comment lines
+                If Not szLine.Contains(";") Then
+                    Select Case True
+                        'Provider
+                        Case szLine.Trim.Contains("OfficeProvider")
+                            szOfficeConection = "Provider=" & szLine.Substring(Microsoft.VisualBasic.InStr(szLine, "=")).Trim & ";"
+                            Exit Select
+                        Case szLine.Trim.Contains("HomeProvider")
+                            szHomeConection = "Provider=" & szLine.Substring(Microsoft.VisualBasic.InStr(szLine, "=")).Trim & ";"
+                            Exit Select
+                            'DataSource
+                        Case szLine.Trim.Contains("DataBasePath")
+                            szOfficeConection = szOfficeConection & "Data Source = " & szLine.Substring(Microsoft.VisualBasic.InStr(szLine, "=")).Trim
+                            Exit Select
+                        Case szLine.Trim.Contains("DataBaseHomePath")
+                            szHomeConection = szHomeConection & "Data Source = " & szLine.Substring(Microsoft.VisualBasic.InStr(szLine, "=")).Trim
+                            Exit Select
+                            'DateTimeFormat
+                        Case szLine.Trim.Contains("DateTimeFormat")
+                            szDateTimeFormat = szLine.Substring(Microsoft.VisualBasic.InStr(szLine, "=")).Trim
+                            Exit Select
+                        Case Else
+                            Exit Select
+                    End Select
                 End If
-            Loop Until szLine Is Nothing
+                szLine = FileReader.ReadLine()
+            End While
             FileReader.Close()
 
             'Close conection if open
@@ -381,7 +395,7 @@ Public Class ModifyCaseForm
             ResponsibleBox.Clear()
             RequestorBox.Clear()
             RegionBox.Clear()
-            DateTimePicker.Value = Date.Today
+            DateTimePicker.Value = DateTime.Today
             PendingSourceBox.Clear()
             CommentsBox.Clear()
 
@@ -406,7 +420,7 @@ Public Class ModifyCaseForm
             ResponsibleBox.Clear()
             RequestorBox.Clear()
             RegionBox.Clear()
-            DateTimePicker.Value = Date.Today
+            DateTimePicker.Value = DateTime.Today
             PendingSourceBox.Clear()
             CommentsBox.Clear()
 
@@ -435,7 +449,7 @@ Public Class ModifyCaseForm
             ResponsibleBox.Clear()
             RequestorBox.Clear()
             RegionBox.Clear()
-            DateTimePicker.Value = Date.Today
+            DateTimePicker.Value = DateTime.Today
             PendingSourceBox.Clear()
             CommentsBox.Clear()
 
@@ -455,8 +469,8 @@ Public Class ModifyCaseForm
     End Sub
 
     Private Sub DateTimePicker_LostFocus(sender As Object, e As EventArgs) Handles DateTimePicker.LostFocus
-        If DateTimePicker.Value.ToString("MM/dd/yyyy") <> Date.Today.ToString("MM/dd/yyyy") Then
-            DateTimePicker.Value = Date.Today
+        If DateTimePicker.Value.ToString(szDateTimeFormat) <> DateTime.Today.ToString(szDateTimeFormat) Then
+            DateTimePicker.Value = DateTime.Today
             MsgBox("Cannot select a future date", vbExclamation, "Alert")
         End If
     End Sub
@@ -507,37 +521,37 @@ Public Class ModifyCaseForm
     End Sub
 
     Private Function SubjectFormatted(ByVal Subject As String) As Boolean
-        Dim result As Boolean = False
-        Dim auxSubject As String = Subject
-        Dim pipeCount As Integer = 0
+        Dim bResult As Boolean = False
+        Dim szAuxSubject As String = Subject
+        Dim mnPipeCount As Integer = 0
 
         '****************************
         'Count subject pipes
         '****************************
         Try
-            pipeCount = (From character In auxSubject Where character = "|" Select character).Count()
+            mnPipeCount = (From character In szAuxSubject Where character = "|" Select character).Count()
         Catch ex As System.Exception
-            pipeCount = 0
+            mnPipeCount = 0
         End Try
 
         '****************************
         'Valid pipe count
         '****************************
-        If 0 < pipeCount And pipeCount < 3 Then
+        If 0 < mnPipeCount And mnPipeCount < 3 Then
             Try
                 'Process Subject Format
-                pipeCount = 0
-                While (auxSubject.Contains("|") And pipeCount < 2) Or auxSubject.Contains("TK")
+                mnPipeCount = 0
+                While (szAuxSubject.Contains("|") And mnPipeCount < 2) Or szAuxSubject.Contains("TK")
                     'Mail szSubject | Ticket Number| Ticket Status
-                    If pipeCount = 1 Then
-                        TicketNumberBox.Text = Convert.ToDouble(auxSubject.Substring(Microsoft.VisualBasic.InStr(auxSubject, "TK") + 1, 10))
-                        auxSubject = auxSubject.Substring(Microsoft.VisualBasic.InStr(auxSubject, "TK") + 11)
+                    If mnPipeCount = 1 Then
+                        TicketNumberBox.Text = Convert.ToDouble(szAuxSubject.Substring(Microsoft.VisualBasic.InStr(szAuxSubject, "TK") + 1, 10))
+                        szAuxSubject = szAuxSubject.Substring(Microsoft.VisualBasic.InStr(szAuxSubject, "TK") + 11)
                     End If
-                    pipeCount = pipeCount + 1
+                    mnPipeCount = mnPipeCount + 1
                 End While
 
-                If pipeCount = 2 Then
-                    result = True
+                If mnPipeCount = 2 Then
+                    bResult = True
                 Else
                     TicketNumberBox.Clear()
                     TicketNumberBox.Focus()
@@ -547,26 +561,26 @@ Public Class ModifyCaseForm
             End Try
         End If
 
-        Return result
+        Return bResult
     End Function
 
     'Ticket Insertion Functions/Sub
     Private Function SearchTicket(TicketNumber As String) As Boolean
-        Dim result As Boolean = False
-        Dim query As String
-        Dim Rows As Integer
+        Dim bResult As Boolean = False
+        Dim szQuery As String
+        Dim mnRows As Integer
 
         If Not String.IsNullOrEmpty(TicketNumberBox.Text) Then
             Try
                 conection.Open()
-                query = "SELECT TOP 1 * FROM Tickets WHERE mnTicketNumber = " & TicketNumber & " ORDER BY mnTicketNumber DESC, mnTicketLineNumber DESC"
-                adapter = New OleDbDataAdapter(query, conection)
+                szQuery = "SELECT TOP 1 * FROM Tickets WHERE mnTicketNumber = " & TicketNumber & " ORDER BY mnTicketNumber DESC, mnTicketLineNumber DESC"
+                adapter = New OleDbDataAdapter(szQuery, conection)
                 adapter.Fill(records, "Tickets")
-                Rows = records.Tables("Tickets").Rows.Count
+                mnRows = records.Tables("Tickets").Rows.Count
 
-                If Rows <> 0 Then
+                If mnRows <> 0 Then
                     'Change function status
-                    result = True
+                    bResult = True
 
                     'Retrieve Form Data
                     StatusBox.Text = Convert.ToString(records.Tables("Tickets").Rows(0).Item("szStatus"))
@@ -589,83 +603,83 @@ Public Class ModifyCaseForm
             conection.Close()
         End If
 
-        Return result
+        Return bResult
     End Function
 
     Private Function UpdateTicket(Action As String) As Boolean
-        Dim result As Boolean = False
-        Dim query As String = ""
+        Dim bResult As Boolean = False
+        Dim szQuery As String = ""
 
         '****************************
         'Format query
         '****************************
-        query = "INSERT INTO Tickets(mnTicketNumber, mnTicketLineNumber, szTeam, szActivityCategory, szResponsible, szStatus, szPriority, szRequestor, szBusinessUnit, szPendingSource, gdOpenDate, gdCloseDate, szComments, szDescription, gdRequestedTime, mnOpenDays, szAuditUser, szLocation, gdCreationDate, mnQuantity, szConversationID)"
-        query = query & "VALUES("
+        szQuery = "INSERT INTO Tickets(mnTicketNumber, mnTicketLineNumber, szTeam, szActivityCategory, szResponsible, szStatus, szPriority, szRequestor, szBusinessUnit, szPendingSource, gdOpenDate, gdCloseDate, szComments, szDescription, gdRequestedTime, mnOpenDays, szAuditUser, szLocation, gdCreationDate, mnQuantity, szConversationID)"
+        szQuery = szQuery & "VALUES("
         'mnTicketNumber
-        query = query & TicketNumberBox.Text & ","
+        szQuery = szQuery & TicketNumberBox.Text & ","
         'mnTicketLineNumber (First line start with 0)
-        query = query & records.Tables("Tickets").Rows(0).Item("mnTicketLineNumber") + 1 & ","
+        szQuery = szQuery & records.Tables("Tickets").Rows(0).Item("mnTicketLineNumber") + 1 & ","
         'szTeam, 
-        query = query & "'" & ReplaceApostrophesInString(records.Tables("Tickets").Rows(0).Item("szTeam")) & "',"
+        szQuery = szQuery & "'" & ReplaceApostrophesInString(records.Tables("Tickets").Rows(0).Item("szTeam")) & "',"
         'szActivityCategory
-        query = query & "'" & ReplaceApostrophesInString(records.Tables("Tickets").Rows(0).Item("szActivityCategory")) & "',"
+        szQuery = szQuery & "'" & ReplaceApostrophesInString(records.Tables("Tickets").Rows(0).Item("szActivityCategory")) & "',"
         'szResponsible
-        query = query & "'" & ReplaceApostrophesInString(ResponsibleBox.Text) & "',"
+        szQuery = szQuery & "'" & ReplaceApostrophesInString(ResponsibleBox.Text) & "',"
         'szStatus
         Select Case (Action)
             Case "Reopen"
-                query = query & "'" & "Reopen" & "',"
+                szQuery = szQuery & "'" & "Reopen" & "',"
                 Exit Select
             Case "Modify"
-                query = query & "'" & "Open" & "',"
+                szQuery = szQuery & "'" & "Open" & "',"
                 Exit Select
         End Select
         'szPriority
-        query = query & "'" & ReplaceApostrophesInString(szPriority) & "',"
+        szQuery = szQuery & "'" & ReplaceApostrophesInString(szPriority) & "',"
         'szRequestor
-        query = query & "'" & ReplaceApostrophesInString(RequestorBox.Text) & "',"
+        szQuery = szQuery & "'" & ReplaceApostrophesInString(RequestorBox.Text) & "',"
         'szBusinessUnit
-        query = query & "'" & ReplaceApostrophesInString(RegionBox.Text) & "',"
+        szQuery = szQuery & "'" & ReplaceApostrophesInString(RegionBox.Text) & "',"
         'szPendingSource
-        query = query & "'" & ReplaceApostrophesInString(PendingSourceBox.Text) & "',"
+        szQuery = szQuery & "'" & ReplaceApostrophesInString(PendingSourceBox.Text) & "',"
         'gdOpenDate
-        query = query & "'" & (DateTimePicker.Value.ToString("MM/dd/yyyy")) & "',"
+        szQuery = szQuery & "'" & (DateTimePicker.Value.ToString(szDateTimeFormat)) & "',"
         'gdCloseDate
-        query = query & "NULL,"
+        szQuery = szQuery & "NULL,"
         'szComments
         Select Case (Action)
             Case "Reopen"
-                query = query & "'Reopen Ticket',"
+                szQuery = szQuery & "'Reopen Ticket',"
                 Exit Select
             Case "Modify"
-                query = query & "'" & ReplaceApostrophesInString(CommentsBox.Text) & "',"
+                szQuery = szQuery & "'" & ReplaceApostrophesInString(CommentsBox.Text) & "',"
                 Exit Select
         End Select
         'szDescription
-        query = query & "'" & ReplaceApostrophesInString(records.Tables("Tickets").Rows(0).Item("szDescription")) & "',"
+        szQuery = szQuery & "'" & ReplaceApostrophesInString(records.Tables("Tickets").Rows(0).Item("szDescription")) & "',"
         'gdRequestedTime 
-        query = query & "'" & ReplaceApostrophesInString(records.Tables("Tickets").Rows(0).Item("gdRequestedTime")) & "',"
+        szQuery = szQuery & "'" & ReplaceApostrophesInString(records.Tables("Tickets").Rows(0).Item("gdRequestedTime")) & "',"
         'mnOpenDays
-        query = query & 0 & ","
+        szQuery = szQuery & 0 & ","
         'szAuditUser
-        query = query & "'" & ReplaceApostrophesInString(Environment.UserName) & "',"
+        szQuery = szQuery & "'" & ReplaceApostrophesInString(Environment.UserName) & "',"
         'szLocation
-        query = query & "'" & ReplaceApostrophesInString(ConectionBox.Text) & "',"
+        szQuery = szQuery & "'" & ReplaceApostrophesInString(ConectionBox.Text) & "',"
         'gdCreationDate
-        query = query & "'" & DateTime.Today.ToString("MM/dd/yyyy") & "',"
+        szQuery = szQuery & "'" & DateTime.Now.ToString() & "',"
         'mnQuantity
-        query = query & records.Tables("Tickets").Rows(0).Item("mnQuantity") & ","
+        szQuery = szQuery & records.Tables("Tickets").Rows(0).Item("mnQuantity") & ","
         'szConversationID
-        query = query & "'" & records.Tables("Tickets").Rows(0).Item("szConversationID") & "')"
+        szQuery = szQuery & "'" & records.Tables("Tickets").Rows(0).Item("szConversationID") & "')"
 
         Try
             '****************************
             'Perform query
             '****************************
             conection.Open()
-            command = New OleDbCommand(query, conection)
+            command = New OleDbCommand(szQuery, conection)
             command.ExecuteNonQuery()
-            result = True
+            bResult = True
 
             '****************************
             'Notify transaction status
@@ -681,7 +695,7 @@ Public Class ModifyCaseForm
         End Try
 
         conection.Close()
-        Return result
+        Return bResult
     End Function
 
     'Change Notification
@@ -699,7 +713,7 @@ Public Class ModifyCaseForm
         '****************************
         'NewMessage.To = PendingSourceBox.Text
         myRecipients = NewMessage.Recipients
-        myRecipients.ADD(PendingSourceBox.Text)
+        myRecipients.Add(PendingSourceBox.Text)
         If Not myRecipients.ResolveAll Then
             'Not valid name 
             MsgBox("Not valid pending source name", vbExclamation, "Alert")
@@ -742,7 +756,7 @@ Public Class ModifyCaseForm
         '****************************
         'NewMessage.To = ResponsibleBox.Text
         myRecipients = NewMessage.Recipients
-        myRecipients.ADD(PendingSourceBox.Text)
+        myRecipients.Add(PendingSourceBox.Text)
         If Not myRecipients.ResolveAll Then
             'Not valid name 
             MsgBox("Not valid responsible name", vbExclamation, "Alert")
@@ -776,7 +790,7 @@ Public Class ModifyCaseForm
         Dim cSpecialCharacter As String = "'"
         Dim cNewCharacter As String = " "
 
-        If String.IsNullOrEmpty(szString.Trim) Then
+        If Not String.IsNullOrEmpty(szString.Trim) Then
             'Replace all
             While szString.Contains(cSpecialCharacter)
                 szString = szString.Replace(cSpecialCharacter, cNewCharacter)

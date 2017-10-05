@@ -9,11 +9,14 @@ Public Class CloseCaseForm
     Dim records As New DataSet
     Dim command As New OleDbCommand
 
-    Dim szSubject As String
     Dim OutlookApp As Outlook.Application
     Dim OutlookItem As Outlook.MailItem
     Dim NewMessage As Outlook.MailItem
+
+    Dim szSubject As String = ""
     Dim bAssociatedEmail As Boolean = False
+
+    Dim szDateTimeFormat As String = ""
 
     'Form Activities
     Private Sub CloseCaseForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -167,25 +170,37 @@ Public Class CloseCaseForm
             Dim szLine As String = ""
 
             'Process every line in INI file
-            Do
-                szLine = FileReader.ReadLine()
-                If (Not szLine Is Nothing) Then
-                    'Check Provider
-                    If szLine.Trim.Contains("OfficeProvider") Then
-                        szOfficeConection = "Provider=" & szLine.Substring(Microsoft.VisualBasic.InStr(szLine, "=")).Trim & ";"
-                    ElseIf szLine.Trim.Contains("HomeProvider") Then
-                        szHomeConection = "Provider=" & szLine.Substring(Microsoft.VisualBasic.InStr(szLine, "=")).Trim & ";"
-
-                        'Check DataSource
-                    ElseIf szLine.Trim.Contains("DataBasePath") Then
-                        szOfficeConection = szOfficeConection & "Data Source = " & szLine.Substring(Microsoft.VisualBasic.InStr(szLine, "=")).Trim
-                    ElseIf szLine.Trim.Contains("DataBaseHomePath") Then
-                        szHomeConection = szHomeConection & "Data Source = " & szLine.Substring(Microsoft.VisualBasic.InStr(szLine, "=")).Trim
-                    End If
+            szLine = FileReader.ReadLine()
+            'Line must have value
+            While Not szLine Is Nothing
+                'Dismiss comment lines
+                If Not szLine.Contains(";") Then
+                    Select Case True
+                        'Provider
+                        Case szLine.Trim.Contains("OfficeProvider")
+                            szOfficeConection = "Provider=" & szLine.Substring(Microsoft.VisualBasic.InStr(szLine, "=")).Trim & ";"
+                            Exit Select
+                        Case szLine.Trim.Contains("HomeProvider")
+                            szHomeConection = "Provider=" & szLine.Substring(Microsoft.VisualBasic.InStr(szLine, "=")).Trim & ";"
+                            Exit Select
+                            'DataSource
+                        Case szLine.Trim.Contains("DataBasePath")
+                            szOfficeConection = szOfficeConection & "Data Source = " & szLine.Substring(Microsoft.VisualBasic.InStr(szLine, "=")).Trim
+                            Exit Select
+                        Case szLine.Trim.Contains("DataBaseHomePath")
+                            szHomeConection = szHomeConection & "Data Source = " & szLine.Substring(Microsoft.VisualBasic.InStr(szLine, "=")).Trim
+                            Exit Select
+                            'DateTimeFormat
+                        Case szLine.Trim.Contains("DateTimeFormat")
+                            szDateTimeFormat = szLine.Substring(Microsoft.VisualBasic.InStr(szLine, "=")).Trim
+                            Exit Select
+                        Case Else
+                            Exit Select
+                    End Select
                 End If
-            Loop Until szLine Is Nothing
+                szLine = FileReader.ReadLine()
+            End While
             FileReader.Close()
-
             'Close conection if open
             If conection.State = ConnectionState.Open Then
                 conection.Close()
@@ -273,37 +288,37 @@ Public Class CloseCaseForm
 
 
     Private Function SubjectFormatted(ByVal Subject As String) As Boolean
-        Dim result As Boolean = False
-        Dim auxSubject As String = Subject
-        Dim pipeCount As Integer = 0
+        Dim bResult As Boolean = False
+        Dim szAuxSubject As String = Subject
+        Dim mnPipeCount As Integer = 0
 
         '****************************
         'Count subject pipes
         '****************************
         Try
-            pipeCount = (From character In auxSubject Where character = "|" Select character).Count()
+            mnPipeCount = (From character In szAuxSubject Where character = "|" Select character).Count()
         Catch ex As System.Exception
-            pipeCount = 0
+            mnPipeCount = 0
         End Try
 
         '****************************
         'Valid pipe count
         '****************************
-        If 0 < pipeCount And pipeCount < 3 Then
+        If 0 < mnPipeCount And mnPipeCount < 3 Then
             Try
                 'Process Subject Format
-                pipeCount = 0
-                While (auxSubject.Contains("|") And pipeCount < 2) Or auxSubject.Contains("TK")
+                mnPipeCount = 0
+                While (szAuxSubject.Contains("|") And mnPipeCount < 2) Or szAuxSubject.Contains("TK")
                     'Mail szSubject | Ticket Number| Ticket Status
-                    If pipeCount = 1 Then
-                        TicketNumberBox.Text = Convert.ToDouble(auxSubject.Substring(Microsoft.VisualBasic.InStr(auxSubject, "TK") + 1, 10))
-                        auxSubject = auxSubject.Substring(Microsoft.VisualBasic.InStr(auxSubject, "TK") + 11)
+                    If mnPipeCount = 1 Then
+                        TicketNumberBox.Text = Convert.ToDouble(szAuxSubject.Substring(Microsoft.VisualBasic.InStr(szAuxSubject, "TK") + 1, 10))
+                        szAuxSubject = szAuxSubject.Substring(Microsoft.VisualBasic.InStr(szAuxSubject, "TK") + 11)
                     End If
-                    pipeCount = pipeCount + 1
+                    mnPipeCount = mnPipeCount + 1
                 End While
 
-                If pipeCount = 2 Then
-                    result = True
+                If mnPipeCount = 2 Then
+                    bResult = True
                 Else
                     TicketNumberBox.Clear()
                 End If
@@ -313,25 +328,25 @@ Public Class CloseCaseForm
             End Try
         End If
 
-        Return result
+        Return bResult
     End Function
 
     'Ticket Update Functions/Sub
     Private Function SearchTicketNumber(mnTicketNumber As Integer) As Boolean
-        Dim result As Boolean = False
-        Dim query As String
-        Dim Rows As Integer
+        Dim bResult As Boolean = False
+        Dim szQuery As String
+        Dim mnRows As Integer
 
         If TicketNumberBox.Text <> "" Then
             Try
                 conection.Open()
-                query = "SELECT TOP 1 * FROM Tickets WHERE mnTicketNumber = " & TicketNumberBox.Text & " ORDER BY mnTicketNumber DESC, mnTicketLineNumber DESC"
-                adapter = New OleDbDataAdapter(query, conection)
+                szQuery = "SELECT TOP 1 * FROM Tickets WHERE mnTicketNumber = " & TicketNumberBox.Text & " ORDER BY mnTicketNumber DESC, mnTicketLineNumber DESC"
+                adapter = New OleDbDataAdapter(szQuery, conection)
                 adapter.Fill(records, "Tickets")
-                Rows = records.Tables("Tickets").Rows.Count
-                If Rows <> 0 Then
+                mnRows = records.Tables("Tickets").Rows.Count
+                If mnRows <> 0 Then
                     CurrentStatusBox.Text = records.Tables("Tickets").Rows(0).Item("szStatus")
-                    result = True
+                    bResult = True
                 End If
             Catch ex As Exception
                 MsgBox(ex.Message)
@@ -339,69 +354,69 @@ Public Class CloseCaseForm
             conection.Close()
         End If
 
-        Return result
+        Return bResult
     End Function
 
     Private Function InsertClosingLine() As Boolean
-        Dim result As Boolean = False
-        Dim query As String = ""
+        Dim bResult As Boolean = False
+        Dim szQuery As String = ""
 
         '****************************
         'Format query
         '****************************
-        query = "INSERT INTO Tickets(mnTicketNumber, mnTicketLineNumber, szTeam, szActivityCategory, szResponsible, szStatus, szPriority, szRequestor, szBusinessUnit, szPendingSource, gdOpenDate, gdCloseDate, szComments, szDescription, gdRequestedTime, mnOpenDays, szAuditUser, szLocation, gdCreationDate, mnQuantity, szConversationID)"
-        query = query & "VALUES("
+        szQuery = "INSERT INTO Tickets(mnTicketNumber, mnTicketLineNumber, szTeam, szActivityCategory, szResponsible, szStatus, szPriority, szRequestor, szBusinessUnit, szPendingSource, gdOpenDate, gdCloseDate, szComments, szDescription, gdRequestedTime, mnOpenDays, szAuditUser, szLocation, gdCreationDate, mnQuantity, szConversationID)"
+        szQuery = szQuery & "VALUES("
         'mnTicketNumber
-        query = query & TicketNumberBox.Text & ","
+        szQuery = szQuery & TicketNumberBox.Text & ","
         'mnTicketLineNumber (First line start with 0)
-        query = query & records.Tables("Tickets").Rows(0).Item("mnTicketLineNumber") + 1 & ", "
+        szQuery = szQuery & records.Tables("Tickets").Rows(0).Item("mnTicketLineNumber") + 1 & ", "
         'szTeam, 
-        query = query & "'" & ReplaceApostrophesInString(Convert.ToString(records.Tables("Tickets").Rows(0).Item("szTeam"))) & "',"
+        szQuery = szQuery & "'" & ReplaceApostrophesInString(Convert.ToString(records.Tables("Tickets").Rows(0).Item("szTeam"))) & "',"
         'szActivityCategory
-        query = query & "'" & ReplaceApostrophesInString(Convert.ToString(records.Tables("Tickets").Rows(0).Item("szActivityCategory"))) & "',"
+        szQuery = szQuery & "'" & ReplaceApostrophesInString(Convert.ToString(records.Tables("Tickets").Rows(0).Item("szActivityCategory"))) & "',"
         'szResponsible
-        query = query & "'" & ReplaceApostrophesInString(Convert.ToString(records.Tables("Tickets").Rows(0).Item("szResponsible"))) & "',"
+        szQuery = szQuery & "'" & ReplaceApostrophesInString(Convert.ToString(records.Tables("Tickets").Rows(0).Item("szResponsible"))) & "',"
         'szStatus
-        query = query & "'" & "Close" & "',"
+        szQuery = szQuery & "'" & "Close" & "',"
         'szPriority
-        query = query & "'" & ReplaceApostrophesInString(Convert.ToString(records.Tables("Tickets").Rows(0).Item("szPriority"))) & "',"
+        szQuery = szQuery & "'" & ReplaceApostrophesInString(Convert.ToString(records.Tables("Tickets").Rows(0).Item("szPriority"))) & "',"
         'szRequestor
-        query = query & "'" & ReplaceApostrophesInString(Convert.ToString(records.Tables("Tickets").Rows(0).Item("szRequestor"))) & "',"
+        szQuery = szQuery & "'" & ReplaceApostrophesInString(Convert.ToString(records.Tables("Tickets").Rows(0).Item("szRequestor"))) & "',"
         'szBusinessUnit
-        query = query & "'" & ReplaceApostrophesInString(Convert.ToString(records.Tables("Tickets").Rows(0).Item("szBusinessUnit"))) & "',"
+        szQuery = szQuery & "'" & ReplaceApostrophesInString(Convert.ToString(records.Tables("Tickets").Rows(0).Item("szBusinessUnit"))) & "',"
         'szPendingSource
-        query = query & "'',"
+        szQuery = szQuery & "NULL,"
         'gdOpenDate
-        query = query & "'" & Convert.ToString(records.Tables("Tickets").Rows(0).Item("gdOpenDate").ToString("MM/dd/yyyy")) & "',"
+        szQuery = szQuery & "'" & Convert.ToString(records.Tables("Tickets").Rows(0).Item("gdOpenDate")) & "',"
         'gdCloseDate
-        query = query & "'" & DateTime.Today.ToString("MM/dd/yyyy") & "',"
+        szQuery = szQuery & "'" & DateTime.Now.ToString(szDateTimeFormat) & "',"
         'szComments
-        query = query & "'" & Convert.ToString(ReplaceApostrophesInString(CommentsBox.Text)) & "',"
+        szQuery = szQuery & "'" & Convert.ToString(ReplaceApostrophesInString(CommentsBox.Text)) & "',"
         'szDescription
-        query = query & "'" & Convert.ToString(ReplaceApostrophesInString(records.Tables("Tickets").Rows(0).Item("szDescription"))) & "',"
+        szQuery = szQuery & "'" & Convert.ToString(ReplaceApostrophesInString(records.Tables("Tickets").Rows(0).Item("szDescription"))) & "',"
         'gdRequestedTime 
-        query = query & "'" & Convert.ToString(ReplaceApostrophesInString(records.Tables("Tickets").Rows(0).Item("gdRequestedTime"))) & "',"
+        szQuery = szQuery & "'" & Convert.ToString(ReplaceApostrophesInString(records.Tables("Tickets").Rows(0).Item("gdRequestedTime"))) & "',"
         'mnOpenDays
-        query = query & 0 & ","
+        szQuery = szQuery & 0 & ","
         'szAuditUser
-        query = query & "'" & Convert.ToString(ReplaceApostrophesInString(Environment.UserName)) & "',"
+        szQuery = szQuery & "'" & Convert.ToString(ReplaceApostrophesInString(Environment.UserName)) & "',"
         'szLocation
-        query = query & "'" & Convert.ToString(ReplaceApostrophesInString(ConectionBox.Text)) & "',"
+        szQuery = szQuery & "'" & Convert.ToString(ReplaceApostrophesInString(ConectionBox.Text)) & "',"
         'gdCreationDate
-        query = query & "'" & DateTime.Today.ToString("MM/dd/yyyy") & "',"
+        szQuery = szQuery & "'" & DateTime.Now.ToString() & "',"
         'mnQuantity
-        query = query & records.Tables("Tickets").Rows(0).Item("mnQuantity") & ","
+        szQuery = szQuery & records.Tables("Tickets").Rows(0).Item("mnQuantity") & ","
         'szConversationID
-        query = query & "'" & records.Tables("Tickets").Rows(0).Item("szConversationID") & "')"
+        szQuery = szQuery & "'" & records.Tables("Tickets").Rows(0).Item("szConversationID") & "')"
 
         Try
             '****************************
             'Perform query
             '****************************
             conection.Open()
-            command = New OleDbCommand(query, conection)
+            command = New OleDbCommand(szQuery, conection)
             command.ExecuteNonQuery()
-            result = True
+            bResult = True
 
             '****************************
             'Notify transaction status
@@ -414,7 +429,7 @@ Public Class CloseCaseForm
 
         conection.Close()
 
-        Return result
+        Return bResult
     End Function
 
     'Additional Functions/Sub
@@ -422,7 +437,7 @@ Public Class CloseCaseForm
         Dim cSpecialCharacter As String = "'"
         Dim cNewCharacter As String = " "
 
-        If String.IsNullOrEmpty(szString.Trim) Then
+        If Not String.IsNullOrEmpty(szString.Trim) Then
             'Replace all
             While szString.Contains(cSpecialCharacter)
                 szString = szString.Replace(cSpecialCharacter, cNewCharacter)

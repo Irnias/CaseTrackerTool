@@ -28,7 +28,7 @@ Public Class CaseTrackerTool
         SearchCaseForm.ShowDialog()
     End Sub
 
-    Private Sub NotifyIssueButton_Click(sender As Object, e As RibbonControlEventArgs) Handles NotifyIssueButton.Click
+    Private Sub NotifyIssueButton_Click(sender As Object, e As RibbonControlEventArgs) Handles ContactAdministratorsButton.Click
         Dim NewMessage As Outlook.MailItem
         Dim OutlookAppli As Outlook.Application
         OutlookAppli = CreateObject("Outlook.Application")
